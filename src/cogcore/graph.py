@@ -116,7 +116,40 @@ def build_cogcore_graph_persistent(
     _add_nodes_and_edges(graph, modules)
 
     conn = sqlite3.connect(sqlite_path, check_same_thread=False)
-    checkpointer = SqliteSaver(conn)
+
+    # 自定义 serializer：预注册 CogCore 自定义类型，避免 msgpack 反序列化警告。
+    # 直接传 allowed_msgpack_modules 到构造函数（with_msgpack_allowlist 在默认
+    # permissive 模式下是 no-op）。
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+    from cogcore.types import (
+        StimulusAtom,
+        StimulusSource,
+        Modality,
+        FeelingType,
+    )
+    from cogcore.cfs import FeelingSignal
+    from cogcore.attention import CurrentAttentionMemory
+    from cogcore.nt import NTModulations
+    from cogcore.state_schema import StatePoolSnapshot, HDBSnapshot
+
+    serde = JsonPlusSerializer(
+        allowed_msgpack_modules=[
+            (cls.__module__, cls.__name__)
+            for cls in (
+                StatePoolSnapshot,
+                HDBSnapshot,
+                NTModulations,
+                StimulusSource,
+                Modality,
+                CurrentAttentionMemory,
+                StimulusAtom,
+                FeelingType,
+                FeelingSignal,
+            )
+        ]
+    )
+
+    checkpointer = SqliteSaver(conn, serde=serde)
     store = SqliteStore(conn)
 
     compiled = graph.compile(checkpointer=checkpointer, store=store)
