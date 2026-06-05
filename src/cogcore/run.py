@@ -65,6 +65,10 @@ def main() -> int:
     parser.add_argument(
         "--config", default=None, help="配置文件路径（默认从项目根查找 config.toml）"
     )
+    parser.add_argument(
+        "--mode", default=None, choices=["full_silent", "ap_agency", "reinforced_agency"],
+        help="运行模式（覆盖 config.toml 设置）"
+    )
     args = parser.parse_args()
 
     # 加载配置
@@ -74,6 +78,13 @@ def main() -> int:
         level=getattr(logging, cfg.runtime.log_level) if not args.verbose else logging.DEBUG,
         format="%(levelname)s %(name)s: %(message)s",
     )
+
+    # 运行模式
+    mode_name = args.mode or cfg.runtime.mode
+    from cogcore.modes import AgentMode, WakeController
+    mode = AgentMode(mode_name)
+    wake = WakeController(mode=mode)
+    logging.info(f"Run mode: {mode.value}")
 
     # 构造模块
     pool = StatePool()

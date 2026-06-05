@@ -332,6 +332,47 @@ class LLMBridge:
         """合并教师反馈。"""
         return []
 
-    def teacher_gate_should_wake(self, event: dict) -> bool:
-        """教师门控。"""
+    def teacher_gate_should_wake(self, event: dict, cogcore_state: dict | None = None) -> bool:
+        """教师门控：reinforced_agency 模式下判断是否允许主动唤醒。
+
+        决策因素：
+        1. 最近是否有错误或异常（error_log 不空 → 应阻止主动）
+        2. 认知压是否过高（cognitive_pressure > 0.8 → 暂缓）
+        3. 疲劳是否过高（NT.fatigue > 0.8 → 需要休息）
+        """
+        if not cogcore_state:
+            return True
+
+        # 1. 错误检查
+        errors = cogcore_state.get("error_log", [])
+        if errors and len(errors) > 2:
+            logger.info("Teacher gate: blocked (recent errors)")
+            return False
+
+        # 2. 认知压检查
+        pool = cogcore_state.get("pool_snapshot", {})
+        pressure = 0.0
+        if pool:
+            if hasattr(pool, "energy_summary"):
+                es = pool.energy_summary
+                pressure = es.cognitive_pressure if hasattr(es, "cognitive_pressure") else 0.0
+            elif isinstance(pool, dict):
+                es = pool.get("energy_summary", {})
+                pressure = es.get("cognitive_pressure", 0.0) if isinstance(es, dict) else 0.0
+        if pressure > 0.8:
+            logger.info(f"Teacher gate: blocked (high pressure={pressure:.2f})")
+            return False
+
+        # 3. 疲劳检查
+        nt = cogcore_state.get("nt_values", {})
+        fatigue = 0.0
+        if nt:
+            if hasattr(nt, "fatigue"):
+                fatigue = nt.fatigue
+            elif isinstance(nt, dict):
+                fatigue = nt.get("fatigue", 0.0)
+        if fatigue > 0.8:
+            logger.info(f"Teacher gate: blocked (high fatigue={fatigue:.2f})")
+            return False
+
         return True
