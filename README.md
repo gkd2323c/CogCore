@@ -2,7 +2,7 @@
 
 **通用认知内核（Universal Cognitive Kernel）—— LLM Agent 的持续认知层**
 
-[![阶段](https://img.shields.io/badge/stage-M1-green)]() [![测试](https://img.shields.io/badge/tests-228%20passed-brightgreen)]() [![模块](https://img.shields.io/badge/modules-22-blue)]() [![论文](https://img.shields.io/badge/based%20on-AP%20(2026)-blue)]()
+[![阶段](https://img.shields.io/badge/stage-M2-green)]() [![测试](https://img.shields.io/badge/tests-260%20passed-brightgreen)]() [![模块](https://img.shields.io/badge/modules-25-blue)]() [![论文](https://img.shields.io/badge/based%20on-AP%20(2026)-blue)]()
 
 ---
 
@@ -19,11 +19,13 @@ CogCore 补 LLM 在长期连续性上的结构性缺失：长期状态维护、�
 | 设计文档 | ✅ 完成（9 章 + 5 个新章节 + 附录 A）|
 | 验证矩阵 | ✅ 完成（17 实验 × CogCore 模块映射）|
 | 论文选型 | ✅ 完成（LangGraph 首选，PydanticAI 次选）|
-| 代码实现 | ✅ M1 阶段完成（LLM 桥接 + 持久化 + 工具系统 + 运行模式），228/228 测试通过 |
+| 代码实现 | ✅ M2 阶段完成（后台服务 + 端到端 Agent + 长程实验 + 工具箱），260/260 测试通过 |
 | E01-E17 复现 | ✅ **17/17 全部通过**，CogCore 实验已覆盖全部论文实验 |
-| LLM 集成 | ✅ OpenAI 兼容协议 + Ollama 本地，config.toml 配置 |
+| E18-E20 实验 | ✅ 3000 tick 稳定 + APT 消融 + CFS/NT 消融全部通过 |
+| 后台服务 | ✅ CogCoreService 持续 tick + 自动日记 + SQLite 持久化 |
+| LLM 集成 | ✅ OpenAI 兼容协议 + Ollama 本地 + end-to-end Agent |
 | 持久化 | ✅ SQLite（零 Docker）/ Memory 双路径 |
-| 工具系统 | ✅ ToolRegistry + 日记/任务 3 工具 |
+| 工具系统 | ✅ ToolRegistry + 日记/任务/计算/技能 6 工具 |
 | 运行模式 | ✅ full_silent / ap_agency / reinforced_agency 三种 |
 
 > **诚实声明**：所有实验已在 CogCore 上运行并通过验证。部分实验值因实现差异与论文数值不完全重合，但实验设计和判据均对齐论文 3.14 节。完整数据见 `experiments/E01-E17/`。
