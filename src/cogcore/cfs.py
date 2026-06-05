@@ -44,7 +44,9 @@ class CognitiveFeelingSystem:
         pressure_high: float = 0.7,
         pressure_drop: float = 0.3,
         fatigue_threshold: int = 5,
+        enabled: bool = True,
     ) -> None:
+        self.enabled = enabled
         self.pressure_high = pressure_high
         self.pressure_drop = pressure_drop
         self.fatigue_threshold = fatigue_threshold
@@ -77,6 +79,8 @@ class CognitiveFeelingSystem:
         Returns:
             list[FeelingSignal]
         """
+        if not self.enabled:
+            return []
         signals: list[FeelingSignal] = []
 
         cognitive_pressure = float(pool_energy_summary.get("cognitive_pressure", 0.0))

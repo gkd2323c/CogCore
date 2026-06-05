@@ -1,0 +1,112 @@
+{
+  "cases": [
+    {
+      "tick": 0,
+      "total_energy": 0.425,
+      "active": 1,
+      "pressure": 0.425,
+      "nt_arousal": 0.0,
+      "nt_fatigue": 0.0,
+      "nt_caution": 0.0,
+      "hdb_structs": 0
+    },
+    {
+      "tick": 300,
+      "total_energy": 0.425,
+      "active": 7,
+      "pressure": 0.061,
+      "nt_arousal": 0.0,
+      "nt_fatigue": 0.0,
+      "nt_caution": 0.0,
+      "hdb_structs": 0
+    },
+    {
+      "tick": 600,
+      "total_energy": 0.425,
+      "active": 13,
+      "pressure": 0.033,
+      "nt_arousal": 0.0,
+      "nt_fatigue": 0.0,
+      "nt_caution": 0.0,
+      "hdb_structs": 0
+    },
+    {
+      "tick": 900,
+      "total_energy": 0.425,
+      "active": 19,
+      "pressure": 0.022,
+      "nt_arousal": 0.0,
+      "nt_fatigue": 0.0,
+      "nt_caution": 0.0,
+      "hdb_structs": 0
+    },
+    {
+      "tick": 1200,
+      "total_energy": 0.425,
+      "active": 25,
+      "pressure": 0.017,
+      "nt_arousal": 0.0,
+      "nt_fatigue": 0.0,
+      "nt_caution": 0.0,
+      "hdb_structs": 0
+    },
+    {
+      "tick": 1500,
+      "total_energy": 0.425,
+      "active": 31,
+      "pressure": 0.014,
+      "nt_arousal": 0.0,
+      "nt_fatigue": 0.0,
+      "nt_caution": 0.0,
+      "hdb_structs": 0
+    },
+    {
+      "tick": 1800,
+      "total_energy": 0.425,
+      "active": 37,
+      "pressure": 0.011,
+      "nt_arousal": 0.0,
+      "nt_fatigue": 0.0,
+      "nt_caution": 0.0,
+      "hdb_structs": 0
+    },
+    {
+      "tick": 2100,
+      "total_energy": 0.425,
+      "active": 43,
+      "pressure": 0.01,
+      "nt_arousal": 0.0,
+      "nt_fatigue": 0.0,
+      "nt_caution": 0.0,
+      "hdb_structs": 0
+    },
+    {
+      "tick": 2400,
+      "total_energy": 0.425,
+      "active": 49,
+      "pressure": 0.009,
+      "nt_arousal": 0.0,
+      "nt_fatigue": 0.0,
+      "nt_caution": 0.0,
+      "hdb_structs": 0
+    },
+    {
+      "tick": 2700,
+      "total_energy": 0.425,
+      "active": 55,
+      "pressure": 0.008,
+      "nt_arousal": 0.0,
+      "nt_fatigue": 0.0,
+      "nt_caution": 0.0,
+      "hdb_structs": 0
+    }
+  ],
+  "metrics": {
+    "total_ticks": 3000,
+    "energy_max": 0.425,
+    "energy_min": 0.425,
+    "energy_diverged": false,
+    "nt_not_stuck": false,
+    "snapshot_count": 10
+  }
+}

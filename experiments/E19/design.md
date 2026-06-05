@@ -1,0 +1,10 @@
+# E19
+
+APT ablation: disabled tuner should produce 0 adjustments
+## еп╬щ
+{
+  "avg_energy_enabled": 0.0,
+  "avg_energy_ablated": 0.0,
+  "enabled_adjustments": 0,
+  "ablated_adjustments": 0
+}

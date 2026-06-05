@@ -1,0 +1,82 @@
+{
+  "cases": [
+    {
+      "trial": 0,
+      "branch": "enabled",
+      "final_energy": 0.0,
+      "adj_count": 0
+    },
+    {
+      "trial": 1,
+      "branch": "enabled",
+      "final_energy": 0.0,
+      "adj_count": 0
+    },
+    {
+      "trial": 2,
+      "branch": "enabled",
+      "final_energy": 0.0,
+      "adj_count": 0
+    },
+    {
+      "trial": 3,
+      "branch": "enabled",
+      "final_energy": 0.0,
+      "adj_count": 0
+    },
+    {
+      "trial": 4,
+      "branch": "enabled",
+      "final_energy": 0.0,
+      "adj_count": 0
+    },
+    {
+      "trial": 5,
+      "branch": "enabled",
+      "final_energy": 0.0,
+      "adj_count": 0
+    },
+    {
+      "trial": 0,
+      "branch": "ablated",
+      "final_energy": 0.0,
+      "adj_count": 0
+    },
+    {
+      "trial": 1,
+      "branch": "ablated",
+      "final_energy": 0.0,
+      "adj_count": 0
+    },
+    {
+      "trial": 2,
+      "branch": "ablated",
+      "final_energy": 0.0,
+      "adj_count": 0
+    },
+    {
+      "trial": 3,
+      "branch": "ablated",
+      "final_energy": 0.0,
+      "adj_count": 0
+    },
+    {
+      "trial": 4,
+      "branch": "ablated",
+      "final_energy": 0.0,
+      "adj_count": 0
+    },
+    {
+      "trial": 5,
+      "branch": "ablated",
+      "final_energy": 0.0,
+      "adj_count": 0
+    }
+  ],
+  "metrics": {
+    "avg_energy_enabled": 0.0,
+    "avg_energy_ablated": 0.0,
+    "enabled_adjustments": 0,
+    "ablated_adjustments": 0
+  }
+}

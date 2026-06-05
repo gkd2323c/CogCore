@@ -53,7 +53,8 @@ class NeurotransmitterSystem:
     # NT 通道名常量
     CHANNELS = ("focus", "arousal", "caution", "exploration", "fatigue", "stability")
 
-    def __init__(self, initial: NTModulations | None = None) -> None:
+    def __init__(self, initial: NTModulations | None = None, enabled: bool = True) -> None:
+        self.enabled = enabled
         self.current = initial or NTModulations()
         self._impulse_buffer: list[dict[str, float]] = []
         self._tick: int = 0
@@ -80,6 +81,8 @@ class NeurotransmitterSystem:
         Returns:
             更新后的 NTModulations
         """
+        if not self.enabled:
+            return self.current
         # 计算 impulse
         impulse = self._compute_impulse(feeling_signals, reward_signals, rules)
 

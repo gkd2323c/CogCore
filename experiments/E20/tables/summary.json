@@ -1,0 +1,94 @@
+{
+  "cases": [
+    {
+      "trial": 0,
+      "branch": "both_enabled",
+      "feelings": 0,
+      "nt_arousal": 0.6,
+      "nt_caution": 0.8
+    },
+    {
+      "trial": 1,
+      "branch": "both_enabled",
+      "feelings": 0,
+      "nt_arousal": 0.6,
+      "nt_caution": 0.8
+    },
+    {
+      "trial": 2,
+      "branch": "both_enabled",
+      "feelings": 0,
+      "nt_arousal": 0.6,
+      "nt_caution": 0.8
+    },
+    {
+      "trial": 3,
+      "branch": "both_enabled",
+      "feelings": 0,
+      "nt_arousal": 0.6,
+      "nt_caution": 0.8
+    },
+    {
+      "trial": 4,
+      "branch": "both_enabled",
+      "feelings": 0,
+      "nt_arousal": 0.6,
+      "nt_caution": 0.8
+    },
+    {
+      "trial": 5,
+      "branch": "both_enabled",
+      "feelings": 0,
+      "nt_arousal": 0.6,
+      "nt_caution": 0.8
+    },
+    {
+      "trial": 0,
+      "branch": "both_ablated",
+      "feelings": 0,
+      "nt_arousal": 0.0,
+      "nt_caution": 0.0
+    },
+    {
+      "trial": 1,
+      "branch": "both_ablated",
+      "feelings": 0,
+      "nt_arousal": 0.0,
+      "nt_caution": 0.0
+    },
+    {
+      "trial": 2,
+      "branch": "both_ablated",
+      "feelings": 0,
+      "nt_arousal": 0.0,
+      "nt_caution": 0.0
+    },
+    {
+      "trial": 3,
+      "branch": "both_ablated",
+      "feelings": 0,
+      "nt_arousal": 0.0,
+      "nt_caution": 0.0
+    },
+    {
+      "trial": 4,
+      "branch": "both_ablated",
+      "feelings": 0,
+      "nt_arousal": 0.0,
+      "nt_caution": 0.0
+    },
+    {
+      "trial": 5,
+      "branch": "both_ablated",
+      "feelings": 0,
+      "nt_arousal": 0.0,
+      "nt_caution": 0.0
+    }
+  ],
+  "metrics": {
+    "avg_nt_arousal_enabled": 0.6,
+    "avg_nt_arousal_ablated": 0.0,
+    "cfs_feelings_enabled": 0,
+    "cfs_feelings_ablated": 0
+  }
+}

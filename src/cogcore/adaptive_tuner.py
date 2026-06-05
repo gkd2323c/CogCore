@@ -51,7 +51,9 @@ class AdaptiveTuner:
         tuner_interval: int = 5,
         tuner_max_adjust: float = 0.15,
         max_atoms: int = 200,
+        enabled: bool = True,
     ) -> None:
+        self.enabled = enabled
         self.tuner_interval = tuner_interval
         self.tuner_max_adjust = tuner_max_adjust
         self.max_atoms = max_atoms
@@ -75,6 +77,8 @@ class AdaptiveTuner:
         4. 注意力过散：CAM 能量方差 < ATTENTION_DIFFUSE_VAR
         5. 传播过薄：感应展开节点数 < INDUCTION_THIN_NODES
         """
+        if not self.enabled:
+            return TunerAdjustments(lambda_real_delta=0.0, attention_budget_delta=0)
         self._tick_count += 1
 
         # 1. 沉寂
