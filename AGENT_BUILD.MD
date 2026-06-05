@@ -162,9 +162,11 @@ cogcore = graph.compile(checkpointer=PostgresSaver(...), store=PostgresStore(...
 
 **退出标准**：能用 `cogcore.invoke({"raw_input": "..."})` 跑通 10 阶段，状态可在 LangGraph Studio 可视化。
 
-### 阶段 B：LLM 解释层接入（M1.1 → M1.5）
+### 阶段 B：LLM 解释层接入（M1.1 → M1.5）✅ 已完成
 
 **目标**：让 LLM 能读 CogCore 状态、决定行动。
+
+**状态**：M1.1 已于 2026-06-05 完成。`LLMBridge` 通过 OpenAI SDK 连接 Ollama/OpenAI/vLLM，`build_context_packet` 输出 8 类审计字段，`chat_with_state` 实现 CogCore→LLM→CogCore 一步闭环。
 
 **起点**：[wassim249](https://github.com/wassim249/fastapi-langgraph-agent-production-ready-template) 的 `app/services/llm/` 拆分模式（registry + service）
 
@@ -175,9 +177,11 @@ cogcore = graph.compile(checkpointer=PostgresSaver(...), store=PostgresStore(...
 - `build_context_packet`：把 CogCore tick report 翻译成 LLM prompt
 - `parse_llm_output`：把 LLM 输出解析为 StimulusAtom
 
-### 阶段 C：工具与记忆（M1.2 → M1.4）
+### 阶段 C：工具与记忆（M1.2 → M1.4）✅ 已完成
 
 **目标**：让 Agent 能用工具、能记住事实。
+
+**状态**：M1.2-M1.4 已全部完成。SQLite 持久化（`build_cogcore_graph_persistent`）零 Docker 依赖；ToolRegistry + LongTermExperienceTools（write_diary/read_diary/schedule_task）全部可用；PA 运行模式（full_silent/ap_agency/reinforced_agency）已实现。
 
 **起点**：[wassim249](https://github.com/wassim249/fastapi-langgraph-agent-production-ready-template) 的 mem0 + pgvector 模式 + [hereandnowai project-16](https://github.com/hereandnowai/master-langgraph-workflows-in-python-20-real-world-agent-projects-by-hereandnow-ai) 的 Knowledge Base 模式
 

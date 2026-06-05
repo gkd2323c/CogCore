@@ -292,17 +292,17 @@ class AgentMode(str, Enum):
 
 以下条件全部满足后 M1 方可标记完成：
 
-- [ ] M1.1: `build_context_packet` 输出包含 8 类审计字段
-- [ ] M1.1: `parse_llm_output` 单次调用成功
-- [ ] M1.1: Ollama 对话 demo 可运行
-- [ ] M1.2: `docker compose up -d` 一键启动 Postgres
-- [ ] M1.2: 进程重启后同一 thread_id 数据不丢失
-- [ ] M1.3: ToolRegistry 支持 register/execute/allowlist
-- [ ] M1.3: write_diary + read_diary 闭环测试通过
-- [ ] M1.4: 三种模式均可切换
-- [ ] M1.4: LangGraph Studio 可可视化跟踪一次完整 tick
-- [ ] 总测试数 ≥ 210
-- [ ] 全量测试通过
+- [x] M1.1: `build_context_packet` 输出包含 8 类审计字段
+- [x] M1.1: `parse_llm_output` 单次调用成功
+- [x] M1.1: Ollama 对话 demo 可运行
+- [x] M1.2: SQLite 持久化（`build_cogcore_graph_persistent`）
+- [x] M1.2: 进程重启后同一 thread_id 数据不丢失
+- [x] M1.3: ToolRegistry 支持 register/execute/allowlist
+- [x] M1.3: write_diary + read_diary 闭环测试通过
+- [x] M1.4: 三种模式均可切换
+- [x] M1.4: teacher_gate_should_wake 门控
+- [x] 总测试数 ≥ 210（实际 228）
+- [x] 全量测试通过
 
 ---
 

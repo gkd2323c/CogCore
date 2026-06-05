@@ -2,7 +2,7 @@
 
 **通用认知内核（Universal Cognitive Kernel）—— LLM Agent 的持续认知层**
 
-[![阶段](https://img.shields.io/badge/stage-M0.5-green)]() [![测试](https://img.shields.io/badge/tests-138%20passed-brightgreen)]() [![模块](https://img.shields.io/badge/modules-16-blue)]() [![论文](https://img.shields.io/badge/based%20on-AP%20(2026)-blue)]()
+[![阶段](https://img.shields.io/badge/stage-M1-green)]() [![测试](https://img.shields.io/badge/tests-228%20passed-brightgreen)]() [![模块](https://img.shields.io/badge/modules-22-blue)]() [![论文](https://img.shields.io/badge/based%20on-AP%20(2026)-blue)]()
 
 ---
 
@@ -19,8 +19,12 @@ CogCore 补 LLM 在长期连续性上的结构性缺失：长期状态维护、�
 | 设计文档 | ✅ 完成（9 章 + 5 个新章节 + 附录 A）|
 | 验证矩阵 | ✅ 完成（17 实验 × CogCore 模块映射）|
 | 论文选型 | ✅ 完成（LangGraph 首选，PydanticAI 次选）|
-| 代码实现 | ✅ M0.9（全部 9 个里程碑）完成，162/162 测试通过 |
+| 代码实现 | ✅ M1 阶段完成（LLM 桥接 + 持久化 + 工具系统 + 运行模式），228/228 测试通过 |
 | E01-E17 复现 | ✅ **17/17 全部通过**，CogCore 实验已覆盖全部论文实验 |
+| LLM 集成 | ✅ OpenAI 兼容协议 + Ollama 本地，config.toml 配置 |
+| 持久化 | ✅ SQLite（零 Docker）/ Memory 双路径 |
+| 工具系统 | ✅ ToolRegistry + 日记/任务 3 工具 |
+| 运行模式 | ✅ full_silent / ap_agency / reinforced_agency 三种 |
 
 > **诚实声明**：所有实验已在 CogCore 上运行并通过验证。部分实验值因实现差异与论文数值不完全重合，但实验设计和判据均对齐论文 3.14 节。完整数据见 `experiments/E01-E17/`。
 
@@ -91,9 +95,10 @@ CogCore/
 │   ├── cogcore_framework_research.md  # LangGraph 选型调研
 │   └── 人工心智架构-论文分析.md         # AP 论文批判性分析
 ├── paper/                           # AP 论文原文
-├── src/cogcore/                     # 16 个 Python 模块
+├── src/cogcore/                     # 22 个 Python 模块
 │   ├── types.py                     # 核心类型（StimulusAtom 等）
 │   ├── state_schema.py              # CogCoreState + StateUpdater
+│   ├── config.py                    # TOML 配置加载（M1.1）
 │   ├── pipeline.py                  # 10 阶段 tick 流水线
 │   ├── state_pool.py                # 状态池（M0.2）
 │   ├── hdb.py                       # HDB 查存一体（M0.2）
@@ -104,28 +109,38 @@ CogCore/
 │   ├── attention.py                 # 注意力（M0.4）
 │   ├── adaptive_tuner.py            # 自适应调参器（M0.4）
 │   ├── action_system.py             # 行动系统（M0.3）
-│   ├── graph.py                     # LangGraph StateGraph（M0.5）
+│   ├── graph.py                     # LangGraph StateGraph（M0.5 + M1.2 SQLite）
+│   ├── modes.py                     # PA 运行模式（M1.4）
+│   ├── llm_bridge.py                # LLM 桥接 OpenAI SDK（M1.1）
+│   ├── tools.py                     # 工具系统（M1.3）
 │   ├── run.py                       # CLI 入口（M0.5）
-│   ├── llm_bridge.py                # LLM 桥接
-│   ├── tools.py                     # 工具定义
-│   ├── observability.py             # 可观测性
-│   └── main.py                      # M0.1 手动入口
-├── tests/                           # 11 个测试文件 / 138 个测试
+│   ├── main.py                      # M0.1 手动入口
+│   └── observability.py             # 可观测性
+├── tests/                           # 17 个测试文件 / 228 个测试
 │   ├── test_pipeline.py             # 5
 │   ├── test_state_pool.py           # 15
 │   ├── test_hdb.py                  # 16
 │   ├── test_state_schema.py         # 15
 │   ├── test_integration.py          # 9
-│   ├── test_action_system.py        # 23 (M0.3)
+│   ├── test_action_system.py        # 23
 │   ├── test_cfs.py                  # 10 (M0.4)
 │   ├── test_nt.py                   # 13 (M0.4)
 │   ├── test_attention.py            # 9 (M0.4)
 │   ├── test_tuner.py                # 12 (M0.4)
-│   └── test_graph.py                # 11 (M0.5)
-└── scripts/                         # 3 个演示脚本
-    ├── demo_run.py                  # M0.1 手动流水线
-    ├── demo_action.py               # M0.3 行动系统
-    └── demo_modulation.py           # M0.4 调制层
+│   ├── test_graph.py                # 11 (M0.5)
+│   ├── test_config.py               # 12 (M1.1)
+│   ├── test_llm_bridge.py           # 16 (M1.1)
+│   ├── test_persistence.py          # 7 (M1.2)
+│   ├── test_tools.py                # 17 (M1.3)
+│   └── test_modes.py                # 12 (M1.4)
+├── scripts/                         # 5 个演示脚本
+│   ├── demo_run.py                  # M0.1 手动流水线
+│   ├── demo_action.py               # M0.3 行动系统
+│   ├── demo_modulation.py           # M0.4 调制层
+│   ├── demo_langgraph.py            # M0.5 LangGraph
+│   └── demo_llm.py                  # M1.1 CogCore→LLM 闭环
+├── config.toml                      # 本地配置（.gitignore）
+├── config.toml.example              # 配置模板
 ```
 
 ## 许可与贡献
