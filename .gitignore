@@ -38,6 +38,8 @@ htmlcov/
 # LangGraph checkpoints (runtime data)
 .db
 *.db
+*.db-shm
+*.db-wal
 *.sqlite3
 
 # 测试数据库文件

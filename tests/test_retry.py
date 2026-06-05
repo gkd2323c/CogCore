@@ -128,19 +128,26 @@ def test_with_retry_custom_retryable():
 
 
 def test_with_retry_exponential_backoff_takes_time():
-    """3 次重试 + 退避至少花 0.5s。"""
+    """3 次重试 + 退避: 多次试验的平均退避时间应符合预期。
 
-    @with_retry(max_attempts=3, base_delay_sec=0.1, max_delay_sec=0.5)
-    def fn():
-        raise ConnectionError("x")
+    tenacity wait_random_exponential(multiplier, max) = uniform(0, multiplier*2^(n-1))
+    单次试验可能极端低 (随机接近 0), 用 N 次平均保证稳定。
+    """
+    N = 10
+    times = []
+    for _ in range(N):
+        @with_retry(max_attempts=3, base_delay_sec=0.1, max_delay_sec=0.5)
+        def fn():
+            raise ConnectionError("x")
 
-    t0 = time.time()
-    with pytest.raises(ConnectionError):
-        fn()
-    elapsed = time.time() - t0
-    # 3 attempts, 2 inter-attempt waits
-    # delays: ~0.1*rand(0,1), ~0.1*rand(1,2) = ~0.15 minimum
-    assert elapsed >= 0.1  # 至少有点退避
+        t0 = time.time()
+        with pytest.raises(ConnectionError):
+            fn()
+        times.append(time.time() - t0)
+    avg = sum(times) / N
+    # 期望: wait1 = uniform(0, 0.1) mean 0.05 + wait2 = uniform(0, 0.2) mean 0.10
+    # 平均 ~0.15s; 留余量, 至少 0.05s
+    assert avg >= 0.05, f"avg backoff {avg:.3f}s < 0.05s (expected ~0.15s)"
 
 
 # ============================================================
