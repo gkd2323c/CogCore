@@ -72,12 +72,22 @@ class RuntimeConfig(BaseModel):
     )
 
 
+class ServiceConfig(BaseModel):
+    """后台服务配置。"""
+
+    tick_interval: int = Field(default=60, ge=0, le=86400, description="后台 tick 间隔（秒），0=不自动 tick")
+    diary_interval: int = Field(default=100, ge=0, description="自动写日记间隔（ticks），0=禁用")
+    report_interval: int = Field(default=500, ge=0, description="状态报告间隔（ticks）")
+    data_dir: str = Field(default="cogcore_data", description="数据目录")
+
+
 class CogCoreConfig(BaseModel):
     """CogCore 完整配置。"""
 
     llm: LLMConfig = Field(default_factory=LLMConfig)
     persistence: PersistenceConfig = Field(default_factory=PersistenceConfig)
     runtime: RuntimeConfig = Field(default_factory=RuntimeConfig)
+    service: ServiceConfig = Field(default_factory=ServiceConfig)
 
 
 # ============================================================
@@ -121,6 +131,9 @@ def _apply_env_overrides(config: CogCoreConfig, prefix: str = "COGCORE_") -> Cog
         "PERSISTENCE_SQLITE_PATH": ("persistence", "sqlite_path"),
         "RUNTIME_LOG_LEVEL": ("runtime", "log_level"),
         "RUNTIME_MODE": ("runtime", "mode"),
+        "SERVICE_TICK_INTERVAL": ("service", "tick_interval"),
+        "SERVICE_DIARY_INTERVAL": ("service", "diary_interval"),
+        "SERVICE_DATA_DIR": ("service", "data_dir"),
     }
 
     for env_key, (section, field) in mapping.items():

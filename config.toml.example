@@ -49,3 +49,16 @@ log_level = "INFO"
 
 # 默认模式：full_silent | ap_agency | reinforced_agency
 mode = "full_silent"
+
+[service]
+# 后台 tick 间隔（秒），0=不自动 tick
+tick_interval = 60
+
+# 自动写日记间隔（ticks），0=禁用
+diary_interval = 100
+
+# 状态报告间隔（ticks）
+report_interval = 500
+
+# 数据目录
+data_dir = "cogcore_data"
