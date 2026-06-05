@@ -2,7 +2,7 @@
 
 **通用认知内核（Universal Cognitive Kernel）—— LLM Agent 的持续认知层**
 
-[![阶段](https://img.shields.io/badge/stage-M2-green)]() [![测试](https://img.shields.io/badge/tests-260%20passed-brightgreen)]() [![模块](https://img.shields.io/badge/modules-25-blue)]() [![论文](https://img.shields.io/badge/based%20on-AP%20(2026)-blue)]()
+[![阶段](https://img.shields.io/badge/stage-M3-green)]() [![测试](https://img.shields.io/badge/tests-374%20passed-brightgreen)]() [![模块](https://img.shields.io/badge/modules-30-blue)]() [![论文](https://img.shields.io/badge/based%20on-AP%20(2026)-blue)]()
 
 ---
 
@@ -19,9 +19,14 @@ CogCore 补 LLM 在长期连续性上的结构性缺失：长期状态维护、�
 | 设计文档 | ✅ 完成（9 章 + 5 个新章节 + 附录 A）|
 | 验证矩阵 | ✅ 完成（17 实验 × CogCore 模块映射）|
 | 论文选型 | ✅ 完成（LangGraph 首选，PydanticAI 次选）|
-| 代码实现 | ✅ M2 阶段完成（后台服务 + 端到端 Agent + 长程实验 + 工具箱），260/260 测试通过 |
-| E01-E17 复现 | ✅ **17/17 全部通过**，CogCore 实验已覆盖全部论文实验 |
+| 代码实现 | ✅ M3.5 阶段完成 (FastAPI + LLM fallback + MCP + 错误处理 + 代码感知工具), 374/374 测试通过 |
+| E01-E17 复现 | ✅ **17/17 全部通过**, CogCore 实验已覆盖全部论文实验 |
 | E18-E20 实验 | ✅ 3000 tick 稳定 + APT 消融 + CFS/NT 消融全部通过 |
+| L1 应用层 | ✅ FastAPI 接入 (5 端点, 真实 DeepSeek 跑通) |
+| L4 解释层 | ✅ LLMRegistry + circular fallback (14 测试 + 实跑) |
+| L5 工具层 | ✅ MCP 适配器 (15 测试) + 6 默认工具 + 3 long-term + 13 code/git/exec |
+| L10 错误处理 | ✅ 三层 (L1 retry + L2 fallback + L3 教师门控, 20 测试) |
+| L12 自迭代 | ⏳ M3.5 完成 L12.1 (自检) + L12.2 (自改), 缺 M3.6 元循环 |
 | 后台服务 | ✅ CogCoreService 持续 tick + 自动日记 + SQLite 持久化 |
 | LLM 集成 | ✅ OpenAI 兼容协议 + Ollama 本地 + end-to-end Agent |
 | 持久化 | ✅ SQLite（零 Docker）/ Memory 双路径 |

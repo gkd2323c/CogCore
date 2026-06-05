@@ -149,7 +149,16 @@ L12 自迭代层 (横切)
 
 ### 阶段 M3 — 智能体能力补全（目标：让 Agent 真能干活）
 
-**L 层覆盖**：`L1`（基础 FastAPI）+ `L4`（多 LLM）+ `L5`（MCP 接入）+ `L10`（错误处理）
+**L 层覆盖**：`L1`（基础 FastAPI）+ `L4`（多 LLM）+ `L5`（MCP 接入）+ `L10`（错误处理）+ `L12.1`/`L12.2`（代码自检/自改）
+
+**M3 进度** (2026-06-05 实际状态):
+- M3.1 FastAPI 接入           ✅ 5 端点 + 13 测试
+- M3.2 LLMRegistry + fallback  ✅ 14 测试 + 实跑
+- M3.3 MCP 工具接入            ✅ 15 测试 + DeepSeek 端到端
+- M3.4 错误处理三层            ✅ L1 retry + L2 fallback + L3 gate, 20 测试
+- M3.5 代码感知工具集           ✅ 6 code + 5 git + 2 exec + 闸门, 50 测试
+- M3.6 自迭代元循环             ⏳ M3.5 是 M3.6 的前提, 准备中
+- M3.7 实验 E21-E22            ⏳
 
 #### M3.1 — FastAPI 接入（`L1`）
 
@@ -265,43 +274,24 @@ L12 自迭代层 (横切)
 
 **目标**：让 Agent 拥有读源码、跑测试、git 操作的工具。**这是自迭代的启动点**。
 
-**交付**：
+**交付**（全部完成，2026-06-05）：
 
-- `src/cogcore/tools_code.py`：
-  - `read_file(path, offset, limit)`：读源码片段
-  - `search_code(pattern, path)`：按 regex / glob 找代码
-  - `list_modules()`：列出 `src/cogcore/` 下的所有模块 + 行数
-  - `list_tests()`：列出所有测试文件
-  - `find_test_for_module(module_path)`：根据 module 推断对应测试文件
-- `src/cogcore/tools_git.py`：
-  - `git_status()`：返回 staged / unstaged / untracked
-  - `git_diff(path)`：返回 patch
-  - `git_log(path, n=10)`：返回 commit 历史 + message
-  - `git_commit(message, paths)`：提交变更（需 L12 安全闸门）
-  - `git_revert(commit_sha)`：回滚指定 commit
-- `src/cogcore/tools_exec.py`：
-  - `run_tests(path=None, marker=None)`：调 pytest，返回 pass/fail
-  - `run_command(cmd, timeout=60)`：受限 shell 调用（白名单 + 超时）
+- ✅ `src/cogcore/tools_code.py`（6 工具）：read_file / search_code / list_modules / list_tests / find_test_for_module / count_lines
+- ✅ `src/cogcore/tools_git.py`（5 工具）：git_status / git_diff / git_log / git_commit / git_revert
+- ✅ `src/cogcore/tools_exec.py`（2 工具）：run_tests / run_command
+- ✅ `src/cogcore/self_modify_safety.py`：路径 / 命令 / pytest args / commit message / 路径越界 五重闸门
 
-**安全约束**：
+**安全约束**（全部实现）：
+- ✅ 路径必须是 `src/cogcore/` / `tests/` / `docs/` / `scripts/` / `experiments/`
+- ✅ 不能改 config.toml / pyproject.toml / AGENTS.md 等治理文件
+- ✅ pytest 禁止 -k skip / --deselect
+- ✅ commit message 必含 [auto-iterate] 标签
+- ✅ 拒绝 rm/rmdir/del/mv/format/fork bomb
+- ✅ 拒绝 ../ 越界
 
-- 所有 git 工具记录到 `traces/agent-actions.jsonl`
-- 写操作（commit/revert/run_command）需过 `self_modify_safety_check()`：
-  - 路径必须是 `src/cogcore/` 或 `tests/`
-  - 不能刪除文件
-  - 不能修改 `config.toml`
-  - 运行测试时不允许 `-k skip` 绕过
+**测试**：50 个 (test_m35_code_tools.py 14 + test_m35_safety_and_git.py 36)
 
-**参考**：wassim249 的 `@tool` 装饰器 + 自定义权限中间件
-
-**测试**：
-
-- `tests/test_tools_code.py`：read/search/list/find_test
-- `tests/test_tools_git.py`：status/diff/log 在 mock 仓库上
-- `tests/test_tools_exec.py`：run_tests 在示例代码上
-- `tests/test_self_modify_safety.py`：安全闸门拒绝危险操作
-
-**退出条件**：Agent 能在对话中读到自己的源码并用 git status 查看状态
+**MCP 超时**：MCPClient._request 默认 30s → 60s (用户反馈 30s 太短)
 
 ---
 
@@ -535,7 +525,7 @@ L12 自迭代层 (横切)
 
 | 阶段       | 自迭代就绪度检查                                             |
 | -------- | ---------------------------------------------------- |
-| **M3.5** | 工具齐备：read/write/test/git 都可用                         |
+| **M3.5** | 工具齐备: read/write/test/git 都可用 ✅ (6+5+2 工具 + 闸门, 50 测试) |
 | **M3.6** | 元循环跑通：dry-run 能生成 diff                               |
 | **M4.3** | **真正能改 + 跑测试 + commit + reload**（干跑 → 干跑-测-改循环 → 闭环） |
 | **M4.4** | evals 套件能评估"这次自改是否比上次好"（A/B 度量）                      |
@@ -612,7 +602,7 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 
 | 阶段     | 硬指标                                                                                                                         |
 | ------ | --------------------------------------------------------------------------------------------------------------------------- |
-| **M3** | 5 个 API 端点 + 3+ LLM provider 轮转 + 至少 1 个 MCP server 集成 + 错误处理三层全测 + **代码感知工具齐备 + 自迭代元循环干跑成功** + E21/E22 通过 + 320+ tests     |
+| **M3** | 5 个 API 端点 ✅ + 3+ LLM provider 轮转 ✅ + 至少 1 个 MCP server 集成 ✅ + 错误处理三层全测 ✅ + 代码感知工具齐备 ✅ + 自迭代元循环干跑成功 ⏳ + E21/E22 通过 ⏳ + 374 tests |
 | **M4** | HDB+嵌入双轨工作 + SQLite 增强（容量可控） + JSON trace + sqlite-stats + evals/ 1 键跑 + **自迭代闭环（改+测+commit+reload）** + E23 通过 + 380+ tests |
 | **M5** | `python -m cogcore serve` 启动 + JWT 鉴权 + 5 业务场景至少 4 个能跑 + **业务场景中至少 1 个用过自迭代** + E24-E25 通过 + 420+ tests                     |
 
@@ -632,4 +622,4 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 
 ---
 
-*最后更新：2026-06-05（M3-M5 路线规划）*
+*最后更新：2026-06-05 (M3.5 代码感知工具集完成, 374 tests)*

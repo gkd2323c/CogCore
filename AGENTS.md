@@ -7,9 +7,18 @@
 
 ## 1. 项目速览
 
-CogCore 是论文《人工心智架构》（AP）的工程化重写。LLM Agent 的"长期认知状态层"。**M2 阶段全部完成：M0 + M1 + M2 三个阶段全部交付**——25 个模块 / 17 个测试文件 / 260 个测试全部通过。
+CogCore 是论文《人工心智架构》（AP）的工程化重写。LLM Agent 的"长期认知状态层"。**M3.5 阶段完成：M0 + M1 + M2 + M3.1-M3.5 全部交付**——30 个模块 / 17 个测试文件 / 374 个测试全部通过。
 
-详细定位读 [PURPOSE.MD](./PURPOSE.MD)，架构决策读 [DESIGN.MD](./DESIGN.MD)。
+M3 进展:
+- M3.1 FastAPI 接入 (5 端点)
+- M3.2 LLMRegistry + circular fallback
+- M3.3 MCP 工具适配器
+- M3.4 错误处理三层
+- M3.5 代码感知工具集 (L12.1 + L12.2)
+- M3.6 自迭代元循环 (L12.3) 待
+- M3.7 实验 E21-E22 待
+
+详细定位读 [PURPOSE.MD](./PURPOSE.MD)，架构决策读 [DESIGN.MD](./DESIGN.MD)，总体计划读 [docs/CogCore-总体计划.md](./docs/CogCore-总体计划.md)。
 
 ## 2. 文件结构与入口
 
