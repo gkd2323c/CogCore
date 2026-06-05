@@ -35,7 +35,12 @@ logger = logging.getLogger(__name__)
 
 
 def _add_nodes_and_edges(graph: StateGraph, modules: dict[str, Any]) -> None:
-    """向 graph 添加 10 个节点和顺序边。"""
+    """向 graph 添加 10 个节点和顺序边。
+
+    M3.4: 每个 stage 节点默认用 with_retry 包, 3 次重试 + 指数退避。
+    """
+    from cogcore.retry import with_retry
+
     pool = modules.get("pool")
     hdb = modules.get("hdb")
     cfs = modules.get("cfs")
@@ -46,16 +51,28 @@ def _add_nodes_and_edges(graph: StateGraph, modules: dict[str, Any]) -> None:
     sensors = modules.get("sensors")
     induction = modules.get("induction")
 
-    graph.add_node("stage_1_sensor_input", lambda s: pipeline.stage_1_sensor_input(s, sensors))
-    graph.add_node("stage_2_state_pool_maintenance", lambda s: pipeline.stage_2_state_pool_maintenance(s, pool))
-    graph.add_node("stage_3_hdb_lookup", lambda s: pipeline.stage_3_hdb_lookup(s, hdb))
-    graph.add_node("stage_4_induction_growth", lambda s: pipeline.stage_4_induction_growth(s, induction))
-    graph.add_node("stage_5_cfs_evaluate", lambda s: pipeline.stage_5_cfs_evaluate(s, cfs))
-    graph.add_node("stage_6_attention_select", lambda s: pipeline.stage_6_attention_select(s, attention, pool))
-    graph.add_node("stage_7_nt_update", lambda s: pipeline.stage_7_nt_update(s, nt_sys))
-    graph.add_node("stage_8_action_evaluate_and_execute", lambda s: pipeline.stage_8_action_evaluate_and_execute(s, action_sys, pool))
-    graph.add_node("stage_9_episodic_write", lambda s: pipeline.stage_9_episodic_write(s, hdb))
-    graph.add_node("stage_10_adaptive_tune", lambda s: pipeline.stage_10_adaptive_tune(s, tuner))
+    # M3.4: 用 with_retry 包每个 stage 函数, 让节点级重试生效
+    s1 = with_retry(max_attempts=3)(lambda s: pipeline.stage_1_sensor_input(s, sensors))
+    s2 = with_retry(max_attempts=3)(lambda s: pipeline.stage_2_state_pool_maintenance(s, pool))
+    s3 = with_retry(max_attempts=3)(lambda s: pipeline.stage_3_hdb_lookup(s, hdb))
+    s4 = with_retry(max_attempts=3)(lambda s: pipeline.stage_4_induction_growth(s, induction))
+    s5 = with_retry(max_attempts=3)(lambda s: pipeline.stage_5_cfs_evaluate(s, cfs))
+    s6 = with_retry(max_attempts=3)(lambda s: pipeline.stage_6_attention_select(s, attention, pool))
+    s7 = with_retry(max_attempts=3)(lambda s: pipeline.stage_7_nt_update(s, nt_sys))
+    s8 = with_retry(max_attempts=3)(lambda s: pipeline.stage_8_action_evaluate_and_execute(s, action_sys, pool))
+    s9 = with_retry(max_attempts=3)(lambda s: pipeline.stage_9_episodic_write(s, hdb))
+    s10 = with_retry(max_attempts=3)(lambda s: pipeline.stage_10_adaptive_tune(s, tuner))
+
+    graph.add_node("stage_1_sensor_input", s1)
+    graph.add_node("stage_2_state_pool_maintenance", s2)
+    graph.add_node("stage_3_hdb_lookup", s3)
+    graph.add_node("stage_4_induction_growth", s4)
+    graph.add_node("stage_5_cfs_evaluate", s5)
+    graph.add_node("stage_6_attention_select", s6)
+    graph.add_node("stage_7_nt_update", s7)
+    graph.add_node("stage_8_action_evaluate_and_execute", s8)
+    graph.add_node("stage_9_episodic_write", s9)
+    graph.add_node("stage_10_adaptive_tune", s10)
 
     graph.add_edge(START, "stage_1_sensor_input")
     graph.add_edge("stage_1_sensor_input", "stage_2_state_pool_maintenance")

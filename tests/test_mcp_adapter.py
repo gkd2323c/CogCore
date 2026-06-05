@@ -51,9 +51,9 @@ def test_client_list_tools():
     client.start()
     try:
         tools = client.list_tools()
-        assert len(tools) == 2
+        assert len(tools) == 3
         names = {t["name"] for t in tools}
-        assert names == {"echo", "add"}
+        assert names == {"echo", "add", "reverse"}
     finally:
         client.stop()
 
@@ -112,7 +112,7 @@ def test_adapter_connect_all_returns_counts():
     adapter.add_server(_make_mock_config("srv1"))
     results = adapter.connect_all()
     try:
-        assert results == {"srv1": 2}
+        assert results == {"srv1": 3}
         assert "srv1" in adapter.server_names()
     finally:
         adapter.disconnect_all()
@@ -156,7 +156,7 @@ def test_adapter_register_all_into_registry():
     try:
         reg = ToolRegistry()
         count = adapter.register_all(reg)
-        assert count == 2
+        assert count == 3
         # 工具名加 server 前缀
         names = reg.get_available_tools()
         assert "mcp__mock__echo" in names
@@ -220,5 +220,7 @@ def test_adapter_multiple_servers():
         assert "mcp__beta__echo" in names
         assert "mcp__alpha__add" in names
         assert "mcp__beta__add" in names
+        assert "mcp__alpha__reverse" in names
+        assert "mcp__beta__reverse" in names
     finally:
         adapter.disconnect_all()
