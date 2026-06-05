@@ -105,16 +105,25 @@ class CogCoreAgent:
         packet = self._bridge.build_context_packet(state, max_tokens=2000)
 
         # ── Step 4: LLM + tool_executor loop ──
+        available = ", ".join(sorted(self._registry.get_available_tools()))
+        tool_schemas = self._registry.describe_schemas() if hasattr(self._registry, "describe_schemas") else ""
+        tool_hint = (
+            f"Available tools (use exact names and parameter keys): {available}. "
+            f"Schema: {tool_schemas}\n"
+            "If you need to use a tool, write: "
+            '<tool>tool_name({"key": "value"})</tool>\n'
+            "After tool execution, weave the result into a natural response. "
+            "Only emit a <tool> tag when you actually need to call a tool."
+        )
+        default_system = (
+            "You are an AI assistant powered by CogCore cognitive state. "
+            "Use the provided cognitive context to respond naturally.\n"
+            + tool_hint
+        )
         messages = [
             {
                 "role": "system",
-                "content": system_prompt
-                or (
-                    "You are an AI assistant powered by CogCore cognitive state. "
-                    "Use the provided cognitive context to respond naturally. "
-                    "If you need to use a tool, write: "
-                    "<tool>tool_name({\"key\": \"value\"})</tool>"
-                ),
+                "content": system_prompt or default_system,
             },
             {"role": "user", "content": packet},
         ]

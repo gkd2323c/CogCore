@@ -47,6 +47,16 @@ class ToolRegistry:
     def get_available_tools(self) -> list[str]:
         return list(self._allowlist)
 
+    def describe_schemas(self) -> str:
+        """返回所有可用工具的 schema 描述，供 LLM 选用。"""
+        parts = []
+        for name in sorted(self._allowlist):
+            if name in self._schemas:
+                schema = self._schemas[name]
+                params = ", ".join(f"{k}: {v}" for k, v in schema.items())
+                parts.append(f"{name}({params})")
+        return "; ".join(parts)
+
     def set_allowlist(self, allowlist: set[str]) -> None:
         self._allowlist = allowlist
 
@@ -321,3 +331,25 @@ def register_default_tools(registry: ToolRegistry) -> None:
     for name, func, schema, _desc in tools:
         registry.register_tool(name, func, schema)
         registry.add_to_allowlist(name)
+
+
+def register_long_term_tools(registry: ToolRegistry, lt: "LongTermExperienceTools") -> None:
+    """把 LongTermExperienceTools 的方法注册为可调用的工具。"""
+    def _write_diary(title: str, content: str, importance: float = 0.5) -> str:
+        return f"diary_id={lt.write_diary(title, content, importance=importance)}"
+
+    def _read_diary(query: str = "", k: int = 3) -> str:
+        entries = lt.read_diary(query, k=k)
+        if not entries:
+            return "no entries"
+        return "; ".join(f"{e['title']}: {e['content'][:60]}" for e in entries)
+
+    def _schedule_task(target: str, content: str, due_tick: int = 10) -> str:
+        return f"task_id={lt.schedule_task(target, content, due_tick)}"
+
+    registry.register_tool("write_diary", _write_diary, {"title": "string", "content": "string", "importance": "float"})
+    registry.add_to_allowlist("write_diary")
+    registry.register_tool("read_diary", _read_diary, {"query": "string", "k": "int"})
+    registry.add_to_allowlist("read_diary")
+    registry.register_tool("schedule_task", _schedule_task, {"target": "string", "content": "string", "due_tick": "int"})
+    registry.add_to_allowlist("schedule_task")
