@@ -37,14 +37,11 @@ max_turns = 10
 stream = false
 
 [persistence]
-# 持久化后端：memory | postgres | sqlite
+# 持久化后端：memory | sqlite
 backend = "memory"
 
-# Postgres 连接字符串（backend=postgres 时生效）
-# postgres_uri = "postgresql://cogcore:cogcore@localhost:5432/cogcore"
-
-# SQLite 路径（backend=sqlite 时生效）
-# sqlite_path = "cogcore.db"
+# SQLite 路径（backend=sqlite 时生效，不需要 Docker）
+# sqlite_path = "cogcore_state.db"
 
 [runtime]
 # 日志级别：DEBUG | INFO | WARNING | ERROR

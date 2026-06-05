@@ -143,7 +143,7 @@ def test_config_cache_out_of_order():
     from cogcore import config as cfg_module
     cfg_module._CONFIG_CACHE = None
     c = get_config()
-    assert c.llm.model == "qwen3:8b"
+    assert c.llm.model == "qwen3.5:latest"
     assert isinstance(c, CogCoreConfig)
 
 

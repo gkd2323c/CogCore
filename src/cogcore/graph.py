@@ -1,21 +1,27 @@
 """CogCoreStateGraph：把 10 阶段 tick 流水线包装为 LangGraph StateGraph。
 
-接口与 docs/CogCore-通用认知内核架构设计.md §5.11（工程主线顺序）完全对齐。
-
-M0.5 实现：
-- 10 个 stage 函数 → 10 个 LangGraph 节点
-- in-memory MemorySaver 作为默认 checkpointer
-- 模块实例通过闭包注入
-- 与 M0.1 run_cycle 行为等价，但支持 LangGraph Studio 可视化 + 自动 patch 合并
+M0.5 实现 in-memory MemorySaver。
+M1.2 新增 SQLite 持久化路径（零 Docker 依赖）。
 """
 
 from __future__ import annotations
 
 import logging
+import sqlite3
 from typing import Any
 
 from langgraph.graph import END, START, StateGraph
 from langgraph.checkpoint.memory import MemorySaver
+
+try:
+    from langgraph.checkpoint.sqlite import SqliteSaver
+    from langgraph.store.sqlite import SqliteStore
+
+    _HAS_SQLITE = True
+except ImportError:
+    SqliteSaver = None  # type: ignore
+    SqliteStore = None  # type: ignore
+    _HAS_SQLITE = False
 
 from cogcore.state_schema import CogCoreState
 import cogcore.pipeline as pipeline
@@ -23,28 +29,13 @@ import cogcore.pipeline as pipeline
 logger = logging.getLogger(__name__)
 
 
-def build_cogcore_graph(modules: dict[str, Any] | None = None) -> Any:
-    """构造 CogCore StateGraph。
+# ============================================================
+# 内部：图定义（内存和 SQLite 共享）
+# ============================================================
 
-    Args:
-        modules: 模块实例字典，可包含：
-            - pool: StatePool
-            - hdb: HDB
-            - cfs: CognitiveFeelingSystem
-            - attention: Attention
-            - nt_sys: NeurotransmitterSystem
-            - action_sys: ActionSystem
-            - tuner: AdaptiveTuner
-            - sensors: SensorLayer（可选）
-            - induction: InductionGrowth（可选）
-        缺失的模块会被传 None，相关 stage 会通过 _safe_call 处理
 
-    Returns:
-        CompiledStateGraph（可调用 .invoke()）
-    """
-    modules = modules or {}
-
-    # 默认模块（如果没传就建一个空 stub）
+def _add_nodes_and_edges(graph: StateGraph, modules: dict[str, Any]) -> None:
+    """向 graph 添加 10 个节点和顺序边。"""
     pool = modules.get("pool")
     hdb = modules.get("hdb")
     cfs = modules.get("cfs")
@@ -55,32 +46,17 @@ def build_cogcore_graph(modules: dict[str, Any] | None = None) -> Any:
     sensors = modules.get("sensors")
     induction = modules.get("induction")
 
-    # 构造图
-    graph = StateGraph(CogCoreState)
+    graph.add_node("stage_1_sensor_input", lambda s: pipeline.stage_1_sensor_input(s, sensors))
+    graph.add_node("stage_2_state_pool_maintenance", lambda s: pipeline.stage_2_state_pool_maintenance(s, pool))
+    graph.add_node("stage_3_hdb_lookup", lambda s: pipeline.stage_3_hdb_lookup(s, hdb))
+    graph.add_node("stage_4_induction_growth", lambda s: pipeline.stage_4_induction_growth(s, induction))
+    graph.add_node("stage_5_cfs_evaluate", lambda s: pipeline.stage_5_cfs_evaluate(s, cfs))
+    graph.add_node("stage_6_attention_select", lambda s: pipeline.stage_6_attention_select(s, attention, pool))
+    graph.add_node("stage_7_nt_update", lambda s: pipeline.stage_7_nt_update(s, nt_sys))
+    graph.add_node("stage_8_action_evaluate_and_execute", lambda s: pipeline.stage_8_action_evaluate_and_execute(s, action_sys, pool))
+    graph.add_node("stage_9_episodic_write", lambda s: pipeline.stage_9_episodic_write(s, hdb))
+    graph.add_node("stage_10_adaptive_tune", lambda s: pipeline.stage_10_adaptive_tune(s, tuner))
 
-    # 用 lambda 绑定模块到 stage 函数（LangGraph 节点签名：state -> dict）
-    graph.add_node("stage_1_sensor_input",
-                   lambda s: pipeline.stage_1_sensor_input(s, sensors))
-    graph.add_node("stage_2_state_pool_maintenance",
-                   lambda s: pipeline.stage_2_state_pool_maintenance(s, pool))
-    graph.add_node("stage_3_hdb_lookup",
-                   lambda s: pipeline.stage_3_hdb_lookup(s, hdb))
-    graph.add_node("stage_4_induction_growth",
-                   lambda s: pipeline.stage_4_induction_growth(s, induction))
-    graph.add_node("stage_5_cfs_evaluate",
-                   lambda s: pipeline.stage_5_cfs_evaluate(s, cfs))
-    graph.add_node("stage_6_attention_select",
-                   lambda s: pipeline.stage_6_attention_select(s, attention, pool))
-    graph.add_node("stage_7_nt_update",
-                   lambda s: pipeline.stage_7_nt_update(s, nt_sys))
-    graph.add_node("stage_8_action_evaluate_and_execute",
-                   lambda s: pipeline.stage_8_action_evaluate_and_execute(s, action_sys, pool))
-    graph.add_node("stage_9_episodic_write",
-                   lambda s: pipeline.stage_9_episodic_write(s, hdb))
-    graph.add_node("stage_10_adaptive_tune",
-                   lambda s: pipeline.stage_10_adaptive_tune(s, tuner))
-
-    # 边：START → 1 → 2 → ... → 10 → END
     graph.add_edge(START, "stage_1_sensor_input")
     graph.add_edge("stage_1_sensor_input", "stage_2_state_pool_maintenance")
     graph.add_edge("stage_2_state_pool_maintenance", "stage_3_hdb_lookup")
@@ -93,10 +69,64 @@ def build_cogcore_graph(modules: dict[str, Any] | None = None) -> Any:
     graph.add_edge("stage_9_episodic_write", "stage_10_adaptive_tune")
     graph.add_edge("stage_10_adaptive_tune", END)
 
-    # 编译（in-memory checkpointer 支持多次 invoke 保持 thread state）
+
+# ============================================================
+# 路径 A：内存（默认，零依赖）
+# ============================================================
+
+
+def build_cogcore_graph(modules: dict[str, Any] | None = None) -> Any:
+    """构造 CogCore StateGraph（in-memory MemorySaver）。
+
+    默认路径，适用于开发、测试和单会话场景。
+    """
+    modules = modules or {}
+    graph = StateGraph(CogCoreState)
+    _add_nodes_and_edges(graph, modules)
     compiled = graph.compile(checkpointer=MemorySaver())
     logger.info("CogCore StateGraph compiled: 10 nodes + MemorySaver")
     return compiled
+
+
+# ============================================================
+# 路径 B：SQLite 持久化（M1.2，零 Docker）
+# ============================================================
+
+
+def build_cogcore_graph_persistent(
+    modules: dict[str, Any] | None = None,
+    sqlite_path: str = "cogcore_state.db",
+) -> Any:
+    """构造 CogCore StateGraph（SQLite 持久化）。
+
+    使用 SqliteSaver + SqliteStore 替代 MemorySaver。
+    不需要 Docker / PostgreSQL——Python 内置 sqlite3 即可。
+
+    Args:
+        modules: 模块实例字典
+        sqlite_path: SQLite 数据库文件路径
+    """
+    if not _HAS_SQLITE:
+        raise ImportError(
+            "langgraph-checkpoint-sqlite 未安装。运行: pip install langgraph-checkpoint-sqlite"
+        )
+
+    modules = modules or {}
+    graph = StateGraph(CogCoreState)
+    _add_nodes_and_edges(graph, modules)
+
+    conn = sqlite3.connect(sqlite_path, check_same_thread=False)
+    checkpointer = SqliteSaver(conn)
+    store = SqliteStore(conn)
+
+    compiled = graph.compile(checkpointer=checkpointer, store=store)
+    logger.info(f"CogCore StateGraph compiled with SQLite: {sqlite_path}")
+    return compiled
+
+
+# ============================================================
+# 便捷调用
+# ============================================================
 
 
 def invoke_cogcore(
@@ -106,18 +136,7 @@ def invoke_cogcore(
     thread_id: str = "default",
     modality: str = "text",
 ) -> dict:
-    """调用一次 StateGraph，返回最终 state。
-
-    Args:
-        graph: build_cogcore_graph() 返回的编译图
-        raw_input: 外源输入
-        tick: 全局 tick 计数
-        thread_id: 会话 ID（LangGraph checkpointer 用）
-        modality: 输入模态
-
-    Returns:
-        最终 CogCoreState（作为 dict）
-    """
+    """调用一次 StateGraph，返回最终 state。"""
     config = {"configurable": {"thread_id": thread_id}}
     initial_state = {
         "tick": tick,
