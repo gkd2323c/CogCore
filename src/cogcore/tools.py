@@ -95,6 +95,12 @@ class LongTermExperienceTools:
         if db_path:
             self._init_diary_db()
 
+    def close(self) -> None:
+        """关闭所有打开的 SQLite 连接（用于 hot-reload / 测试清理）。"""
+        # sqlite3 的连接是短生命周期的（with 语句内），没有需要持续持有的连接。
+        # 重置 in-memory fallback。
+        self._diary_store = []
+
     def _init_diary_db(self) -> None:
         """初始化日记 SQLite 表。"""
         if not self._db_path:
