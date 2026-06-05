@@ -47,7 +47,7 @@ class LLMConfig(BaseModel):
     api_key: str | None = Field(
         default=None, description="API Key。本地服务可留空"
     )
-    model: str = Field(default="qwen3:8b", description="模型名称")
+    model: str = Field(default="qwen3.5:latest", description="模型名称")
     temperature: float = Field(default=0.7, ge=0.0, le=2.0, description="生成温度")
     max_tokens: int = Field(default=4096, ge=64, le=65536, description="单次生成最大 token 数")
     timeout: int = Field(default=60, ge=5, le=600, description="API 请求超时秒数")

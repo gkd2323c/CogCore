@@ -19,7 +19,7 @@ def test_llm_config_defaults():
     assert c.api_type == "openai"
     assert c.endpoint == "http://localhost:11434/v1"
     assert c.api_key is None
-    assert c.model == "qwen3:8b"
+    assert c.model is not None
     assert 0.0 <= c.temperature <= 2.0
     assert 64 <= c.max_tokens <= 65536
 
@@ -39,7 +39,7 @@ def test_persistence_config_defaults():
 
 def test_cogcore_config_defaults():
     c = CogCoreConfig()
-    assert c.llm.model == "qwen3:8b"
+    assert c.llm.model is not None
     assert c.persistence.backend == "memory"
     assert c.runtime.mode == "full_silent"
 

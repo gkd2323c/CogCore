@@ -132,10 +132,10 @@ class LLMBridge:
         # 1. 情绪递质 (Neurotransmitters)
         nt = tick_report.get("nt_values", {})
         def get_val(obj, key, default=0.0):
-            if hasattr(obj, key):
-                return getattr(obj, key)
             if isinstance(obj, dict):
                 return obj.get(key, default)
+            if hasattr(obj, key):
+                return getattr(obj, key)
             return default
 
         focus = get_val(nt, "focus")
@@ -149,14 +149,18 @@ class LLMBridge:
         pool_snap = tick_report.get("pool_snapshot", {})
         summary = {}
         if pool_snap:
-            if hasattr(pool_snap, "energy_summary"):
+            if isinstance(pool_snap, dict):
+                es = pool_snap.get("energy_summary", {})
+                if isinstance(es, dict):
+                    summary = es
+                else:
+                    summary = {"active_count": 0, "total_energy": 0.0, "cognitive_pressure": 0.0}
+            elif hasattr(pool_snap, "energy_summary"):
                 es = pool_snap.energy_summary
                 if hasattr(es, "model_dump"):
                     summary = es.model_dump()
                 else:
-                    summary = dict(es)
-            elif isinstance(pool_snap, dict):
-                summary = pool_snap.get("energy_summary", {})
+                    summary = {"active_count": es.active_count, "total_energy": es.total_energy, "cognitive_pressure": es.cognitive_pressure}
 
         active_count = summary.get("active_count", 0)
         total_energy = summary.get("total_energy", 0.0)
@@ -166,7 +170,10 @@ class LLMBridge:
         cam = tick_report.get("cam")
         cam_items = []
         if cam:
-            items = getattr(cam, "items", []) if hasattr(cam, "items") else cam.get("items", [])
+            if isinstance(cam, dict):
+                items = cam.get("items", [])
+            else:
+                items = getattr(cam, "items", [])
             for item in items:
                 content = getattr(item, "content", "") if hasattr(item, "content") else item.get("content", "")
                 item_id = getattr(item, "id", "") if hasattr(item, "id") else item.get("id", "")
@@ -185,30 +192,33 @@ class LLMBridge:
 
         # 4. 记忆来源 (Memory Sources) - 来自 HDB 快照与 matching scores
         hdb = tick_report.get("hdb_snapshot", {})
-        def get_list(obj, key):
-            if hasattr(obj, key):
-                return getattr(obj, key)
-            if isinstance(obj, dict):
-                return obj.get(key, [])
-            return []
-
-        matched_structs = get_list(hdb, "matched_structure_ids")
-        new_structs = get_list(hdb, "new_structure_ids")
+        matched_structs = []
+        new_structs = []
         match_scores = {}
         if hdb:
-            if hasattr(hdb, "match_scores"):
-                match_scores = hdb.match_scores
-            elif isinstance(hdb, dict):
+            if isinstance(hdb, dict):
+                matched_structs = hdb.get("matched_structure_ids", [])
+                new_structs = hdb.get("new_structure_ids", [])
                 match_scores = hdb.get("match_scores", {})
+            else:
+                matched_structs = getattr(hdb, "matched_structure_ids", [])
+                new_structs = getattr(hdb, "new_structure_ids", [])
+                match_scores = getattr(hdb, "match_scores", {})
 
         # 5. 认知感受 (Cognitive Feelings)
         feelings = tick_report.get("feeling_signals", [])
         feeling_list = []
         for f in feelings:
-            f_type = getattr(f, "type", "") if hasattr(f, "type") else f.get("type", "")
-            if hasattr(f_type, "value"):
-                f_type = f_type.value
-            intensity = getattr(f, "intensity", 0.0) if hasattr(f, "intensity") else f.get("intensity", 0.0)
+            if isinstance(f, dict):
+                f_type = f.get("type", "")
+                if hasattr(f_type, "value"):
+                    f_type = f_type.value
+                intensity = f.get("intensity", 0.0)
+            else:
+                f_type = getattr(f, "type", "")
+                if hasattr(f_type, "value"):
+                    f_type = f_type.value
+                intensity = getattr(f, "intensity", 0.0)
             feeling_list.append(f"- Feeling: {f_type} (Intensity: {intensity:.2f})")
 
         # 6. 行动倾向 (Action Drives)
@@ -216,16 +226,24 @@ class LLMBridge:
         new_atoms = tick_report.get("new_atoms", [])
         action_atoms = []
         for a in new_atoms:
-            source = getattr(a, "source", "") if hasattr(a, "source") else a.get("source", "")
-            if hasattr(source, "value"):
-                source = source.value
-            if source == "action":
-                content = getattr(a, "content", "") if hasattr(a, "content") else a.get("content", "")
-                val_real = 0.0
-                energy = getattr(a, "energy", None) if hasattr(a, "energy") else a.get("energy", None)
-                if energy:
-                    val_real = getattr(energy, "real", 0.0) if hasattr(energy, "real") else energy.get("real", 0.0)
-                action_atoms.append(f"- Action: {content} (Feedback Energy: {val_real:.2f})")
+            if isinstance(a, dict):
+                source = a.get("source", "")
+                if hasattr(source, "value"):
+                    source = source.value
+                if source == "action":
+                    content = a.get("content", "")
+                    energy = a.get("energy", None)
+                    val_real = energy.get("real", 0.0) if isinstance(energy, dict) else (getattr(energy, "real", 0.0) if energy else 0.0)
+                    action_atoms.append(f"- Action: {content} (Feedback Energy: {val_real:.2f})")
+            else:
+                source = getattr(a, "source", "")
+                if hasattr(source, "value"):
+                    source = source.value
+                if source == "action":
+                    content = getattr(a, "content", "")
+                    energy = getattr(a, "energy", None)
+                    val_real = getattr(energy, "real", 0.0) if energy else 0.0
+                    action_atoms.append(f"- Action: {content} (Feedback Energy: {val_real:.2f})")
 
         # 拼装上下文 Prompt
         packet = []
