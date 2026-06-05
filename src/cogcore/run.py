@@ -19,6 +19,7 @@ from cogcore.action_system import ActionNode, ActionResult, ActionSource, Action
 from cogcore.adaptive_tuner import AdaptiveTuner
 from cogcore.attention import Attention
 from cogcore.cfs import CognitiveFeelingSystem
+from cogcore.config import load_config, get_config
 from cogcore.graph import build_cogcore_graph, invoke_cogcore
 from cogcore.hdb import HDB
 from cogcore.nt import NeurotransmitterSystem
@@ -61,10 +62,16 @@ def main() -> int:
     parser.add_argument(
         "--verbose", "-v", action="store_true", help="详细日志"
     )
+    parser.add_argument(
+        "--config", default=None, help="配置文件路径（默认从项目根查找 config.toml）"
+    )
     args = parser.parse_args()
 
+    # 加载配置
+    cfg = load_config(args.config)
+
     logging.basicConfig(
-        level=logging.DEBUG if args.verbose else logging.INFO,
+        level=getattr(logging, cfg.runtime.log_level) if not args.verbose else logging.DEBUG,
         format="%(levelname)s %(name)s: %(message)s",
     )
 
