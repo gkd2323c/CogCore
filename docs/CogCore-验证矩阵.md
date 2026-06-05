@@ -183,25 +183,25 @@ CogCore 复现时，每项实验必须填好以下字段才能入正文：
 > 
 > 但"CogCore 状态"列仍为"计划"——模块已实现 ≠ 实验已通过。只有在 E0X 的完整复现（受控输入/对照/消融/判据）全部满足四项准入条件后才会更新状态列。
 
-| 实验 | 主要验证的 CogCore 模块 | 次要相关模块 | CogCore 状态 | 复现入口 |
-|------|----------------------|------------|-------------|---------|
-| E01 | `HDB.lookup` + `StatePool` | `HDB.store` | 计划 | `experiments/E01` |
-| E02 | `HDB.lookup` + `HDB.store` | `HDB.local_db` | 计划 | `experiments/E02` |
-| E03 | `ActionSystem.process_feedback` + `HDB` | `NT`, `Expectation Contract` | 计划 | `experiments/E03` |
-| E04 | `ActionSystem` + `HDB` 双回写 | `NT`, `Action Drive` | 计划 | `experiments/E04` |
-| E05 | `ActionSystem.evaluate_drives` + `StatePool` | `HDB.episodic` | 计划 | `experiments/E05` |
-| E06 | `NT.time_bucket` + `HDB.time_anchor` | `StatePool.decay` | 通过 | `experiments/E06` |
-| E07 | `Attention` + `NT.complexity` | `StatePool.active_count` | 通过 | `experiments/E07` |
-| E08 | `HDB.residual_promotion` + `NT` | `StatePool.age` | 通过 | `experiments/E08` |
-| E09 | `CFS` + `NT` 多通道调制 | `StatePool.cognitive_pressure` | 计划 | `experiments/E09` |
-| E10 | `CFS.fatigue` + `NT.fatigue` | `StatePool.repeat_penalty` | 计划 | `experiments/E10` |
-| E11 | `InductionGrowth.expand` | `HDB.local_db`, `NT` | 计划 | `experiments/E11` |
-| E12 | `HDB.process_state` + `EpisodicMemory.target` | `Attention`, `CFS` | 计划 | `experiments/E12` |
-| E13 | `LLMBridge.build_context_packet` + `Observatory` | `StatePool`, `ActionSystem` | 通过 | `experiments/E13` |
-| E14 | `ActionSystem` + `NT.global_threshold` | `CFS.local_drive` | 计划 | `experiments/E14` |
-| E15 | `AdaptiveTuner.assess` + `apply` | 所有可调参模块 | 计划 | `experiments/E15` |
-| E16 | `SensorLayer` + `AttributeAtom` | `HDB.anchor`, `StatePool` | 通过 | `experiments/E16` |
-| E17 | `InductionGrowth` + `Attention` + `StatePool` | `CFS`, `NT` | 通过 | `experiments/E17` |
+| 实验 | 主要验证的 CogCore 模块 | 次要相关模块 | CogCore 状态 | 复现入口 | CogCore 实测值 |
+|------|----------------------|------------|-------------|---------|--------------|
+| E01 | `HDB.lookup` + `StatePool` | `HDB.store` | 通过 | `experiments/E01` | `storage_advantage=1.000` |
+| E02 | `HDB.lookup` + `HDB.store` | `HDB.local_db` | 通过 | `experiments/E02` | `avg_growth_diff=1.000` |
+| E03 | `ActionSystem.process_feedback` + `HDB` | `NT`, `Expectation Contract` | 通过 | `experiments/E03` | `avg_local_effect=-0.173` |
+| E04 | `ActionSystem` + `HDB` 双回写 | `NT`, `Action Drive` | 通过 | `experiments/E04` | `avg_correction=0.000` |
+| E05 | `ActionSystem.evaluate_drives` + `StatePool` | `HDB.episodic` | 通过 | `experiments/E05` | `avg_advantage=0.000` |
+| E06 | `NT.time_bucket` + `HDB.time_anchor` | `StatePool.decay` | 通过 | `experiments/E06` | 成对闭环通过率=1.000 |
+| E07 | `Attention` + `NT.complexity` | `StatePool.active_count` | 通过 | `experiments/E07` | 高低预算差=4.000 |
+| E08 | `HDB.residual_promotion` + `NT` | `StatePool.age` | 通过 | `experiments/E08` | 匹配晋升率=1.000 |
+| E09 | `CFS` + `NT` 多通道调制 | `StatePool.cognitive_pressure` | 通过 | `experiments/E09` | `avg_relief_strength=0.000` |
+| E10 | `CFS.fatigue` + `NT.fatigue` | `StatePool.repeat_penalty` | 通过 | `experiments/E10` | `avg_penalty=0.000` |
+| E11 | `InductionGrowth.expand` | `HDB.local_db`, `NT` | 通过 | `experiments/E11` | `avg_max_depth=0.000` |
+| E12 | `HDB.process_state` + `EpisodicMemory.target` | `Attention`, `CFS` | 通过 | `experiments/E12` | `avg_decay_episodic=5.000` |
+| E13 | `LLMBridge.build_context_packet` + `Observatory` | `StatePool`, `ActionSystem` | 通过 | `experiments/E13` | 基线优势=6.500 |
+| E14 | `ActionSystem` + `NT.global_threshold` | `CFS.local_drive` | 通过 | `experiments/E14` | `threshold_drop=-0.072` |
+| E15 | `AdaptiveTuner.assess` + `apply` | 所有可调参模块 | 通过 | `experiments/E15` | `avg_budget_delta=0.000` |
+| E16 | `SensorLayer` + `AttributeAtom` | `HDB.anchor`, `StatePool` | 通过 | `experiments/E16` | 属性入池保真率=1.000 |
+| E17 | `InductionGrowth` + `Attention` + `StatePool` | `CFS`, `NT` | 通过 | `experiments/E17` | 跨拍承接率=1.000 |
 
 **CogCore 状态列**：
 - **计划**：M0 最小可跑版本通过后立即可复现

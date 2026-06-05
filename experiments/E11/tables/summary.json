@@ -1,0 +1,470 @@
+{
+  "experiment": "E11",
+  "mechanism_domain": "能量图景",
+  "total_cases": 72,
+  "metrics": {
+    "avg_deep_depth": 2.0,
+    "avg_shallow_depth": 0.8695652173913043,
+    "avg_all_depth": 1.25,
+    "deep_case_count": 24,
+    "shallow_case_count": 23,
+    "chain_length": 5,
+    "transition_weight": 0.18,
+    "initial_energy": 1.0,
+    "thresholds": [
+      0.005,
+      0.01,
+      0.02,
+      0.04,
+      0.06,
+      0.1,
+      0.3,
+      0.5
+    ],
+    "widths": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ]
+  },
+  "cases": [
+    {
+      "threshold": 0.005,
+      "width": 1,
+      "max_depth": 3,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.005,
+      "width": 2,
+      "max_depth": 3,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.005,
+      "width": 3,
+      "max_depth": 3,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.005,
+      "width": 4,
+      "max_depth": 3,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.005,
+      "width": 5,
+      "max_depth": 3,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.005,
+      "width": 6,
+      "max_depth": 3,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.005,
+      "width": 7,
+      "max_depth": 3,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.005,
+      "width": 8,
+      "max_depth": 3,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.005,
+      "width": 9,
+      "max_depth": 3,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.01,
+      "width": 1,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.01,
+      "width": 2,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.01,
+      "width": 3,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.01,
+      "width": 4,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.01,
+      "width": 5,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.01,
+      "width": 6,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.01,
+      "width": 7,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.01,
+      "width": 8,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.01,
+      "width": 9,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.02,
+      "width": 1,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.02,
+      "width": 2,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.02,
+      "width": 3,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.02,
+      "width": 4,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.02,
+      "width": 5,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.02,
+      "width": 6,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.02,
+      "width": 7,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.02,
+      "width": 8,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.02,
+      "width": 9,
+      "max_depth": 2,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.04,
+      "width": 1,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.04,
+      "width": 2,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.04,
+      "width": 3,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.04,
+      "width": 4,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.04,
+      "width": 5,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.04,
+      "width": 6,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.04,
+      "width": 7,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.04,
+      "width": 8,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.04,
+      "width": 9,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.06,
+      "width": 1,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.06,
+      "width": 2,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.06,
+      "width": 3,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.06,
+      "width": 4,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.06,
+      "width": 5,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.06,
+      "width": 6,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.06,
+      "width": 7,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.06,
+      "width": 8,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.06,
+      "width": 9,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.1,
+      "width": 1,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.1,
+      "width": 2,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.1,
+      "width": 3,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.1,
+      "width": 4,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.1,
+      "width": 5,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.1,
+      "width": 6,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.1,
+      "width": 7,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.1,
+      "width": 8,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.1,
+      "width": 9,
+      "max_depth": 1,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.3,
+      "width": 1,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.3,
+      "width": 2,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.3,
+      "width": 3,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.3,
+      "width": 4,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.3,
+      "width": 5,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.3,
+      "width": 6,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.3,
+      "width": 7,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.3,
+      "width": 8,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.3,
+      "width": 9,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.5,
+      "width": 1,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.5,
+      "width": 2,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.5,
+      "width": 3,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.5,
+      "width": 4,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.5,
+      "width": 5,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.5,
+      "width": 6,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.5,
+      "width": 7,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.5,
+      "width": 8,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    },
+    {
+      "threshold": 0.5,
+      "width": 9,
+      "max_depth": 0,
+      "initial_energy": 1.0
+    }
+  ]
+}

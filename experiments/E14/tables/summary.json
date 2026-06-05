@@ -1,0 +1,871 @@
+{
+  "cases": [
+    {
+      "family": "F01",
+      "cond": 0,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F01",
+      "cond": 1,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F01",
+      "cond": 2,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F01",
+      "cond": 3,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F01",
+      "cond": 4,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F01",
+      "cond": 5,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F01",
+      "cond": 6,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F01",
+      "cond": 7,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F01",
+      "cond": 8,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F01",
+      "cond": 9,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F01",
+      "cond": 10,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F01",
+      "cond": 11,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F02",
+      "cond": 0,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F02",
+      "cond": 1,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F02",
+      "cond": 2,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F02",
+      "cond": 3,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F02",
+      "cond": 4,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F02",
+      "cond": 5,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F02",
+      "cond": 6,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F02",
+      "cond": 7,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F02",
+      "cond": 8,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F02",
+      "cond": 9,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F02",
+      "cond": 10,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F02",
+      "cond": 11,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F03",
+      "cond": 0,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F03",
+      "cond": 1,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F03",
+      "cond": 2,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F03",
+      "cond": 3,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F03",
+      "cond": 4,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F03",
+      "cond": 5,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F03",
+      "cond": 6,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F03",
+      "cond": 7,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F03",
+      "cond": 8,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F03",
+      "cond": 9,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F03",
+      "cond": 10,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F03",
+      "cond": 11,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F04",
+      "cond": 0,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F04",
+      "cond": 1,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F04",
+      "cond": 2,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F04",
+      "cond": 3,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F04",
+      "cond": 4,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F04",
+      "cond": 5,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F04",
+      "cond": 6,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F04",
+      "cond": 7,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F04",
+      "cond": 8,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F04",
+      "cond": 9,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F04",
+      "cond": 10,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F04",
+      "cond": 11,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F05",
+      "cond": 0,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F05",
+      "cond": 1,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F05",
+      "cond": 2,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F05",
+      "cond": 3,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F05",
+      "cond": 4,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F05",
+      "cond": 5,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F05",
+      "cond": 6,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F05",
+      "cond": 7,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F05",
+      "cond": 8,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F05",
+      "cond": 9,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F05",
+      "cond": 10,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F05",
+      "cond": 11,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F06",
+      "cond": 0,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F06",
+      "cond": 1,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F06",
+      "cond": 2,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F06",
+      "cond": 3,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F06",
+      "cond": 4,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F06",
+      "cond": 5,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F06",
+      "cond": 6,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F06",
+      "cond": 7,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F06",
+      "cond": 8,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F06",
+      "cond": 9,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F06",
+      "cond": 10,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F06",
+      "cond": 11,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F07",
+      "cond": 0,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F07",
+      "cond": 1,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F07",
+      "cond": 2,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F07",
+      "cond": 3,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F07",
+      "cond": 4,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F07",
+      "cond": 5,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F07",
+      "cond": 6,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F07",
+      "cond": 7,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F07",
+      "cond": 8,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F07",
+      "cond": 9,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F07",
+      "cond": 10,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F07",
+      "cond": 11,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F08",
+      "cond": 0,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F08",
+      "cond": 1,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F08",
+      "cond": 2,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F08",
+      "cond": 3,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F08",
+      "cond": 4,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F08",
+      "cond": 5,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F08",
+      "cond": 6,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F08",
+      "cond": 7,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F08",
+      "cond": 8,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F08",
+      "cond": 9,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F08",
+      "cond": 10,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F08",
+      "cond": 11,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F09",
+      "cond": 0,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F09",
+      "cond": 1,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F09",
+      "cond": 2,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F09",
+      "cond": 3,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F09",
+      "cond": 4,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F09",
+      "cond": 5,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F09",
+      "cond": 6,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F09",
+      "cond": 7,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F09",
+      "cond": 8,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F09",
+      "cond": 9,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F09",
+      "cond": 10,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F09",
+      "cond": 11,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F10",
+      "cond": 0,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F10",
+      "cond": 1,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F10",
+      "cond": 2,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F10",
+      "cond": 3,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F10",
+      "cond": 4,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F10",
+      "cond": 5,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F10",
+      "cond": 6,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F10",
+      "cond": 7,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F10",
+      "cond": 8,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F10",
+      "cond": 9,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F10",
+      "cond": 10,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F10",
+      "cond": 11,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F11",
+      "cond": 0,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F11",
+      "cond": 1,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F11",
+      "cond": 2,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F11",
+      "cond": 3,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F11",
+      "cond": 4,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F11",
+      "cond": 5,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F11",
+      "cond": 6,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F11",
+      "cond": 7,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F11",
+      "cond": 8,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F11",
+      "cond": 9,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F11",
+      "cond": 10,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F11",
+      "cond": 11,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F12",
+      "cond": 0,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F12",
+      "cond": 1,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F12",
+      "cond": 2,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F12",
+      "cond": 3,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F12",
+      "cond": 4,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F12",
+      "cond": 5,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F12",
+      "cond": 6,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F12",
+      "cond": 7,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F12",
+      "cond": 8,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F12",
+      "cond": 9,
+      "is_reward": false,
+      "avg_drive": 1.0
+    },
+    {
+      "family": "F12",
+      "cond": 10,
+      "is_reward": true,
+      "avg_drive": 1.072
+    },
+    {
+      "family": "F12",
+      "cond": 11,
+      "is_reward": false,
+      "avg_drive": 1.0
+    }
+  ],
+  "metrics": {
+    "threshold_drop": -0.072
+  }
+}

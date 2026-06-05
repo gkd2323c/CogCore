@@ -1,0 +1,91 @@
+{
+  "cases": [
+    {
+      "base": "今天 天气 真 好",
+      "replacement": "今天 天气 真 差",
+      "base_count": 1,
+      "new_count": 2,
+      "diff": 1
+    },
+    {
+      "base": "我 喜欢 吃 苹果",
+      "replacement": "我 喜欢 吃 香蕉",
+      "base_count": 1,
+      "new_count": 2,
+      "diff": 1
+    },
+    {
+      "base": "他 在 学校 学习",
+      "replacement": "他 在 公司 工作",
+      "base_count": 1,
+      "new_count": 2,
+      "diff": 1
+    },
+    {
+      "base": "这 本 书 很 有趣",
+      "replacement": "这 本 书 很 无聊",
+      "base_count": 1,
+      "new_count": 2,
+      "diff": 1
+    },
+    {
+      "base": "明天 要 去 公园",
+      "replacement": "明天 要 去 医院",
+      "base_count": 1,
+      "new_count": 2,
+      "diff": 1
+    },
+    {
+      "base": "她 是 个 优秀 的 老师",
+      "replacement": "她 是 个 优秀 的 医生",
+      "base_count": 1,
+      "new_count": 2,
+      "diff": 1
+    },
+    {
+      "base": "我们 一起 去 海边",
+      "replacement": "我们 一起 去 山里",
+      "base_count": 1,
+      "new_count": 2,
+      "diff": 1
+    },
+    {
+      "base": "今天 晚上 看 电影",
+      "replacement": "今天 晚上 看 话剧",
+      "base_count": 1,
+      "new_count": 2,
+      "diff": 1
+    },
+    {
+      "base": "这 个 问题 很 简单",
+      "replacement": "这 个 问题 很 复杂",
+      "base_count": 1,
+      "new_count": 2,
+      "diff": 1
+    },
+    {
+      "base": "猫 在 桌子 上面 睡觉",
+      "replacement": "猫 在 椅子 上面 睡觉",
+      "base_count": 1,
+      "new_count": 2,
+      "diff": 1
+    },
+    {
+      "base": "春天 的 花朵 很 美丽",
+      "replacement": "春天 的 花朵 很 漂亮",
+      "base_count": 1,
+      "new_count": 2,
+      "diff": 1
+    },
+    {
+      "base": "你 会 弹 钢琴 吗",
+      "replacement": "你 会 弹 吉他 吗",
+      "base_count": 1,
+      "new_count": 2,
+      "diff": 1
+    }
+  ],
+  "metrics": {
+    "avg_growth_diff": 1.0
+  }
+}

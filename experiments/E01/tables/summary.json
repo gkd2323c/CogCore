@@ -1,0 +1,79 @@
+{
+  "cases": [
+    {
+      "trial": 0,
+      "order": "ordered_first",
+      "cost": 0,
+      "score": 1.0
+    },
+    {
+      "trial": 0,
+      "order": "reversed_first",
+      "cost": 0,
+      "score": 1.0
+    },
+    {
+      "trial": 1,
+      "order": "ordered_first",
+      "cost": 0,
+      "score": 1.0
+    },
+    {
+      "trial": 1,
+      "order": "reversed_first",
+      "cost": 0,
+      "score": 1.0
+    },
+    {
+      "trial": 2,
+      "order": "ordered_first",
+      "cost": 0,
+      "score": 1.0
+    },
+    {
+      "trial": 2,
+      "order": "reversed_first",
+      "cost": 0,
+      "score": 1.0
+    },
+    {
+      "trial": 3,
+      "order": "ordered_first",
+      "cost": 0,
+      "score": 1.0
+    },
+    {
+      "trial": 3,
+      "order": "reversed_first",
+      "cost": 0,
+      "score": 1.0
+    },
+    {
+      "trial": 4,
+      "order": "ordered_first",
+      "cost": 0,
+      "score": 1.0
+    },
+    {
+      "trial": 4,
+      "order": "reversed_first",
+      "cost": 0,
+      "score": 1.0
+    },
+    {
+      "trial": 5,
+      "order": "ordered_first",
+      "cost": 0,
+      "score": 1.0
+    },
+    {
+      "trial": 5,
+      "order": "reversed_first",
+      "cost": 0,
+      "score": 1.0
+    }
+  ],
+  "metrics": {
+    "storage_advantage": 1.0
+  }
+}

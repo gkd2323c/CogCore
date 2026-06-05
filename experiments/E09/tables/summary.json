@@ -1,0 +1,427 @@
+{
+  "cases": [
+    {
+      "family": "F01",
+      "condition": 0,
+      "relief": 0.0
+    },
+    {
+      "family": "F01",
+      "condition": 1,
+      "relief": 0.0
+    },
+    {
+      "family": "F01",
+      "condition": 2,
+      "relief": 0.0
+    },
+    {
+      "family": "F01",
+      "condition": 3,
+      "relief": 0.0
+    },
+    {
+      "family": "F01",
+      "condition": 4,
+      "relief": 0.0
+    },
+    {
+      "family": "F01",
+      "condition": 5,
+      "relief": 0.0
+    },
+    {
+      "family": "F01",
+      "condition": 6,
+      "relief": 0.0
+    },
+    {
+      "family": "F01",
+      "condition": 7,
+      "relief": 0.0
+    },
+    {
+      "family": "F01",
+      "condition": 8,
+      "relief": 0.0
+    },
+    {
+      "family": "F01",
+      "condition": 9,
+      "relief": 0.0
+    },
+    {
+      "family": "F01",
+      "condition": 10,
+      "relief": 0.0
+    },
+    {
+      "family": "F01",
+      "condition": 11,
+      "relief": 0.0
+    },
+    {
+      "family": "F02",
+      "condition": 0,
+      "relief": 0.0
+    },
+    {
+      "family": "F02",
+      "condition": 1,
+      "relief": 0.0
+    },
+    {
+      "family": "F02",
+      "condition": 2,
+      "relief": 0.0
+    },
+    {
+      "family": "F02",
+      "condition": 3,
+      "relief": 0.0
+    },
+    {
+      "family": "F02",
+      "condition": 4,
+      "relief": 0.0
+    },
+    {
+      "family": "F02",
+      "condition": 5,
+      "relief": 0.0
+    },
+    {
+      "family": "F02",
+      "condition": 6,
+      "relief": 0.0
+    },
+    {
+      "family": "F02",
+      "condition": 7,
+      "relief": 0.0
+    },
+    {
+      "family": "F02",
+      "condition": 8,
+      "relief": 0.0
+    },
+    {
+      "family": "F02",
+      "condition": 9,
+      "relief": 0.0
+    },
+    {
+      "family": "F02",
+      "condition": 10,
+      "relief": 0.0
+    },
+    {
+      "family": "F02",
+      "condition": 11,
+      "relief": 0.0
+    },
+    {
+      "family": "F03",
+      "condition": 0,
+      "relief": 0.0
+    },
+    {
+      "family": "F03",
+      "condition": 1,
+      "relief": 0.0
+    },
+    {
+      "family": "F03",
+      "condition": 2,
+      "relief": 0.0
+    },
+    {
+      "family": "F03",
+      "condition": 3,
+      "relief": 0.0
+    },
+    {
+      "family": "F03",
+      "condition": 4,
+      "relief": 0.0
+    },
+    {
+      "family": "F03",
+      "condition": 5,
+      "relief": 0.0
+    },
+    {
+      "family": "F03",
+      "condition": 6,
+      "relief": 0.0
+    },
+    {
+      "family": "F03",
+      "condition": 7,
+      "relief": 0.0
+    },
+    {
+      "family": "F03",
+      "condition": 8,
+      "relief": 0.0
+    },
+    {
+      "family": "F03",
+      "condition": 9,
+      "relief": 0.0
+    },
+    {
+      "family": "F03",
+      "condition": 10,
+      "relief": 0.0
+    },
+    {
+      "family": "F03",
+      "condition": 11,
+      "relief": 0.0
+    },
+    {
+      "family": "F04",
+      "condition": 0,
+      "relief": 0.0
+    },
+    {
+      "family": "F04",
+      "condition": 1,
+      "relief": 0.0
+    },
+    {
+      "family": "F04",
+      "condition": 2,
+      "relief": 0.0
+    },
+    {
+      "family": "F04",
+      "condition": 3,
+      "relief": 0.0
+    },
+    {
+      "family": "F04",
+      "condition": 4,
+      "relief": 0.0
+    },
+    {
+      "family": "F04",
+      "condition": 5,
+      "relief": 0.0
+    },
+    {
+      "family": "F04",
+      "condition": 6,
+      "relief": 0.0
+    },
+    {
+      "family": "F04",
+      "condition": 7,
+      "relief": 0.0
+    },
+    {
+      "family": "F04",
+      "condition": 8,
+      "relief": 0.0
+    },
+    {
+      "family": "F04",
+      "condition": 9,
+      "relief": 0.0
+    },
+    {
+      "family": "F04",
+      "condition": 10,
+      "relief": 0.0
+    },
+    {
+      "family": "F04",
+      "condition": 11,
+      "relief": 0.0
+    },
+    {
+      "family": "F05",
+      "condition": 0,
+      "relief": 0.0
+    },
+    {
+      "family": "F05",
+      "condition": 1,
+      "relief": 0.0
+    },
+    {
+      "family": "F05",
+      "condition": 2,
+      "relief": 0.0
+    },
+    {
+      "family": "F05",
+      "condition": 3,
+      "relief": 0.0
+    },
+    {
+      "family": "F05",
+      "condition": 4,
+      "relief": 0.0
+    },
+    {
+      "family": "F05",
+      "condition": 5,
+      "relief": 0.0
+    },
+    {
+      "family": "F05",
+      "condition": 6,
+      "relief": 0.0
+    },
+    {
+      "family": "F05",
+      "condition": 7,
+      "relief": 0.0
+    },
+    {
+      "family": "F05",
+      "condition": 8,
+      "relief": 0.0
+    },
+    {
+      "family": "F05",
+      "condition": 9,
+      "relief": 0.0
+    },
+    {
+      "family": "F05",
+      "condition": 10,
+      "relief": 0.0
+    },
+    {
+      "family": "F05",
+      "condition": 11,
+      "relief": 0.0
+    },
+    {
+      "family": "F06",
+      "condition": 0,
+      "relief": 0.0
+    },
+    {
+      "family": "F06",
+      "condition": 1,
+      "relief": 0.0
+    },
+    {
+      "family": "F06",
+      "condition": 2,
+      "relief": 0.0
+    },
+    {
+      "family": "F06",
+      "condition": 3,
+      "relief": 0.0
+    },
+    {
+      "family": "F06",
+      "condition": 4,
+      "relief": 0.0
+    },
+    {
+      "family": "F06",
+      "condition": 5,
+      "relief": 0.0
+    },
+    {
+      "family": "F06",
+      "condition": 6,
+      "relief": 0.0
+    },
+    {
+      "family": "F06",
+      "condition": 7,
+      "relief": 0.0
+    },
+    {
+      "family": "F06",
+      "condition": 8,
+      "relief": 0.0
+    },
+    {
+      "family": "F06",
+      "condition": 9,
+      "relief": 0.0
+    },
+    {
+      "family": "F06",
+      "condition": 10,
+      "relief": 0.0
+    },
+    {
+      "family": "F06",
+      "condition": 11,
+      "relief": 0.0
+    },
+    {
+      "family": "F07",
+      "condition": 0,
+      "relief": 0.0
+    },
+    {
+      "family": "F07",
+      "condition": 1,
+      "relief": 0.0
+    },
+    {
+      "family": "F07",
+      "condition": 2,
+      "relief": 0.0
+    },
+    {
+      "family": "F07",
+      "condition": 3,
+      "relief": 0.0
+    },
+    {
+      "family": "F07",
+      "condition": 4,
+      "relief": 0.0
+    },
+    {
+      "family": "F07",
+      "condition": 5,
+      "relief": 0.0
+    },
+    {
+      "family": "F07",
+      "condition": 6,
+      "relief": 0.0
+    },
+    {
+      "family": "F07",
+      "condition": 7,
+      "relief": 0.0
+    },
+    {
+      "family": "F07",
+      "condition": 8,
+      "relief": 0.0
+    },
+    {
+      "family": "F07",
+      "condition": 9,
+      "relief": 0.0
+    },
+    {
+      "family": "F07",
+      "condition": 10,
+      "relief": 0.0
+    },
+    {
+      "family": "F07",
+      "condition": 11,
+      "relief": 0.0
+    }
+  ],
+  "metrics": {
+    "avg_relief_strength": 0.0
+  }
+}

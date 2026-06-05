@@ -1,0 +1,15 @@
+{
+  "experiment": "E12",
+  "description": "结构承担过程态，记忆承担目标态与审计锚点",
+  "files": {
+    "tables/summary.json": {
+      "sha256": "8e62e3c8a9887bf3c8ea0712c48a7ce881bf0e0f67e9525c585fa07dfc92adc5"
+    },
+    "design.md": {
+      "sha256": "c01b5cfc94e7acafa149500f0ebdc1c6a84ce5d65d4771dd6e7cbe5b1bad4675"
+    },
+    "report.md": {
+      "sha256": "1e15b1f50d7c8218562588d11a5530585d081297dc2251024b7063b33b89dc6a"
+    }
+  }
+}

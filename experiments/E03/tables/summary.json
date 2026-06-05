@@ -1,0 +1,79 @@
+{
+  "cases": [
+    {
+      "seed": 0,
+      "reward_match": 0.4583,
+      "neutral_match": 0.6316,
+      "effect": -0.1732
+    },
+    {
+      "seed": 1,
+      "reward_match": 0.4583,
+      "neutral_match": 0.6316,
+      "effect": -0.1732
+    },
+    {
+      "seed": 2,
+      "reward_match": 0.4583,
+      "neutral_match": 0.6316,
+      "effect": -0.1732
+    },
+    {
+      "seed": 3,
+      "reward_match": 0.4583,
+      "neutral_match": 0.6316,
+      "effect": -0.1732
+    },
+    {
+      "seed": 4,
+      "reward_match": 0.4583,
+      "neutral_match": 0.6316,
+      "effect": -0.1732
+    },
+    {
+      "seed": 5,
+      "reward_match": 0.4583,
+      "neutral_match": 0.6316,
+      "effect": -0.1732
+    },
+    {
+      "seed": 6,
+      "reward_match": 0.4583,
+      "neutral_match": 0.6316,
+      "effect": -0.1732
+    },
+    {
+      "seed": 7,
+      "reward_match": 0.4583,
+      "neutral_match": 0.6316,
+      "effect": -0.1732
+    },
+    {
+      "seed": 8,
+      "reward_match": 0.4583,
+      "neutral_match": 0.6316,
+      "effect": -0.1732
+    },
+    {
+      "seed": 9,
+      "reward_match": 0.4583,
+      "neutral_match": 0.6316,
+      "effect": -0.1732
+    },
+    {
+      "seed": 10,
+      "reward_match": 0.4583,
+      "neutral_match": 0.6316,
+      "effect": -0.1732
+    },
+    {
+      "seed": 11,
+      "reward_match": 0.4583,
+      "neutral_match": 0.6316,
+      "effect": -0.1732
+    }
+  ],
+  "metrics": {
+    "avg_local_effect": -0.1732
+  }
+}

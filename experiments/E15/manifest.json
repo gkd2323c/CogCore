@@ -1,0 +1,14 @@
+{
+  "experiment": "E15",
+  "files": {
+    "tables/summary.json": {
+      "sha256": "e8f209bd51f59143b7835e8c9968adf8b178394d5f5419f0fc75a7ac6bf83802"
+    },
+    "design.md": {
+      "sha256": "813137a44d68266eab3630333bb9f0aff17e000d6cca8145c2f009633cda80f4"
+    },
+    "report.md": {
+      "sha256": "39e24c0ceb840a8cc1d63221e528f7fa764c675be7f0f7ab9a94203122012b4e"
+    }
+  }
+}

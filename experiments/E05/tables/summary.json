@@ -1,0 +1,79 @@
+{
+  "cases": [
+    {
+      "seed": 0,
+      "exec_drive": 1.0,
+      "text_drive": 1.0,
+      "advantage": 0.0
+    },
+    {
+      "seed": 1,
+      "exec_drive": 1.0,
+      "text_drive": 1.0,
+      "advantage": 0.0
+    },
+    {
+      "seed": 2,
+      "exec_drive": 1.0,
+      "text_drive": 1.0,
+      "advantage": 0.0
+    },
+    {
+      "seed": 3,
+      "exec_drive": 1.0,
+      "text_drive": 1.0,
+      "advantage": 0.0
+    },
+    {
+      "seed": 4,
+      "exec_drive": 1.0,
+      "text_drive": 1.0,
+      "advantage": 0.0
+    },
+    {
+      "seed": 5,
+      "exec_drive": 1.0,
+      "text_drive": 1.0,
+      "advantage": 0.0
+    },
+    {
+      "seed": 6,
+      "exec_drive": 1.0,
+      "text_drive": 1.0,
+      "advantage": 0.0
+    },
+    {
+      "seed": 7,
+      "exec_drive": 1.0,
+      "text_drive": 1.0,
+      "advantage": 0.0
+    },
+    {
+      "seed": 8,
+      "exec_drive": 1.0,
+      "text_drive": 1.0,
+      "advantage": 0.0
+    },
+    {
+      "seed": 9,
+      "exec_drive": 1.0,
+      "text_drive": 1.0,
+      "advantage": 0.0
+    },
+    {
+      "seed": 10,
+      "exec_drive": 1.0,
+      "text_drive": 1.0,
+      "advantage": 0.0
+    },
+    {
+      "seed": 11,
+      "exec_drive": 1.0,
+      "text_drive": 1.0,
+      "advantage": 0.0
+    }
+  ],
+  "metrics": {
+    "avg_advantage": 0.0
+  }
+}

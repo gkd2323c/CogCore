@@ -1,0 +1,174 @@
+{
+  "experiment": "E12",
+  "mechanism_domain": "能量图景",
+  "total_families": 16,
+  "total_cases": 48,
+  "metrics": {
+    "avg_memory_hits": 3.0,
+    "total_hits": 48,
+    "total_expected": 48,
+    "hit_rate": 1.0
+  },
+  "families": [
+    {
+      "family_id": "P01",
+      "family_name": "蓝石流程",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P02",
+      "family_name": "琥珀验证",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P03",
+      "family_name": "星港测试",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P04",
+      "family_name": "银杏注册",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P05",
+      "family_name": "青灯审计",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P06",
+      "family_name": "雾桥校准",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P07",
+      "family_name": "松针记录",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P08",
+      "family_name": "白塔部署",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P09",
+      "family_name": "澄海巡检",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P10",
+      "family_name": "赤松回滚",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P11",
+      "family_name": "月井发布",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P12",
+      "family_name": "竹影构建",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P13",
+      "family_name": "霜叶调参",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P14",
+      "family_name": "露台迁移",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P15",
+      "family_name": "雪松快照",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    },
+    {
+      "family_id": "P16",
+      "family_name": "雷音诊断",
+      "structures_built": 5,
+      "structures_removed": 1,
+      "episodic_count": 3,
+      "expected_hits": 3,
+      "actual_hits": 3,
+      "target_structs_survived": 2
+    }
+  ]
+}

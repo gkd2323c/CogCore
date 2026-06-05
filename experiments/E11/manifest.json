@@ -1,0 +1,15 @@
+{
+  "experiment": "E11",
+  "description": "感应能量有限深度扩散受阈值剪枝约束",
+  "files": {
+    "tables/summary.json": {
+      "sha256": "820174908304108e1907dbebd5717a551e143bd9f5bd9c529ec7fff9e01c7c19"
+    },
+    "design.md": {
+      "sha256": "0e3f9e3320063468db1249bcc79182fc328a8a0d93d971d128bfa27e244437b3"
+    },
+    "report.md": {
+      "sha256": "f359e393f5243b213acb2621fa68c5877b30af125235a2f30841588b5a1db60f"
+    }
+  }
+}

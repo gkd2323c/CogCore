@@ -1,0 +1,583 @@
+{
+  "cases": [
+    {
+      "family": "F01",
+      "cond": 0,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F01",
+      "cond": 1,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F01",
+      "cond": 2,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F01",
+      "cond": 3,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F01",
+      "cond": 4,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F01",
+      "cond": 5,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F01",
+      "cond": 6,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F01",
+      "cond": 7,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F01",
+      "cond": 8,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F01",
+      "cond": 9,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F01",
+      "cond": 10,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F01",
+      "cond": 11,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F02",
+      "cond": 0,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F02",
+      "cond": 1,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F02",
+      "cond": 2,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F02",
+      "cond": 3,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F02",
+      "cond": 4,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F02",
+      "cond": 5,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F02",
+      "cond": 6,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F02",
+      "cond": 7,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F02",
+      "cond": 8,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F02",
+      "cond": 9,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F02",
+      "cond": 10,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F02",
+      "cond": 11,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F03",
+      "cond": 0,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F03",
+      "cond": 1,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F03",
+      "cond": 2,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F03",
+      "cond": 3,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F03",
+      "cond": 4,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F03",
+      "cond": 5,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F03",
+      "cond": 6,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F03",
+      "cond": 7,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F03",
+      "cond": 8,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F03",
+      "cond": 9,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F03",
+      "cond": 10,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F03",
+      "cond": 11,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F04",
+      "cond": 0,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F04",
+      "cond": 1,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F04",
+      "cond": 2,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F04",
+      "cond": 3,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F04",
+      "cond": 4,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F04",
+      "cond": 5,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F04",
+      "cond": 6,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F04",
+      "cond": 7,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F04",
+      "cond": 8,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F04",
+      "cond": 9,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F04",
+      "cond": 10,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F04",
+      "cond": 11,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F05",
+      "cond": 0,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F05",
+      "cond": 1,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F05",
+      "cond": 2,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F05",
+      "cond": 3,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F05",
+      "cond": 4,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F05",
+      "cond": 5,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F05",
+      "cond": 6,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F05",
+      "cond": 7,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F05",
+      "cond": 8,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F05",
+      "cond": 9,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F05",
+      "cond": 10,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F05",
+      "cond": 11,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F06",
+      "cond": 0,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F06",
+      "cond": 1,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F06",
+      "cond": 2,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F06",
+      "cond": 3,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F06",
+      "cond": 4,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F06",
+      "cond": 5,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F06",
+      "cond": 6,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F06",
+      "cond": 7,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F06",
+      "cond": 8,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F06",
+      "cond": 9,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F06",
+      "cond": 10,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F06",
+      "cond": 11,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F07",
+      "cond": 0,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F07",
+      "cond": 1,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F07",
+      "cond": 2,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F07",
+      "cond": 3,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F07",
+      "cond": 4,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F07",
+      "cond": 5,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F07",
+      "cond": 6,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F07",
+      "cond": 7,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F07",
+      "cond": 8,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F07",
+      "cond": 9,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F07",
+      "cond": 10,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F07",
+      "cond": 11,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F08",
+      "cond": 0,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F08",
+      "cond": 1,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F08",
+      "cond": 2,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F08",
+      "cond": 3,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F08",
+      "cond": 4,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F08",
+      "cond": 5,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F08",
+      "cond": 6,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F08",
+      "cond": 7,
+      "scenario": "normal",
+      "budget_delta": 0
+    },
+    {
+      "family": "F08",
+      "cond": 8,
+      "scenario": "overload",
+      "budget_delta": 0
+    },
+    {
+      "family": "F08",
+      "cond": 9,
+      "scenario": "high_pressure",
+      "budget_delta": 0
+    },
+    {
+      "family": "F08",
+      "cond": 10,
+      "scenario": "diffuse",
+      "budget_delta": 0
+    },
+    {
+      "family": "F08",
+      "cond": 11,
+      "scenario": "normal",
+      "budget_delta": 0
+    }
+  ],
+  "metrics": {
+    "avg_overload_budget_delta": 0.0
+  }
+}
