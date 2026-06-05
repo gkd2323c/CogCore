@@ -30,9 +30,23 @@ from pydantic import BaseModel, Field
 
 
 class LLMConfig(BaseModel):
-    """LLM 连接配置。"""
+    """LLM 连接配置（兼容 OpenAI 协议）。
 
-    endpoint: str = Field(default="http://localhost:11434", description="Ollama/vLLM 服务地址")
+    支持两种 API 协议:
+    - openai: 标准 OpenAI /v1/chat/completions 协议（Ollama 也兼容此格式）
+    - ollama: Ollama 原生协议（自动拼接 /api/chat）
+    """
+
+    api_type: Literal["openai", "ollama"] = Field(
+        default="openai", description="API 协议：openai(标准) / ollama(原生)"
+    )
+    endpoint: str = Field(
+        default="http://localhost:11434/v1",
+        description="API 端点。OpenAI 兼容格式含 /v1 后缀",
+    )
+    api_key: str | None = Field(
+        default=None, description="API Key。本地服务可留空"
+    )
     model: str = Field(default="qwen3:8b", description="模型名称")
     temperature: float = Field(default=0.7, ge=0.0, le=2.0, description="生成温度")
     max_tokens: int = Field(default=4096, ge=64, le=65536, description="单次生成最大 token 数")
@@ -93,7 +107,9 @@ def _apply_env_overrides(config: CogCoreConfig, prefix: str = "COGCORE_") -> Cog
     COGCORE_RUNTIME_LOG_LEVEL   → config.runtime.log_level
     """
     mapping = {
+        "LLM_API_TYPE": ("llm", "api_type"),
         "LLM_ENDPOINT": ("llm", "endpoint"),
+        "LLM_API_KEY": ("llm", "api_key"),
         "LLM_MODEL": ("llm", "model"),
         "LLM_TEMPERATURE": ("llm", "temperature"),
         "LLM_MAX_TOKENS": ("llm", "max_tokens"),

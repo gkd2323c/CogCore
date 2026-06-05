@@ -16,7 +16,9 @@ from cogcore.config import CogCoreConfig, LLMConfig, PersistenceConfig, RuntimeC
 
 def test_llm_config_defaults():
     c = LLMConfig()
-    assert c.endpoint == "http://localhost:11434"
+    assert c.api_type == "openai"
+    assert c.endpoint == "http://localhost:11434/v1"
+    assert c.api_key is None
     assert c.model == "qwen3:8b"
     assert 0.0 <= c.temperature <= 2.0
     assert 64 <= c.max_tokens <= 65536
@@ -83,7 +85,7 @@ def test_load_from_partial_toml():
     try:
         cfg = load_config(tmp, use_cache=False)
         assert cfg.llm.model == "test-model"
-        assert cfg.llm.endpoint == "http://localhost:11434"  # 默认
+        assert cfg.llm.endpoint == "http://localhost:11434/v1"  # 默认
         assert cfg.llm.temperature == 0.7  # 默认
     finally:
         os.unlink(tmp)
