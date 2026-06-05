@@ -35,6 +35,11 @@ class LLMConfig(BaseModel):
     支持两种 API 协议:
     - openai: 标准 OpenAI /v1/chat/completions 协议（Ollama 也兼容此格式）
     - ollama: Ollama 原生协议（自动拼接 /api/chat）
+
+    多 Provider 模式 (M3.2):
+    - 单 provider 时使用 endpoint/model/api_key 顶层字段
+    - 多 provider 时使用 providers 列表（优先级排序）
+    - 两者都提供时, providers 优先
     """
 
     api_type: Literal["openai", "ollama"] = Field(
@@ -53,6 +58,33 @@ class LLMConfig(BaseModel):
     timeout: int = Field(default=60, ge=5, le=600, description="API 请求超时秒数")
     max_turns: int = Field(default=10, ge=1, le=1000, description="对话循环最大轮数")
     stream: bool = Field(default=False, description="是否启用流式输出")
+
+    # M3.2: 多 Provider 列表
+    providers: list["LLMProviderConfig"] = Field(
+        default_factory=list,
+        description="多 LLM provider 列表（按优先级排序）。空时使用顶层 endpoint/model",
+    )
+
+    fallback_max_attempts: int = Field(
+        default=3, ge=1, le=10,
+        description="fallback 最大重试次数（全部失败前的尝试次数）",
+    )
+    fallback_cooldown_sec: int = Field(
+        default=30, ge=0, le=3600,
+        description="provider 失败后冷却时间（秒）",
+    )
+
+
+class LLMProviderConfig(BaseModel):
+    """单个 LLM provider 配置。"""
+
+    name: str = Field(..., min_length=1, description="provider 名称")
+    endpoint: str = Field(..., description="API 端点")
+    api_key: str | None = Field(default=None, description="API Key")
+    model: str = Field(..., description="模型名称")
+    priority: int = Field(default=0, description="优先级（数字越小越优先）")
+    enabled: bool = Field(default=True, description="是否启用")
+    timeout: int = Field(default=60, ge=5, le=600, description="API 超时")
 
 
 class PersistenceConfig(BaseModel):

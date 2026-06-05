@@ -38,20 +38,33 @@ class LLMBridge:
         timeout = 60
     """
 
-    def __init__(self, client: OpenAI | None = None):
+    def __init__(
+        self,
+        client: OpenAI | None = None,
+        api_type: str | None = None,
+        endpoint: str | None = None,
+        api_key: str | None = None,
+        model: str | None = None,
+        timeout: int | None = None,
+    ):
         cfg = get_config().llm
 
         if client is not None:
             self._client = client
+            self._model = cfg.model
+            self._timeout = cfg.timeout
         else:
-            base_url = cfg.endpoint
-            api_key = cfg.api_key or ""
-            self._client = OpenAI(base_url=base_url, api_key=api_key)
+            base_url = endpoint or cfg.endpoint
+            key = api_key if api_key is not None else (cfg.api_key or "")
+            self._client = OpenAI(base_url=base_url, api_key=key)
+            self._model = model or cfg.model
+            self._timeout = timeout or cfg.timeout
 
-        self.model = cfg.model
+        # 如果调用方没有显式传 model/timeout，使用传参；否则用 cfg 默认
+        self.model = self._model
         self.temperature = cfg.temperature
         self.max_tokens = cfg.max_tokens
-        self.timeout = cfg.timeout
+        self.timeout = self._timeout
 
     # ============================================================
     # LLM 调用

@@ -36,6 +36,29 @@ max_turns = 10
 # 是否启用流式输出
 stream = false
 
+# M3.2: 多 LLM Provider (fallback 轮转)
+# 留空时使用上面的 endpoint/model/api_key 单 provider 模式
+# providers 按 priority 排序（数字越小越优先）
+#
+# [[llm.providers]]
+# name = "deepseek"
+# endpoint = "https://api.deepseek.com/v1"
+# api_key = "sk-..."
+# model = "deepseek-chat"
+# priority = 1
+# enabled = true
+#
+# [[llm.providers]]
+# name = "ollama_local"
+# endpoint = "http://127.0.0.1:11434/v1"
+# model = "qwen3.5:9b"
+# priority = 2
+# enabled = true
+
+# Fallback 行为
+fallback_max_attempts = 3
+fallback_cooldown_sec = 30
+
 [persistence]
 # 持久化后端：memory | sqlite
 backend = "memory"
