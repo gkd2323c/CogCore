@@ -40,5 +40,12 @@ htmlcov/
 *.db
 *.sqlite3
 
+# 测试数据库文件
+*test_*.db
+test_cogcore*
+
+# 服务运行时数据
+cogcore_data/
+
 # 本地配置（含可能的 API Key）
 config.toml
