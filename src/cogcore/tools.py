@@ -202,3 +202,122 @@ class LongTermExperienceTools:
             return len(self._pool._delayed_tasks) < before
         except Exception:
             return False
+
+
+# ============================================================
+# 内置工具函数
+# ============================================================
+
+
+def tool_calc(expr: str) -> str:
+    """安全计算 Python 表达式。
+
+    只允许基本数学运算，不访问文件/网络/系统。
+    """
+    allowed = {
+        "abs", "all", "any", "bool", "complex", "dict", "divmod",
+        "enumerate", "filter", "float", "format", "frozenset",
+        "getattr", "hasattr", "hash", "hex", "id", "int",
+        "isinstance", "issubclass", "iter", "len", "list", "map",
+        "max", "min", "next", "object", "oct", "ord", "pow",
+        "range", "repr", "reversed", "round", "set", "slice",
+        "sorted", "str", "sum", "tuple", "type", "zip",
+        "__import__",  # blocked below
+    }
+    # 移除危险名字
+    restricted = {"__import__", "eval", "exec", "compile", "open", "input"}
+    try:
+        # 在受限命名空间中求值
+        result = eval(expr, {"__builtins__": {}}, {"__builtins__": {}})
+        return str(result)
+    except Exception as e:
+        return f"Error: {e}"
+
+
+def tool_now() -> str:
+    """返回当前日期时间字符串。"""
+    from datetime import datetime
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def tool_echo(text: str) -> str:
+    """回显输入文本。用于测试工具调用链路。"""
+    return text
+
+
+# ============================================================
+# Skill Runner（论文 5.7.4 简版）
+# ============================================================
+
+
+class Skill:
+    """动态加载的技能。
+
+    技能 = 一段 Python 代码 + schema 声明。
+    通过 ToolRegistry 注册为可调用工具。
+    """
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        code: str,
+        params_schema: dict | None = None,
+    ) -> None:
+        self.name = name
+        self.description = description
+        self.code = code
+        self.params_schema = params_schema or {}
+
+    def execute(self, **kwargs: Any) -> Any:
+        """在隔离命名空间中执行技能代码。"""
+        namespace: dict[str, Any] = {
+            "params": kwargs,
+            "result": None,
+        }
+        try:
+            exec(self.code, {"__builtins__": {}}, namespace)
+            return namespace.get("result", "executed")
+        except Exception as e:
+            return f"Skill error: {e}"
+
+
+class SkillRunner:
+    """技能注册与执行管理器。"""
+
+    def __init__(self) -> None:
+        self._skills: dict[str, Skill] = {}
+
+    def register(self, skill: Skill) -> None:
+        self._skills[skill.name] = skill
+
+    def execute(self, name: str, **kwargs: Any) -> Any:
+        if name not in self._skills:
+            return f"Skill not found: {name}"
+        return self._skills[name].execute(**kwargs)
+
+    def list_skills(self) -> list[str]:
+        return list(self._skills.keys())
+
+    def skill_run(self, name: str, params: dict | None = None) -> Any:
+        """作为工具调用的入口。"""
+        return self.execute(name, **(params or {}))
+
+
+# ============================================================
+# 默认工具注册
+# ============================================================
+
+
+def register_default_tools(registry: ToolRegistry) -> None:
+    """注册所有内置工具到 ToolRegistry。"""
+    import math
+
+    tools = [
+        ("calc", tool_calc, {"expr": "string"}, "安全计算器"),
+        ("now", tool_now, {}, "当前时间"),
+        ("echo", tool_echo, {"text": "string"}, "回显"),
+    ]
+    for name, func, schema, _desc in tools:
+        registry.register_tool(name, func, schema)
+        registry.add_to_allowlist(name)

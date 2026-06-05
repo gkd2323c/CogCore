@@ -5,7 +5,15 @@ import pytest
 
 from cogcore.hdb import HDB
 from cogcore.state_pool import StatePool
-from cogcore.tools import LongTermExperienceTools, ToolRegistry
+from cogcore.tools import (
+    LongTermExperienceTools,
+    Skill,
+    SkillRunner,
+    ToolRegistry,
+    register_default_tools,
+    tool_calc,
+    tool_now,
+)
 
 
 # ============================================================
@@ -140,6 +148,32 @@ def test_cancel_nonexistent_task_returns_false():
     t = _tools()
     result = t.cancel_task("nonexistent-id")
     assert result is False
+
+
+def test_tool_calc_add():
+    from cogcore.tools import tool_calc
+    assert tool_calc("1 + 2") == "3"
+
+
+def test_skill_execute():
+    from cogcore.tools import Skill, SkillRunner
+    s = Skill(name="double", description="", code='result = params["x"] * 2')
+    r = SkillRunner()
+    r.register(s)
+    assert r.execute("double", x=5) == 10
+
+
+def test_skill_not_found():
+    from cogcore.tools import SkillRunner
+    r = SkillRunner()
+    assert "not found" in r.execute("nonexistent")
+
+
+def test_register_default_tools():
+    from cogcore.tools import ToolRegistry, register_default_tools
+    r = ToolRegistry()
+    register_default_tools(r)
+    assert "calc" in r.get_available_tools()
 
 
 def test_schedule_multiple_tasks():
