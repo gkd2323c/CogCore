@@ -1,25 +1,29 @@
-# CogCore 配置文件
-# 路径：项目根目录 config.toml
-# 格式：TOML（Python 3.11+ 原生支持，无需额外依赖）
+# CogCore 配置文件模板
+# 复制为 config.toml 后按需修改：
+#   cp config.toml.example config.toml
+#
+# 注意：config.toml 已加入 .gitignore，不会上传到 GitHub。
+# 敏感信息（api_key 等）只填在 config.toml 中。
 
 [llm]
 # API 协议类型：openai | ollama
-# openai = OpenAI 标准 /v1/chat/completions 协议
-# ollama = Ollama 原生协议（不含 /v1 前缀）
+#   openai = 标准 OpenAI /v1/chat/completions 协议（Ollama/vLLM 也兼容）
+#   ollama = Ollama 原生协议
 api_type = "openai"
 
 # API 端点
-# OpenAI 兼容: http://localhost:11434/v1（Ollama 也兼容此格式）
-# 远程服务: https://api.openai.com/v1
+#   本地 Ollama:      http://localhost:11434/v1
+#   OpenAI:           https://api.openai.com/v1
+#   其他兼容服务:      http://<host>:<port>/v1
 endpoint = "http://localhost:11434/v1"
 
 # API Key（本地服务留空，远程服务必填）
 # api_key = "sk-..."
 
 # 模型名称
-# 本地 Ollama: qwen3:8b / llama3.2:3b 等
-# OpenAI: gpt-4o / gpt-4o-mini 等
-model = "qwen3:8b"
+#   本地 Ollama:  qwen3.5:latest / llama3.2:3b 等
+#   OpenAI:      gpt-4o / gpt-4o-mini 等
+model = "qwen3.5:latest"
 
 # 生成参数
 temperature = 0.7

@@ -39,3 +39,6 @@ htmlcov/
 .db
 *.db
 *.sqlite3
+
+# 本地配置（含可能的 API Key）
+config.toml
