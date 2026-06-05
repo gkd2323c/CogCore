@@ -1,0 +1,15 @@
+{
+  "experiment": "E08",
+  "description": "Controlled shadow residual memory st_000030 promotion",
+  "files": {
+    "tables/summary.json": {
+      "sha256": "b9dd3e07d2238f58d2a7f777bde27b5a21955f5e924a84110ca1a1235cffde1b"
+    },
+    "design.md": {
+      "sha256": "5179d13827e6d425c76533c60d26ebe634db871546126710d475a7c9b0a0df61"
+    },
+    "report.md": {
+      "sha256": "cf160d4cb05097150629c9ebae35190dcd95f11af805c48be5544a1641b8f94c"
+    }
+  }
+}

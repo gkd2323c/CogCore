@@ -1,0 +1,15 @@
+{
+  "experiment": "E17",
+  "description": "Candidate Chain Handoff replication reproducibility files",
+  "files": {
+    "tables/summary.json": {
+      "sha256": "e337c7e8e4a2623188f229e06f75fd00912511dc5c3619fb22a5d849edbf69e0"
+    },
+    "design.md": {
+      "sha256": "c27478cf993bf60bd836d4e2733bc5d3da8fe53e8578f78ad390fe995882d3c8"
+    },
+    "report.md": {
+      "sha256": "085d259709cec5df750ac8de0020d92cee19b23d563e7d74fc1309fe4df93598"
+    }
+  }
+}

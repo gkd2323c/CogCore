@@ -1,0 +1,15 @@
+{
+  "experiment": "E13",
+  "description": "AP Agent memory projection audit reproducibility files",
+  "files": {
+    "tables/summary.json": {
+      "sha256": "79e576f555a2524bba3e26b42c84ff3f3b495a909ae18b3a8858aa8cea20a0c8"
+    },
+    "design.md": {
+      "sha256": "e93aa2dc4eba58ec9f96dfca350f3b657a27d8f5dcccb5649d27ef414122ac51"
+    },
+    "report.md": {
+      "sha256": "b812fb0679b27f063e6a31834376384c99b8edec3ec2864497f2cf52e1ed3b72"
+    }
+  }
+}

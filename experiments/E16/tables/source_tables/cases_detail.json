@@ -1,0 +1,722 @@
+[
+  {
+    "family": "F01",
+    "branch": "packet_multi_source",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F01",
+    "branch": "packet_wrong_anchor",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F01",
+    "branch": "packet_folded_control",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F01",
+    "branch": "runtime_tool_binding",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F01",
+    "branch": "runtime_wrong_target",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F01",
+    "branch": "runtime_illegal_role",
+    "case_ok": 1,
+    "details": {
+      "refused_ok": true,
+      "target_clean": true,
+      "distractor_clean": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F02",
+    "branch": "packet_multi_source",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F02",
+    "branch": "packet_wrong_anchor",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F02",
+    "branch": "packet_folded_control",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F02",
+    "branch": "runtime_tool_binding",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F02",
+    "branch": "runtime_wrong_target",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F02",
+    "branch": "runtime_illegal_role",
+    "case_ok": 1,
+    "details": {
+      "refused_ok": true,
+      "target_clean": true,
+      "distractor_clean": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F03",
+    "branch": "packet_multi_source",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F03",
+    "branch": "packet_wrong_anchor",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F03",
+    "branch": "packet_folded_control",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F03",
+    "branch": "runtime_tool_binding",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F03",
+    "branch": "runtime_wrong_target",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F03",
+    "branch": "runtime_illegal_role",
+    "case_ok": 1,
+    "details": {
+      "refused_ok": true,
+      "target_clean": true,
+      "distractor_clean": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F04",
+    "branch": "packet_multi_source",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F04",
+    "branch": "packet_wrong_anchor",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F04",
+    "branch": "packet_folded_control",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F04",
+    "branch": "runtime_tool_binding",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F04",
+    "branch": "runtime_wrong_target",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F04",
+    "branch": "runtime_illegal_role",
+    "case_ok": 1,
+    "details": {
+      "refused_ok": true,
+      "target_clean": true,
+      "distractor_clean": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F05",
+    "branch": "packet_multi_source",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F05",
+    "branch": "packet_wrong_anchor",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F05",
+    "branch": "packet_folded_control",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F05",
+    "branch": "runtime_tool_binding",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F05",
+    "branch": "runtime_wrong_target",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F05",
+    "branch": "runtime_illegal_role",
+    "case_ok": 1,
+    "details": {
+      "refused_ok": true,
+      "target_clean": true,
+      "distractor_clean": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F06",
+    "branch": "packet_multi_source",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F06",
+    "branch": "packet_wrong_anchor",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F06",
+    "branch": "packet_folded_control",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F06",
+    "branch": "runtime_tool_binding",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F06",
+    "branch": "runtime_wrong_target",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F06",
+    "branch": "runtime_illegal_role",
+    "case_ok": 1,
+    "details": {
+      "refused_ok": true,
+      "target_clean": true,
+      "distractor_clean": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F07",
+    "branch": "packet_multi_source",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F07",
+    "branch": "packet_wrong_anchor",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F07",
+    "branch": "packet_folded_control",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F07",
+    "branch": "runtime_tool_binding",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F07",
+    "branch": "runtime_wrong_target",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F07",
+    "branch": "runtime_illegal_role",
+    "case_ok": 1,
+    "details": {
+      "refused_ok": true,
+      "target_clean": true,
+      "distractor_clean": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F08",
+    "branch": "packet_multi_source",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F08",
+    "branch": "packet_wrong_anchor",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F08",
+    "branch": "packet_folded_control",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F08",
+    "branch": "runtime_tool_binding",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F08",
+    "branch": "runtime_wrong_target",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F08",
+    "branch": "runtime_illegal_role",
+    "case_ok": 1,
+    "details": {
+      "refused_ok": true,
+      "target_clean": true,
+      "distractor_clean": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F09",
+    "branch": "packet_multi_source",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F09",
+    "branch": "packet_wrong_anchor",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F09",
+    "branch": "packet_folded_control",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F09",
+    "branch": "runtime_tool_binding",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F09",
+    "branch": "runtime_wrong_target",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F09",
+    "branch": "runtime_illegal_role",
+    "case_ok": 1,
+    "details": {
+      "refused_ok": true,
+      "target_clean": true,
+      "distractor_clean": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F10",
+    "branch": "packet_multi_source",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F10",
+    "branch": "packet_wrong_anchor",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F10",
+    "branch": "packet_folded_control",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F10",
+    "branch": "runtime_tool_binding",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F10",
+    "branch": "runtime_wrong_target",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F10",
+    "branch": "runtime_illegal_role",
+    "case_ok": 1,
+    "details": {
+      "refused_ok": true,
+      "target_clean": true,
+      "distractor_clean": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F11",
+    "branch": "packet_multi_source",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F11",
+    "branch": "packet_wrong_anchor",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F11",
+    "branch": "packet_folded_control",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F11",
+    "branch": "runtime_tool_binding",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F11",
+    "branch": "runtime_wrong_target",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F11",
+    "branch": "runtime_illegal_role",
+    "case_ok": 1,
+    "details": {
+      "refused_ok": true,
+      "target_clean": true,
+      "distractor_clean": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F12",
+    "branch": "packet_multi_source",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F12",
+    "branch": "packet_wrong_anchor",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F12",
+    "branch": "packet_folded_control",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "no_standalone_ok": true
+    }
+  },
+  {
+    "family": "F12",
+    "branch": "runtime_tool_binding",
+    "case_ok": 1,
+    "details": {
+      "target_bound_ok": true,
+      "distractor_clean": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F12",
+    "branch": "runtime_wrong_target",
+    "case_ok": 1,
+    "details": {
+      "target_clean": true,
+      "distractor_bound_ok": true,
+      "standalone_ok": true
+    }
+  },
+  {
+    "family": "F12",
+    "branch": "runtime_illegal_role",
+    "case_ok": 1,
+    "details": {
+      "refused_ok": true,
+      "target_clean": true,
+      "distractor_clean": true,
+      "no_standalone_ok": true
+    }
+  }
+]

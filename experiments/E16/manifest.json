@@ -1,0 +1,15 @@
+{
+  "experiment": "E16",
+  "description": "Multi-source Attribute Grounding Entry reproducibility files",
+  "files": {
+    "tables/summary.json": {
+      "sha256": "5778a74c63b9e8b287adf61953c31b3612b851cb221cf02e46b1bf5de1d52ba4"
+    },
+    "design.md": {
+      "sha256": "397c8f89eedc6753aaa7efd8fe95de55696d8a4416b7df94f1a084bab96c04dc"
+    },
+    "report.md": {
+      "sha256": "ed2e738e2f84db01e57dd361c631d8335b0d30d39818312bbc050d41c720ae53"
+    }
+  }
+}

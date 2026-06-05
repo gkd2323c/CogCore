@@ -1,0 +1,62 @@
+[
+  {
+    "id": "F01",
+    "project": "蓝石计划",
+    "interval": 0.0
+  },
+  {
+    "id": "F02",
+    "project": "琥珀备忘",
+    "interval": 0.4
+  },
+  {
+    "id": "F03",
+    "project": "星港资料",
+    "interval": 1.0
+  },
+  {
+    "id": "F04",
+    "project": "银杏任务",
+    "interval": 2.0
+  },
+  {
+    "id": "F05",
+    "project": "青灯偏好",
+    "interval": 3.0
+  },
+  {
+    "id": "F06",
+    "project": "雾桥实验",
+    "interval": 4.5
+  },
+  {
+    "id": "F07",
+    "project": "松针档案",
+    "interval": 6.0
+  },
+  {
+    "id": "F08",
+    "project": "白塔清单",
+    "interval": 9.0
+  },
+  {
+    "id": "F09",
+    "project": "澄海约定",
+    "interval": 12.0
+  },
+  {
+    "id": "F10",
+    "project": "赤松流程",
+    "interval": 15.0
+  },
+  {
+    "id": "F11",
+    "project": "月井偏好",
+    "interval": 1.5
+  },
+  {
+    "id": "F12",
+    "project": "竹影路线",
+    "interval": 5.0
+  }
+]

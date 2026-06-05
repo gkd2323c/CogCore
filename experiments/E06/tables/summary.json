@@ -1,0 +1,141 @@
+{
+  "experiment": "E06",
+  "total_cases": 12,
+  "on_success_rate": 1.0,
+  "off_success_rate": 1.0,
+  "pair_pass_rate": 1.0,
+  "details": [
+    {
+      "family": "F01",
+      "project": "蓝石计划",
+      "interval": 0.0,
+      "bucket_pair": "0_5t/0_5t",
+      "main_bucket": "0_5t",
+      "arrival_tick": 7,
+      "on_success": 1,
+      "off_success": 1,
+      "pair_passed": 1
+    },
+    {
+      "family": "F02",
+      "project": "琥珀备忘",
+      "interval": 0.4,
+      "bucket_pair": "0_5t/0_5t",
+      "main_bucket": "0_5t",
+      "arrival_tick": 7,
+      "on_success": 1,
+      "off_success": 1,
+      "pair_passed": 1
+    },
+    {
+      "family": "F03",
+      "project": "星港资料",
+      "interval": 1.0,
+      "bucket_pair": "0_5t/1_5t",
+      "main_bucket": "0_5t",
+      "arrival_tick": 7,
+      "on_success": 1,
+      "off_success": 1,
+      "pair_passed": 1
+    },
+    {
+      "family": "F04",
+      "project": "银杏任务",
+      "interval": 2.0,
+      "bucket_pair": "1_5t/3t",
+      "main_bucket": "1_5t",
+      "arrival_tick": 7,
+      "on_success": 1,
+      "off_success": 1,
+      "pair_passed": 1
+    },
+    {
+      "family": "F05",
+      "project": "青灯偏好",
+      "interval": 3.0,
+      "bucket_pair": "3t/6t",
+      "main_bucket": "3t",
+      "arrival_tick": 8.0,
+      "on_success": 1,
+      "off_success": 1,
+      "pair_passed": 1
+    },
+    {
+      "family": "F06",
+      "project": "雾桥实验",
+      "interval": 4.5,
+      "bucket_pair": "3t/6t",
+      "main_bucket": "3t",
+      "arrival_tick": 9.5,
+      "on_success": 1,
+      "off_success": 1,
+      "pair_passed": 1
+    },
+    {
+      "family": "F07",
+      "project": "松针档案",
+      "interval": 6.0,
+      "bucket_pair": "6t/12t",
+      "main_bucket": "6t",
+      "arrival_tick": 11.0,
+      "on_success": 1,
+      "off_success": 1,
+      "pair_passed": 1
+    },
+    {
+      "family": "F08",
+      "project": "白塔清单",
+      "interval": 9.0,
+      "bucket_pair": "6t/12t",
+      "main_bucket": "6t",
+      "arrival_tick": 14.0,
+      "on_success": 1,
+      "off_success": 1,
+      "pair_passed": 1
+    },
+    {
+      "family": "F09",
+      "project": "澄海约定",
+      "interval": 12.0,
+      "bucket_pair": "12t/12t",
+      "main_bucket": "12t",
+      "arrival_tick": 17.0,
+      "on_success": 1,
+      "off_success": 1,
+      "pair_passed": 1
+    },
+    {
+      "family": "F10",
+      "project": "赤松流程",
+      "interval": 15.0,
+      "bucket_pair": "12t/12t",
+      "main_bucket": "12t",
+      "arrival_tick": 20.0,
+      "on_success": 1,
+      "off_success": 1,
+      "pair_passed": 1
+    },
+    {
+      "family": "F11",
+      "project": "月井偏好",
+      "interval": 1.5,
+      "bucket_pair": "1_5t/3t",
+      "main_bucket": "1_5t",
+      "arrival_tick": 7,
+      "on_success": 1,
+      "off_success": 1,
+      "pair_passed": 1
+    },
+    {
+      "family": "F12",
+      "project": "竹影路线",
+      "interval": 5.0,
+      "bucket_pair": "3t/6t",
+      "main_bucket": "6t",
+      "arrival_tick": 10.0,
+      "on_success": 1,
+      "off_success": 1,
+      "pair_passed": 1
+    }
+  ]
+}

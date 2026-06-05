@@ -1,0 +1,15 @@
+{
+  "experiment": "E06",
+  "description": "Time perception calibration and delayed tasks verification",
+  "files": {
+    "tables/summary.json": {
+      "sha256": "830ba3e368f9fc1a5cf3408a9a69e6c4279a3f3536240e3aed62d25270a11124"
+    },
+    "design.md": {
+      "sha256": "9b3d0885a605ca949ee1ad7e4b51ece31260d04ca9a852930e446e97d47ecb0a"
+    },
+    "report.md": {
+      "sha256": "14c07d0cfa4dd7d0a79e64eee727c8b760d2ef48cd478b1ba45aa3f8609bb96f"
+    }
+  }
+}

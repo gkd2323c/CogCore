@@ -1,0 +1,15 @@
+{
+  "experiment": "E07",
+  "description": "Complexity modulation on attention budget and search pool size",
+  "files": {
+    "tables/summary.json": {
+      "sha256": "6a0fff35fe367cea6611244e9d01ca6308ebb24e357dfa8831f4f15abedc9e3e"
+    },
+    "design.md": {
+      "sha256": "933d33774c8773239681332d04575960358456d40e1231418d891636643250dd"
+    },
+    "report.md": {
+      "sha256": "2698bb51ab9ac8ab82ea9ca687c09d9a075d22567843f37d8ccbc8da7df94b9e"
+    }
+  }
+}
