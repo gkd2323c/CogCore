@@ -194,7 +194,7 @@ def run_e11_experiment():
     for thr in thresholds:
         group = [r for r in results if r["threshold"] == thr]
         avg = sum(r["max_depth"] for r in group) / len(group)
-        print(f"    thr={thr:.2f}: avg_depth={avg:.4f}")
+        print(f"    thr={thr:.3f}: avg_depth={avg:.4f}")
 
     # 打印按 width 分组
     print("\n  按 width 分组的平均深度:")
@@ -206,7 +206,7 @@ def run_e11_experiment():
     # 深扩散条件 case 列表
     print(f"\n  深扩散 case ({len(deep_cases)} 个):")
     for r in deep_cases:
-        print(f"    thr={r['threshold']:.2f}  width={r['width']}  depth={r['max_depth']}")
+        print(f"    thr={r['threshold']:.3f}  width={r['width']}  depth={r['max_depth']}")
 
     # ----------------------------------------------------------
     # 4. 判据断言

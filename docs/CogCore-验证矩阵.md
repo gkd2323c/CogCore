@@ -195,8 +195,8 @@ CogCore 复现时，每项实验必须填好以下字段才能入正文：
 | E08 | `HDB.residual_promotion` + `NT` | `StatePool.age` | 通过 | `experiments/E08` | 匹配晋升率=1.000 |
 | E09 | `CFS` + `NT` 多通道调制 | `StatePool.cognitive_pressure` | 通过 | `experiments/E09` | `avg_relief_strength=0.000` |
 | E10 | `CFS.fatigue` + `NT.fatigue` | `StatePool.repeat_penalty` | 通过 | `experiments/E10` | `avg_penalty=0.000` |
-| E11 | `InductionGrowth.expand` | `HDB.local_db`, `NT` | 通过 | `experiments/E11` | `avg_max_depth=0.000` |
-| E12 | `HDB.process_state` + `EpisodicMemory.target` | `Attention`, `CFS` | 通过 | `experiments/E12` | `avg_decay_episodic=5.000` |
+| E11 | `InductionGrowth.expand` | `HDB.local_db`, `NT` | 通过 | `experiments/E11` | `avg_deep_depth=2.000` |
+| E12 | `HDB.process_state` + `EpisodicMemory.target` | `Attention`, `CFS` | 通过 | `experiments/E12` | `avg_memory_hits=3.000` |
 | E13 | `LLMBridge.build_context_packet` + `Observatory` | `StatePool`, `ActionSystem` | 通过 | `experiments/E13` | 基线优势=6.500 |
 | E14 | `ActionSystem` + `NT.global_threshold` | `CFS.local_drive` | 通过 | `experiments/E14` | `threshold_drop=-0.072` |
 | E15 | `AdaptiveTuner.assess` + `apply` | 所有可调参模块 | 通过 | `experiments/E15` | `avg_budget_delta=0.000` |
