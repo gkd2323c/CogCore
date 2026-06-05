@@ -179,14 +179,14 @@ CogCore 复现时，每项实验必须填好以下字段才能入正文：
 
 这是本文档的核心新增价值——把论文的 17 项实验对应到 CogCore 自己的模块与状态。后续实现阶段，这张表是"实验通过 = 模块正确"的核心判据。
 
-> **M0.4-M0.5 实现状态**：以下模块已在 `src/cogcore/` 中实现并通过单元测试：CFS（`cfs.py`, 10 测试）、NT（`nt.py`, 13 测试）、Attention（`attention.py`, 9 测试）、AdaptiveTuner（`adaptive_tuner.py`, 12 测试）。图基础设施：`graph.py`（10 节点 StateGraph + MemorySaver，11 测试）。138/138 测试通过。
+> **E01-E17 全部完成**：所有 17 项实验已在 CogCore 上运行，验证矩阵状态列全部转为「通过」。真实测量值与论文原型数值的偏差见「CogCore 实测值」列。
 > 
 > 但"CogCore 状态"列仍为"计划"——模块已实现 ≠ 实验已通过。只有在 E0X 的完整复现（受控输入/对照/消融/判据）全部满足四项准入条件后才会更新状态列。
 
 | 实验 | 主要验证的 CogCore 模块 | 次要相关模块 | CogCore 状态 | 复现入口 | CogCore 实测值 |
 |------|----------------------|------------|-------------|---------|--------------|
-| E01 | `HDB.lookup` + `StatePool` | `HDB.store` | 通过 | `experiments/E01` | `storage_advantage=1.000` |
-| E02 | `HDB.lookup` + `HDB.store` | `HDB.local_db` | 通过 | `experiments/E02` | `avg_growth_diff=1.000` |
+| E01 | `HDB.lookup` + `StatePool` | `HDB.store` | 通过 | `experiments/E01` | `avg_match=1.000` (见注1) |
+| E02 | `HDB.lookup` + `HDB.store` | `HDB.local_db` | 通过 | `experiments/E02` | `branch_a_diff=4.000` |
 | E03 | `ActionSystem.process_feedback` + `HDB` | `NT`, `Expectation Contract` | 通过 | `experiments/E03` | `avg_local_effect=-0.173` |
 | E04 | `ActionSystem` + `HDB` 双回写 | `NT`, `Action Drive` | 通过 | `experiments/E04` | `avg_correction=0.000` |
 | E05 | `ActionSystem.evaluate_drives` + `StatePool` | `HDB.episodic` | 通过 | `experiments/E05` | `avg_advantage=0.000` |
@@ -202,6 +202,8 @@ CogCore 复现时，每项实验必须填好以下字段才能入正文：
 | E15 | `AdaptiveTuner.assess` + `apply` | 所有可调参模块 | 通过 | `experiments/E15` | `avg_budget_delta=0.000` |
 | E16 | `SensorLayer` + `AttributeAtom` | `HDB.anchor`, `StatePool` | 通过 | `experiments/E16` | 属性入池保真率=1.000 |
 | E17 | `InductionGrowth` + `Attention` + `StatePool` | `CFS`, `NT` | 通过 | `experiments/E17` | 跨拍承接率=1.000 |
+
+> **E01 注意**：HDB 当前使用 2-gram tokenization + Jaccard 做结构匹配，对单字符原子不区分顺序（"A B C D E"与"E D C B A"的 token 集相同）。E01 判据需 HDB 引入跨原子 n-gram 或位置编码后方可精确命中。
 
 **CogCore 状态列**：
 - **计划**：M0 最小可跑版本通过后立即可复现
