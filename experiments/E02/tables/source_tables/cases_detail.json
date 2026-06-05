@@ -1,0 +1,266 @@
+[
+  {
+    "family": "F01",
+    "branch": "replacement",
+    "original": "今天 天气 真 好",
+    "replacements": [
+      "今天 天气 真 差",
+      "今天 天气 真 坏",
+      "今天 天气 真 糟",
+      "今天 天气 真 烂"
+    ],
+    "stable_node_count": 1,
+    "new_node_count": 5,
+    "structure_diff": 4
+  },
+  {
+    "family": "F01",
+    "branch": "control",
+    "original": "今天 天气 真 好",
+    "stable_node_count": 1,
+    "new_node_count": 1,
+    "structure_diff": 0
+  },
+  {
+    "family": "F02",
+    "branch": "replacement",
+    "original": "我 很 喜欢 这个 电影",
+    "replacements": [
+      "我 很 喜欢 这个 书",
+      "我 很 喜欢 这个 音乐",
+      "我 很 喜欢 这个 游戏",
+      "我 很 喜欢 这个 画"
+    ],
+    "stable_node_count": 1,
+    "new_node_count": 5,
+    "structure_diff": 4
+  },
+  {
+    "family": "F02",
+    "branch": "control",
+    "original": "我 很 喜欢 这个 电影",
+    "stable_node_count": 1,
+    "new_node_count": 1,
+    "structure_diff": 0
+  },
+  {
+    "family": "F03",
+    "branch": "replacement",
+    "original": "他 走 得 非常 快",
+    "replacements": [
+      "他 走 得 非常 慢",
+      "他 走 得 非常 稳",
+      "他 走 得 非常 远",
+      "他 走 得 非常 久"
+    ],
+    "stable_node_count": 1,
+    "new_node_count": 5,
+    "structure_diff": 4
+  },
+  {
+    "family": "F03",
+    "branch": "control",
+    "original": "他 走 得 非常 快",
+    "stable_node_count": 1,
+    "new_node_count": 1,
+    "structure_diff": 0
+  },
+  {
+    "family": "F04",
+    "branch": "replacement",
+    "original": "这个 苹果 很 甜",
+    "replacements": [
+      "这个 苹果 很 酸",
+      "这个 苹果 很 脆",
+      "这个 苹果 很 大",
+      "这个 苹果 很 红"
+    ],
+    "stable_node_count": 1,
+    "new_node_count": 5,
+    "structure_diff": 4
+  },
+  {
+    "family": "F04",
+    "branch": "control",
+    "original": "这个 苹果 很 甜",
+    "stable_node_count": 1,
+    "new_node_count": 1,
+    "structure_diff": 0
+  },
+  {
+    "family": "F05",
+    "branch": "replacement",
+    "original": "小猫 在 沙发 上 睡觉",
+    "replacements": [
+      "小猫 在 沙发 上 玩耍",
+      "小猫 在 沙发 上 吃饭",
+      "小猫 在 沙发 上 发呆",
+      "小猫 在 沙发 上 打滚"
+    ],
+    "stable_node_count": 1,
+    "new_node_count": 5,
+    "structure_diff": 4
+  },
+  {
+    "family": "F05",
+    "branch": "control",
+    "original": "小猫 在 沙发 上 睡觉",
+    "stable_node_count": 1,
+    "new_node_count": 1,
+    "structure_diff": 0
+  },
+  {
+    "family": "F06",
+    "branch": "replacement",
+    "original": "外面 下 着 大雨",
+    "replacements": [
+      "外面 下 着 小雪",
+      "外面 下 着 冰雹",
+      "外面 下 着 细雨",
+      "外面 下 着 狂风"
+    ],
+    "stable_node_count": 1,
+    "new_node_count": 5,
+    "structure_diff": 4
+  },
+  {
+    "family": "F06",
+    "branch": "control",
+    "original": "外面 下 着 大雨",
+    "stable_node_count": 1,
+    "new_node_count": 1,
+    "structure_diff": 0
+  },
+  {
+    "family": "F07",
+    "branch": "replacement",
+    "original": "这道 题 非常 简单",
+    "replacements": [
+      "这道 题 非常 困难",
+      "这道 题 非常 复杂",
+      "这道 题 非常 有趣",
+      "这道 题 非常 无聊"
+    ],
+    "stable_node_count": 1,
+    "new_node_count": 5,
+    "structure_diff": 4
+  },
+  {
+    "family": "F07",
+    "branch": "control",
+    "original": "这道 题 非常 简单",
+    "stable_node_count": 1,
+    "new_node_count": 1,
+    "structure_diff": 0
+  },
+  {
+    "family": "F08",
+    "branch": "replacement",
+    "original": "妈妈 做 的 菜 很 香",
+    "replacements": [
+      "妈妈 做 的 菜 很 咸",
+      "妈妈 做 的 菜 很 辣",
+      "妈妈 做 的 菜 很 甜",
+      "妈妈 做 的 菜 很 淡"
+    ],
+    "stable_node_count": 1,
+    "new_node_count": 5,
+    "structure_diff": 4
+  },
+  {
+    "family": "F08",
+    "branch": "control",
+    "original": "妈妈 做 的 菜 很 香",
+    "stable_node_count": 1,
+    "new_node_count": 1,
+    "structure_diff": 0
+  },
+  {
+    "family": "F09",
+    "branch": "replacement",
+    "original": "春天 的 花园 很 美丽",
+    "replacements": [
+      "春天 的 花园 很 安静",
+      "春天 的 花园 很 热闹",
+      "春天 的 花园 很 清新",
+      "春天 的 花园 很 温暖"
+    ],
+    "stable_node_count": 1,
+    "new_node_count": 5,
+    "structure_diff": 4
+  },
+  {
+    "family": "F09",
+    "branch": "control",
+    "original": "春天 的 花园 很 美丽",
+    "stable_node_count": 1,
+    "new_node_count": 1,
+    "structure_diff": 0
+  },
+  {
+    "family": "F10",
+    "branch": "replacement",
+    "original": "小明 考试 得了 满分",
+    "replacements": [
+      "小明 考试 得了 零分",
+      "小明 考试 得了 高分",
+      "小明 考试 得了 及格",
+      "小明 考试 得了 优秀"
+    ],
+    "stable_node_count": 1,
+    "new_node_count": 5,
+    "structure_diff": 4
+  },
+  {
+    "family": "F10",
+    "branch": "control",
+    "original": "小明 考试 得了 满分",
+    "stable_node_count": 1,
+    "new_node_count": 1,
+    "structure_diff": 0
+  },
+  {
+    "family": "F11",
+    "branch": "replacement",
+    "original": "咖啡 的 味道 很 苦",
+    "replacements": [
+      "咖啡 的 味道 很 香",
+      "咖啡 的 味道 很 淡",
+      "咖啡 的 味道 很 浓",
+      "咖啡 的 味道 很 甜"
+    ],
+    "stable_node_count": 1,
+    "new_node_count": 5,
+    "structure_diff": 4
+  },
+  {
+    "family": "F11",
+    "branch": "control",
+    "original": "咖啡 的 味道 很 苦",
+    "stable_node_count": 1,
+    "new_node_count": 1,
+    "structure_diff": 0
+  },
+  {
+    "family": "F12",
+    "branch": "replacement",
+    "original": "夜晚 的 星空 非常 璀璨",
+    "replacements": [
+      "夜晚 的 星空 非常 宁静",
+      "夜晚 的 星空 非常 深邃",
+      "夜晚 的 星空 非常 辽阔",
+      "夜晚 的 星空 非常 明亮"
+    ],
+    "stable_node_count": 1,
+    "new_node_count": 5,
+    "structure_diff": 4
+  },
+  {
+    "family": "F12",
+    "branch": "control",
+    "original": "夜晚 的 星空 非常 璀璨",
+    "stable_node_count": 1,
+    "new_node_count": 1,
+    "structure_diff": 0
+  }
+]

@@ -1,14 +1,15 @@
 {
   "experiment": "E02",
+  "description": "Stable sentence shell local replacement triggers structural growth",
   "files": {
     "tables/summary.json": {
-      "sha256": "5b99dbbf34945b42afa248ae4af63d8d9c403bd2acf02851ca2bfed2ca6b1491"
+      "sha256": "7615415a545fa3efa466e2539caeefa20ea23934157aa9761db5afca7d0235e8"
     },
     "design.md": {
-      "sha256": "7efc9618ce1d3410520f9595006e5c7b76cb2f65e46056719b64c497b75b569d"
+      "sha256": "607b47468316d4df419c84c469d91dd366a8906c949bdcffc1d77939f2eebf6c"
     },
     "report.md": {
-      "sha256": "9d3dee7b458441af3bcfc554dc30db201f8345784db672d99152c979706d53d1"
+      "sha256": "ce72407999c4adc68c654ac2d6ddf94563c27196c86d95e6b975a7522fbfd4b7"
     }
   }
 }

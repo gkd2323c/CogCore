@@ -1,14 +1,15 @@
 {
   "experiment": "E01",
+  "description": "Historical order impact on structural reuse cost",
   "files": {
     "tables/summary.json": {
-      "sha256": "a9c65ed825d0da577b7d9da4210fc614f128107cd58f9775e131bf5777d62b31"
+      "sha256": "d9743d0d5a71a2db1f6fd81f85650dcc41920776077d7c45144f734b719b2956"
     },
     "design.md": {
-      "sha256": "e6fb5b553bcddc589add897d2138d3af2d753733f3dc443414839918f5662bf4"
+      "sha256": "2aa63ea05dfccaa76155d301a45c851303e3e82612f38d5bf64b5c3dde09700f"
     },
     "report.md": {
-      "sha256": "68ae55e06b853fea996b5bcc5b23415df93215e572d12bd837888cb4f6e1e7c8"
+      "sha256": "1fbb38c5332169ea09b1a9713be9ed4ed75ae5246fb3c61b4611a11952f70bf6"
     }
   }
 }

@@ -1,0 +1,22 @@
+[
+  {
+    "label": "Case1_同序→乱序",
+    "first_order": "A B C D E",
+    "second_order": "E D C B A",
+    "probe_order": "A B C D E",
+    "match_score": 1.0,
+    "structure_count": 1,
+    "matched_count": 1,
+    "new_structures_count": 0
+  },
+  {
+    "label": "Case2_乱序→同序",
+    "first_order": "E D C B A",
+    "second_order": "A B C D E",
+    "probe_order": "A B C D E",
+    "match_score": 1.0,
+    "structure_count": 1,
+    "matched_count": 1,
+    "new_structures_count": 0
+  }
+]
