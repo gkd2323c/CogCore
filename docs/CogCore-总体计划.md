@@ -4,7 +4,26 @@
 
 ---
 
-## 0. 当前位置
+## 0. 设计原则：零 Docker / 零外部服务
+
+**目标用户** 是个人开发者 + 研究者。环境假设 = Python 3.11+ + (可选) 本地 Ollama。
+部署假设 = `pip install cogcore` → `python -m cogcore serve` → 完事。
+
+```
+数据位置：~/.cogcore/
+  cogcore.db       # SQLite 状态
+  diary.db         # 日记
+  traces/          # JSON 审计日志
+  config.toml      # 配置
+依赖项：LangGraph + OpenAI SDK + SQLite + Pydantic
+外部服务：可选远程 LLM（DeepSeek/OpenAI），可选本地 Ollama
+```
+
+**M3-M5 所有设计改动** 都不引入 Docker / Postgres / Prometheus / Grafana。需要更强能力的场景（如多机部署、cluster 调度）属于 M5 之后的扩展，不在当前目标用户范围。
+
+---
+
+## 0.5 当前位置
 
 ```
 2026-06-05 现状
@@ -20,7 +39,13 @@
 
 **已覆盖**：`L2`（图引擎）+ `L3`（认知层）+ `L4`（单 LLM 解释）+ `L5`（基础工具）+ `L7`（SQLite 持久化）+ `L11`（基础测试）
 
-**未覆盖**：`L1`（应用层）+ `L4`（多 LLM registry + fallback）+ `L5`（MCP 接入）+ `L6`（语义层）+ `L7`（Postgres 升级）+ `L8`（可观测性）+ `L9`（部署基础设施）+ `L10`（错误处理层）+ `L11`（evals/）
+**未覆盖**：`L1`（应用层）+ `L4`（多 LLM registry + fallback）+ `L5`（MCP 接入）+ `L6`（嵌入/语义层）+ `L8`（可观测性）+ `L9`（部署基础设施）+ `L10`（错误处理层）+ `L11`（evals/）
+
+**设计不变量**：
+- **不引入 Docker**——所有组件 Python 进程内 / SQLite 文件
+- **不引入 Postgres**——SQLite 覆盖 99% 场景
+- **不引入 Langfuse / Prom / Grafana**——自写 JSON trace + sqlite-stats 即可
+- **不引入 docker-compose**——`python -m cogcore serve` 一个进程起步
 
 ---
 
@@ -35,10 +60,10 @@
 │  L3  认知层    ─── CogCore 9 模块 + 25 实验        ✅ 17/25   │
 │  L4  解释层    ─── LLMRegistry + circular fallback ⚠️ 单 LLM │
 │  L5  工具层    ─── LangChain Tools + MCP           ⚠️ 6 工具 │
-│  L6  记忆层    ─── HDB + pgvector + mem0           ⚠️ HDB only│
-│  L7  持久化    ─── PostgresSaver + Store + Alembic  ⚠️ SQLite│
-│  L8  可观测性  ─── Langfuse / LangSmith + Prom     ❌ 未开始  │
-│  L9  部署层    ─── Docker + Compose + JWT + slowapi ❌ 未开始 │
+│  L6  记忆层    ─── HDB + sqlite-vec / 嵌入       ⚠️ HDB only│
+│  L7  持久化    ─── SQLite + langgraph-checkpoint   ✅ SQLite  │
+│  L8  可观测性  ─── JSON trace + sqlite-stats       ❌ 未开始  │
+│  L9  部署层    ─── `python -m cogcore serve`       ❌ 未开始  │
 │  L10 错误处理  ─── RetryPolicy + fallback + 教师门控 ⚠️ 内部有│
 │  L11 测试      ─── evals/ + unit + integration     ⚠️ 262 unit│
 └──────────────────────────────────────────────────────────────┘
@@ -174,23 +199,24 @@
 
 ### 阶段 M4 — 持久化与可观测（目标：让 Agent 真能观测）
 
-**L 层覆盖**：`L6`（语义层）+ `L7`（Postgres 升级）+ `L8`（可观测性）+ `L11`（evals/）
+**L 层覆盖**：`L6`（语义层）+ `L8`（可观测性）+ `L11`（evals/）
 
-#### M4.1 — pgvector 语义层（`L6`）
+#### M4.1 — 嵌入语义层（`L6`）
 
-**目标**：HDB（结构）之外增加 pgvector（语义）双轨记忆。
+**目标**：HDB（结构）之外增加嵌入（语义）双轨记忆。**不引入 pgvector，用 sqlite-vec / numpy**。
 
 **交付**：
 - `src/cogcore/embeddings.py`：
   - `EmbeddingProvider`：抽象接口
-  - `OllamaEmbeddingProvider`：调 `qwen3-embedding:0.6b`（本地）
+  - `OllamaEmbeddingProvider`：调 `qwen3-embedding:0.6b`（本地，无需 Docker）
   - `OpenAIEmbeddingProvider`：调 OpenAI text-embedding-3
 - `src/cogcore/semantic_store.py`：
-  - `SemanticStore`：存向量，按相似度查询
+  - `SemanticStore`：默认用 numpy + SQLite（向量列存 BLOB）
+  - 可选 `sqlite-vec` 扩展（如果装了）
   - 与 HDB 协作：HDB 命中走查存，miss 走相似度
 - `config.toml`：选 embedding provider
 
-**参考**：wassim249 `mem0` + pgvector 模式
+**参考**：wassim249 `mem0` + pgvector 模式（仅作语义层设计参考，部署方案不同）
 
 **测试**：
 - `tests/test_embeddings.py`：本地 Ollama 嵌入
@@ -200,57 +226,56 @@
 
 ---
 
-#### M4.2 — Postgres 升级（`L7` 升级）
+#### M4.2 — SQLite 增强（`L7` 优化）
 
-**目标**：SQLite（开发）→ Postgres（生产）。
+**目标**：SQLite 保持不动，**为高频访问路径加索引 + 备份 + 容量预警**。
 
 **交付**：
-- `src/cogcore/graph.py`：
-  - `build_cogcore_graph_postgres()`：用 `PostgresSaver` + `PostgresStore`
-  - 自动迁移到 `alembic/`
-- `alembic/` 配置 + 首次 migration
-- `docker-compose.yml` 起本地 Postgres
+- `src/cogcore/db_maintenance.py`：
+  - `vacuum()`：定期压缩
+  - `prune_old_checkpoints(N)`：只保留最近 N 个 LangGraph checkpoint（防止 state.db 无限增长）
+  - `auto_backup_to(dir)`：可选手动备份
+- `scripts/db_health.py`：状态报告 + 容量预警
+- `config.toml`：`[persistence] max_checkpoints=100, auto_vacuum_interval=1000`
 
 **测试**：
-- `tests/test_persistence_postgres.py`：Postgres 路径
-- 集成测试：起 Docker Postgres → 跑 100 tick → 重启 → 状态恢复
+- `tests/test_db_maintenance.py`：vacuum、prune、容量预警
 
-**退出条件**：Alice 重启 Postgres 还能被记住
+**退出条件**：state.db 不会无限增长；OOM 前能发出警告
 
 ---
 
-#### M4.3 — Langfuse 可观测（`L8`）
+#### M4.3 — JSON trace + sqlite-stats（`L8`）
 
-**目标**：每节点/每 LLM 调用的 trace + 指标 + 审计。
+**目标**：每节点/每 LLM 调用的 trace + 统计。**不引入 Langfuse / Prom / Grafana**。
 
 **交付**：
 - `src/cogcore/observatory.py`：
-  - `LangfuseTracer`：包装每节点 trace
-  - `PrometheusExporter`：暴露 `cogcore_ticks_total`、`cogcore_nt_arousal` 等 metric
+  - `JSONTracer`：每节点输出 `{ts, tick, node, duration_ms, status}` 到 `traces/YYYY-MM-DD.jsonl`
+  - `SQLiteStats`：写入 `cogcore.db` 的 `stats` 表（counter / gauge / histogram）
   - `CogCoreAuditTrail`：每 tick 10 阶段快照 + SHA-256（论文 5.6.1）
-- `grafana/dashboards/cogcore.json`：预置 dashboard
-- `prometheus/prometheus.yml`：scrape 配置
-
-**参考**：wassim249 Langfuse + Prom + Grafana 全栈
+- `scripts/stats_report.py`：从 sqlite-stats 输出 Markdown 报告
+- `scripts/trace_viewer.py`：简易 HTML 渲染 JSONL trace（零依赖）
 
 **测试**：
-- `tests/test_observatory.py`：trace 写入
-- 集成测试：跑 50 tick → 查 Prom metric → 查 Langfuse UI
+- `tests/test_observatory.py`：trace 写入、stats 累积
+- 集成测试：跑 50 tick → 查 stats 表 → 查 trace JSONL
 
-**退出条件**：可观测 dashboard 真的能看到指标
+**退出条件**：`python -m cogcore.stats` 一条命令出报告
 
 ---
 
 #### M4.4 — evals/ 评测模块（`L11` 升级）
 
-**目标**：用 LangSmith Evals 模式写"机制级"评测。
+**目标**：用「任务级 + 机制级」评测协议。**不引入 LangSmith Evals（云端依赖）**。
 
 **交付**：
 - `evals/` 目录：
   - `evals/E21_reward_curve/eval.py`：不同奖励曲线 → NT 演化路径评估
   - `evals/E22_delayed_reentry/eval.py`：延迟回投准确率评估
-  - `evals/agent_quality/eval.py`：对话质量人工 + LLM-as-judge
+  - `evals/agent_quality/eval.py`：对话质量 LLM-as-judge（用本地 Ollama 当 judge）
 - `pyproject.toml`：`pytest --evals` 入口
+- 报告输出：`evals/reports/E21-2026-06-05.json`
 
 **测试**：跑 evals/ 套件，输出 JSON 报告
 
@@ -270,19 +295,32 @@
 
 **L 层覆盖**：`L1`（完善）+ `L9`（部署）+ 5 个业务场景
 
-#### M5.1 — Docker 化（`L9`）
+#### M5.1 — 单进程部署（`L9`）
 
-**目标**：完整可分发的 Docker 镜像 + Compose。
+**目标**：`python -m cogcore serve` 一个进程起步。**不引入 Docker / Compose**。
 
 **交付**：
-- `Dockerfile`：Python 3.14-slim 基础 + CogCore 依赖
-- `docker-compose.yml`：Postgres + Ollama + CogCore
-- `nginx/` 反向代理配置
-- `.dockerignore`
+- `src/cogcore/serve.py`：
+  - `python -m cogcore serve --port 8000`：起 FastAPI
+  - `--workers N`：多进程（可选，默认 1）
+  - `--reload`：开发热重载
+  - `--data-dir ~/.cogcore`：数据目录
+- `pyproject.toml`：`[project.scripts] cogcore = "cogcore.cli:main"`
+- `scripts/install-service.sh` / `install-service.ps1`：systemd / NSSM / Windows 服务注册（可选）
+- 文档：单用户 README 启动指南
 
-**参考**：wassim249 `Dockerfile` + `docker-compose.yml`
+**部署矩阵**：
 
-**测试**：`docker-compose up` → 外部 curl 通对话
+| 场景 | 命令 |
+|------|------|
+| 个人开发 | `python -m cogcore serve` |
+| 24/7 后台 | `nohup python -m cogcore serve &` / Task Scheduler |
+| 局域网多用户 | `--host 0.0.0.0 --port 8000` |
+| 公网部署 | 反向代理加 nginx + HTTPS（自己选、文档给出模板） |
+
+**参考**：wassim249 `Dockerfile` 思路——但用 Python 进程替代容器
+
+**测试**：`python -m cogcore serve &` → 外部 curl 通对话 → kill
 
 ---
 
@@ -328,14 +366,19 @@ M3 ───┐
      M3.4 (错误处理) 横向贯穿
 
 M4.1 (嵌入) ──┐
-M4.2 (Postgres) ──→ M4.3 (可观测) ──→ M4.4 (evals)
+M4.2 (SQLite 增强) ──→ M4.3 (JSON trace) ──→ M4.4 (evals)
 M4.5 (E23) 跟随
 
-M5.1 (Docker) ──┐
+M5.1 (单进程部署) ──┐
 M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 ```
 
-**关键路径**：M3.1 FastAPI → M3.2 多 LLM → M4.2 Postgres → M4.3 可观测 → M5.1 Docker
+**关键路径**：M3.1 FastAPI → M3.2 多 LLM → M4.1 嵌入 → M4.3 JSON trace → M5.1 `python -m cogcore serve`
+
+**不依赖路径**（如果环境受限可以跳过）：
+- M3.3 MCP（需要 MCP server 运行环境）
+- M4.1 嵌入（如果用 HDB-only 也能跑）
+- M5.3 业务场景 4-5（可选）
 
 ---
 
@@ -346,9 +389,9 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 | FastAPI chatbot endpoint | M3.1 |
 | JWT + slowapi | M5.2 |
 | Alembic migration | M4.2 |
-| Grafana dashboards | M4.3 |
+| Langfuse + Prom + Grafana | **不采用**——自写 JSON trace + sqlite-stats |
 | Prometheus 配置 | M4.3 |
-| Dockerfile + compose | M5.1 |
+| Docker / Compose | **不采用**——`python -m cogcore serve` |
 | evals/ 套件 | M4.4 |
 
 阶段 D 全部分散到 M3-M5 各任务里。
@@ -359,15 +402,17 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 
 ### 5.1 L6 语义层风险
 - **依赖**：本机有 Ollama（已确认运行）或愿意调用 OpenAI Embeddings
-- **未决**：pgvector 部署复杂度，可先用本地 SQLite + numpy 顶替
+- **未决**：用 numpy 存储向量还是 sqlite-vec 扩展
+- **退路**：HDB-only 也能跑，语义层为可选增强
 
 ### 5.2 M5.3 多 Agent 协作
 - **依赖**：LangGraph Store 跨实例共享
 - **未决**：协作协议是 A2A 还是 A2A-lite
+- **退路**：先做单 Agent 多个 CogCore 实例在同一进程（多角色）
 
-### 5.3 M4.2 Postgres 迁移
-- **依赖**：用户机器有 Docker 或愿意装 Postgres
-- **退路**：保留 SQLite 作为 fallback
+### 5.3 M5 高级特性
+- **不依赖**：M5.1、M5.2、M5.3 中的 4-5 业务场景、M5.4 都不是阻塞主线的——可以选做
+- **必做**：M5.1 单进程部署是最后一道交付门槛
 
 ---
 
@@ -376,8 +421,10 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 | 阶段 | 硬指标 |
 |------|-------|
 | **M3** | 5 个 API 端点 + 3+ LLM provider 轮转 + 至少 1 个 MCP server 集成 + 错误处理三层全测 + E21/E22 通过 + 300+ tests |
-| **M4** | HDB+pgvector 双轨工作 + Postgres 状态恢复 + Langfuse trace + evals/ 1 键跑 + E23 通过 + 340+ tests |
-| **M5** | docker-compose up 启动 + JWT 鉴权 + 5 业务场景至少 4 个能跑 + E24-E25 通过 + 400+ tests |
+| **M4** | HDB+嵌入双轨工作 + SQLite 增强（容量可控） + JSON trace + sqlite-stats + evals/ 1 键跑 + E23 通过 + 340+ tests |
+| **M5** | `python -m cogcore serve` 启动 + JWT 鉴权 + 5 业务场景至少 4 个能跑 + E24-E25 通过 + 400+ tests |
+
+**所有阶段都零 Docker / 零外部服务**（除可选的远程 LLM 端点）。
 
 ---
 
