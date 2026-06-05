@@ -1,10 +1,70 @@
-# CogCore 总体计划 — 从认知内核到生产智能体
+# CogCore 总体计划 — 从认知内核到自迭代智能体
 
-> **本文档** 综合了 `AGENT_BUILD.MD` 的 11 层能力栈、`CogCore-验证矩阵.md` 的 25 项实验、`AGENT_BUILD.MD` §8 的业务场景，把 CogCore 从当前状态推进到"真正能跑生产"的完整路径。
+> **本文档** 综合了 `AGENT_BUILD.MD` 的 11 层能力栈、`CogCore-验证矩阵.md` 的 25 项实验、`AGENT_BUILD.MD` §8 的业务场景，把 CogCore 从当前状态推进到"真正能跑生产、且能自我迭代"的完整路径。
 
 ---
 
-## 0. 设计原则：零 Docker / 零外部服务
+## 0. 北星目标：自迭代 (Self-Iteration)
+
+**CogCore 的根本目的**不是做一个更聪明的 LLM Agent——LLM 已经够聪明。
+是做一个**能读懂自己源码、识别自己的能力缺口、修改自己代码、验证修改、在生产环境热部署、失败时回滚**的认知体。
+
+这跟现有架构的多个已落地设计一脉相承：
+
+| 现有资产 | 自迭代中的角色 |
+|---------|--------------|
+| **GAP Loop**（能力缺口闭环） | 元循环的方法论 |
+| **Dream Weaver 5 阶段** | 元循环的离线 / 夜间实现 |
+| **plugin_dev / Hana plugin 系统** | 自部署的载体 |
+| **三阶段事实库管线** | 经验沉淀的记忆 |
+| **Boil-the-Lake 公约** | "做完整实现"的态度 |
+| **本地优先 + 零外部服务** | 避免被环境锁死 |
+
+**自迭代的明确含义**（四层）：
+
+| 层 | 能力 | 示例 |
+|---|------|------|
+| **L12.1 自检** | 读自己源码、跑自己测试、查 git 历史 | Agent 看到某个 bug → `git log -- <file>` 找到引入 commit |
+| **L12.2 自改** | 写补丁、跑测试、git commit | Agent 写 fix → 跑 pytest → commit |
+| **L12.3 自部署** | 热重载模块、回滚失败改动 | 修改后 hot-reload → 运行 30 秒监控 → 失败自动 git revert |
+| **L12.4 自学** | 跟踪哪些自改成功、纳入 Dream Weaver | 每周 Dream Weaver 总结"哪类改动成功率最高" |
+
+**这不是"Agent 写代码给人审"——是 Agent 自己写、自己测、自己部署、自己监控**。人是 supervisor，不是 bottleneck。
+
+### 0.1 自迭代的安全约束（必须配套设计）
+
+自迭代是双刃剑。安全约束跟能力同样重要：
+
+1. **测试闸门**：所有自改必须先过现有测试套件
+2. **版本回滚**：每次自改先 git commit，失败立即 revert
+3. **变更沙箱**：agent 改的是自己的 `src/cogcore/`，不是 system Python
+4. **影响范围限速**：自改前评估 blast radius（影响多少 stage / module / 测试）
+5. **可解释性**：所有自改 commit message 必须包含"为什么改"，不能只改不解释
+6. **A/B 对照**：关键参数修改采用 dual-run（新旧并存 30 tick），差异显著才落定
+7. **人工否决通道**：所有自改推 PR 而非直接 merge（可选，激进模式可自动 merge）
+
+### 0.2 自迭代与 11 层栈的关系
+
+L12 不是单独的"第 12 层"——它是**横切所有 11 层的元能力**：
+
+```
+L12 自迭代层 (横切)
+  ├── 需要 L0-L1 读自己状态 (L8 观测 + L11 评测)
+  ├── 需要 L4 推理 "怎么修" (LLM 规划)
+  ├── 需要 L5 工具操作代码 (L12.1-L12.3 工具集)
+  ├── 需要 L6 长期记忆 (HDB + 嵌入 + 日记)
+  ├── 需要 L7 持久化 (checkpoint 不会因 reload 丢)
+  ├── 需要 L8 可观测 (改前快照 + 改后 diff 指标)
+  ├── 需要 L9 部署 (hot-reload + 回滚)
+  ├── 需要 L10 错误处理 (自改失败也是错误)
+  └── 需要 L11 评测 (改动过没过)
+```
+
+**结论**：M3-M5 的所有里程碑都应该**问同一个问题**——"这个能力是否支持自迭代？" 不支持的就要补。
+
+---
+
+## 0.5 设计原则：零 Docker / 零外部服务
 
 **目标用户** 是个人开发者 + 研究者。环境假设 = Python 3.11+ + (可选) 本地 Ollama。
 部署假设 = `pip install cogcore` → `python -m cogcore serve` → 完事。
@@ -66,6 +126,7 @@
 │  L9  部署层    ─── `python -m cogcore serve`       ❌ 未开始  │
 │  L10 错误处理  ─── RetryPolicy + fallback + 教师门控 ⚠️ 内部有│
 │  L11 测试      ─── evals/ + unit + integration     ⚠️ 262 unit│
+│  L12 自迭代    ─── 自检/自改/自部署/自学 + 安全约束  ❌ 未开始  │
 └──────────────────────────────────────────────────────────────┘
                                                   ★ = 强项
                                                   ⚠ = 部分
@@ -80,9 +141,9 @@
 
 | 阶段 | 主题 | 11 层覆盖目标 | 时间估计 | 实验 |
 |------|------|--------------|---------|------|
-| **M3** | 智能体能力补全 | L1 + L4(多LLM) + L5(MCP) + L10 | 1 周 | E21-E22 |
-| **M4** | 持久化与可观测 | L6 + L7(升级) + L8 + L11(evals) | 1 周 | E23 |
-| **M5** | 部署与多场景 | L1(完善) + L9 + 5 业务场景 | 1-2 周 | E24-E25 |
+| **M3** | 智能体能力 + **L12 自迭代起步** | L1 + L4(多LLM) + L5(MCP) + L10 + **L12.1-L12.2** | 1 周 | E21-E22 |
+| **M4** | 持久化与可观测 + **自迭代闭环** | L6 + L8 + L11(evals) + **L12.3-L12.4** | 1 周 | E23 |
+| **M5** | 部署与多场景 + **自迭代应用于业务** | L1(完善) + L9 + 5 业务场景 + **L12 生产验证** | 1-2 周 | E24-E25 |
 
 ---
 
@@ -188,7 +249,89 @@
 
 ---
 
-#### M3.5 — 实验 E21-E22
+#### M3.5 — 代码感知工具集（`L12.1` 自检 + `L12.2` 自改）
+
+**目标**：让 Agent 拥有读源码、跑测试、git 操作的工具。**这是自迭代的启动点**。
+
+**交付**：
+- `src/cogcore/tools_code.py`：
+  - `read_file(path, offset, limit)`：读源码片段
+  - `search_code(pattern, path)`：按 regex / glob 找代码
+  - `list_modules()`：列出 `src/cogcore/` 下的所有模块 + 行数
+  - `list_tests()`：列出所有测试文件
+  - `find_test_for_module(module_path)`：根据 module 推断对应测试文件
+- `src/cogcore/tools_git.py`：
+  - `git_status()`：返回 staged / unstaged / untracked
+  - `git_diff(path)`：返回 patch
+  - `git_log(path, n=10)`：返回 commit 历史 + message
+  - `git_commit(message, paths)`：提交变更（需 L12 安全闸门）
+  - `git_revert(commit_sha)`：回滚指定 commit
+- `src/cogcore/tools_exec.py`：
+  - `run_tests(path=None, marker=None)`：调 pytest，返回 pass/fail
+  - `run_command(cmd, timeout=60)`：受限 shell 调用（白名单 + 超时）
+
+**安全约束**：
+- 所有 git 工具记录到 `traces/agent-actions.jsonl`
+- 写操作（commit/revert/run_command）需过 `self_modify_safety_check()`：
+  - 路径必须是 `src/cogcore/` 或 `tests/`
+  - 不能刪除文件
+  - 不能修改 `config.toml`
+  - 运行测试时不允许 `-k skip` 绕过
+
+**参考**：wassim249 的 `@tool` 装饰器 + 自定义权限中间件
+
+**测试**：
+- `tests/test_tools_code.py`：read/search/list/find_test
+- `tests/test_tools_git.py`：status/diff/log 在 mock 仓库上
+- `tests/test_tools_exec.py`：run_tests 在示例代码上
+- `tests/test_self_modify_safety.py`：安全闸门拒绝危险操作
+
+**退出条件**：Agent 能在对话中读到自己的源码并用 git status 查看状态
+
+---
+
+#### M3.6 — 自迭代元循环（`L12.3` + `L12.4`）
+
+**目标**：把"自检 / 自改 / 自部署 / 自学"组装成可执行的元循环。
+
+**交付**：
+- `src/cogcore/self_iteration.py`：
+  - `SelfIterateLoop` 类：
+    1. `observe()`：拉当前 tick 状态 + 最近评测指标
+    2. `detect_gap()`：根据 CFS 不协调感 + 评测失败率触发
+    3. `plan_fix()`：调 LLM 生成"该读哪些文件、改哪些地方"
+    4. `read_source()`：调代码工具读相关源码
+    5. `propose_change()`：LLM 写 diff（带 commit message 说明）
+    6. `test()`：跑 pytest，必须 100% 过
+    7. `commit()`：git commit，message 包含 gap 描述 + 测试结果
+    8. `reload()`：热重载被改的 module
+    9. `log()`：写入自改日志 + Dream Weaver 评价
+
+- `scripts/run_self_iteration.py`：
+  - 一次性运行：detect gap → fix → commit
+  - 定期模式：每 N tick 跑一次
+  - Dry-run 模式：只生成 diff 不 commit
+
+**热重载实现**（M3.6 关键技术点）：
+- Python `importlib.reload()`：简单但脆弱（依赖状态可能不兼容）
+- 备选：fork 子进程跑新代码、A/B 对照、交换 socket
+- **推荐**：`importlib.reload` + `run_tests` 验证 + `run_health_check`（跑 10 tick 看指标）
+
+**安全检查点**（每步都验证）：
+- `test()` 失败 → 跳过 commit、写错误到日志、保留修改为 untracked
+- `reload()` 后 10 tick 内出现 error_log 项 ≥ 3 → 自动 git revert
+- 每个 commit message 必须包含 `[auto-iterate]` 标签 + gap ID
+
+**测试**：
+- `tests/test_self_iterate_loop.py`：mock 仓库 + mock LLM，验证 9 步流程
+- `tests/test_self_iterate_safety.py`：失败场景回滚
+- 集成测试：人为制造一个真实 bug → run_self_iteration → 验证修好 + 提交
+
+**退出条件**：跑 `python -m cogcore.self_iterate --dry-run` 能针对"测试失败率 30%"生成 fix diff（不真改）
+
+---
+
+#### M3.7 — 实验 E21-E22
 
 - **E21** 奖惩反事实课程：构造 5 条不同奖励曲线的轨迹，对比 NT 演化路径
 - **E22** 时间延迟压力测试：10/50/100 tick 延迟任务的回投准确率
@@ -356,6 +499,21 @@
 
 ---
 
+## 2.5 自迭代在 M3-M5 中的关键检查点
+
+每个 M 阶段结束都要回答："这个 Agent 能开始自迭代了吗？"
+
+| 阶段 | 自迭代就绪度检查 |
+|------|----------------|
+| **M3.5** | 工具齐备：read/write/test/git 都可用 |
+| **M3.6** | 元循环跑通：dry-run 能生成 diff |
+| **M4.3** | **真正能改 + 跑测试 + commit + reload**（干跑 → 干跑-测-改循环 → 闭环） |
+| **M4.4** | evals 套件能评估"这次自改是否比上次好"（A/B 度量） |
+| **M5.3** | 业务场景 5 (长期陪伴) 中 Agent 实际自迭代过至少 1 次 |
+| **M5.4** | E24/E25 至少一个验证"自迭代产生价值"（如：Agent 自己补了某个测试） |
+
+---
+
 ## 3. 优先级与依赖
 
 ```
@@ -420,9 +578,9 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 
 | 阶段 | 硬指标 |
 |------|-------|
-| **M3** | 5 个 API 端点 + 3+ LLM provider 轮转 + 至少 1 个 MCP server 集成 + 错误处理三层全测 + E21/E22 通过 + 300+ tests |
-| **M4** | HDB+嵌入双轨工作 + SQLite 增强（容量可控） + JSON trace + sqlite-stats + evals/ 1 键跑 + E23 通过 + 340+ tests |
-| **M5** | `python -m cogcore serve` 启动 + JWT 鉴权 + 5 业务场景至少 4 个能跑 + E24-E25 通过 + 400+ tests |
+| **M3** | 5 个 API 端点 + 3+ LLM provider 轮转 + 至少 1 个 MCP server 集成 + 错误处理三层全测 + **代码感知工具齐备 + 自迭代元循环干跑成功** + E21/E22 通过 + 320+ tests |
+| **M4** | HDB+嵌入双轨工作 + SQLite 增强（容量可控） + JSON trace + sqlite-stats + evals/ 1 键跑 + **自迭代闭环（改+测+commit+reload）** + E23 通过 + 380+ tests |
+| **M5** | `python -m cogcore serve` 启动 + JWT 鉴权 + 5 业务场景至少 4 个能跑 + **业务场景中至少 1 个用过自迭代** + E24-E25 通过 + 420+ tests |
 
 **所有阶段都零 Docker / 零外部服务**（除可选的远程 LLM 端点）。
 
