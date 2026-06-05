@@ -14,9 +14,8 @@ authors = [
 ]
 dependencies = [
     "pydantic>=2.5",
-    # LangGraph 将在 M1 阶段加入
-    # "langgraph>=0.2",
-    # "langchain-core>=0.3",
+    "langgraph>=1.2",
+    "openai>=1.0",
 ]
 
 [project.optional-dependencies]

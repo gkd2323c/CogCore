@@ -9,19 +9,110 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from openai import OpenAI
+
+from cogcore.config import get_config
 from cogcore.types import StimulusAtom, Modality, AtomEnergy, StimulusSource
 
 logger = logging.getLogger(__name__)
 
 
 class LLMBridge:
-    """CogCore ↔ LLM 双向桥接。
+    """CogCore ↔ LLM 双向桥接（使用 OpenAI 兼容协议）。
 
     - build_context_packet：CogCore 状态 → LLM 可理解的 prompt
     - parse_llm_output：LLM 输出 → 认知输入
+    - chat：调用 LLM（OpenAI SDK，兼容 Ollama/vLLM/OpenAI）
+    - chat_with_state：build_context_packet + chat 一步到位
     - queue_teacher_feedback / merge_pending_teacher_feedback：教师反馈延迟合流
     - teacher_gate_should_wake：reinforced_agency 模式的主动唤醒门控
+
+    配置从 config.toml 自动读取：
+        [llm]
+        api_type = "openai"
+        endpoint = "http://localhost:11434/v1"
+        api_key = ""
+        model = "qwen3:8b"
+        temperature = 0.7
+        max_tokens = 4096
+        timeout = 60
     """
+
+    def __init__(self, client: OpenAI | None = None):
+        cfg = get_config().llm
+
+        if client is not None:
+            self._client = client
+        else:
+            base_url = cfg.endpoint
+            api_key = cfg.api_key or ""
+            self._client = OpenAI(base_url=base_url, api_key=api_key)
+
+        self.model = cfg.model
+        self.temperature = cfg.temperature
+        self.max_tokens = cfg.max_tokens
+        self.timeout = cfg.timeout
+
+    # ============================================================
+    # LLM 调用
+    # ============================================================
+
+    def chat(
+        self,
+        messages: list[dict],
+        **kwargs,
+    ) -> str:
+        """调用 LLM 聊天补全。
+
+        Args:
+            messages: OpenAI 格式消息列表 [{"role": ..., "content": ...}]
+            **kwargs: 覆盖默认参数（temperature, max_tokens 等）
+
+        Returns:
+            LLM 回复文本。
+        """
+        try:
+            response = self._client.chat.completions.create(
+                model=kwargs.get("model", self.model),
+                messages=messages,
+                temperature=kwargs.get("temperature", self.temperature),
+                max_tokens=kwargs.get("max_tokens", self.max_tokens),
+                timeout=kwargs.get("timeout", self.timeout),
+                stream=False,
+            )
+            return response.choices[0].message.content or ""
+        except Exception as e:
+            logger.error(f"LLM chat failed: {e}")
+            return f"[LLM Error: {e}]"
+
+    def chat_with_state(
+        self,
+        cogcore_state: dict,
+        system_prompt: str | None = None,
+        max_packet_tokens: int = 2000,
+    ) -> tuple[str, str]:
+        """CogCore 状态 → LLM prompt → LLM 回复。
+
+        Args:
+            cogcore_state: invoke_cogcore() 返回的 state dict
+            system_prompt: 可选的系统提示词（None 则用默认）
+            max_packet_tokens: 状态上下文包的 token 预算
+
+        Returns:
+            (context_packet, llm_response) 二元组。
+        """
+        packet = self.build_context_packet(cogcore_state, max_packet_tokens)
+
+        if system_prompt is None:
+            system_prompt = "You are an AI assistant with access to real-time cognitive state. Use the provided context to respond naturally."
+
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": packet},
+        ]
+
+        response = self.chat(messages)
+        return packet, response
 
     def build_context_packet(self, tick_report: dict, max_tokens: int) -> str:
         """CogCore → LLM：将认知状态翻译为 LLM 可理解的上下文。
