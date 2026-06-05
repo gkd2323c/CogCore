@@ -142,7 +142,7 @@ class MCPClient:
     # JSON-RPC 内部
     # ============================================================
 
-    def _request(self, method: str, params: dict, timeout: float = 30.0) -> dict:
+    def _request(self, method: str, params: dict, timeout: float = 60.0) -> dict:
         """发送请求并等待响应。"""
         if not self.is_running:
             raise RuntimeError(f"MCP[{self.config.name}] not running")
