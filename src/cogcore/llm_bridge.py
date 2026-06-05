@@ -208,6 +208,7 @@ class LLMBridge:
         # 5. 认知感受 (Cognitive Feelings)
         feelings = tick_report.get("feeling_signals", [])
         feeling_list = []
+        FEELING_DISPLAY_THRESHOLD = 0.5
         for f in feelings:
             if isinstance(f, dict):
                 f_type = f.get("type", "")
@@ -219,7 +220,9 @@ class LLMBridge:
                 if hasattr(f_type, "value"):
                     f_type = f_type.value
                 intensity = getattr(f, "intensity", 0.0)
-            feeling_list.append(f"- Feeling: {f_type} (Intensity: {intensity:.2f})")
+            if intensity < FEELING_DISPLAY_THRESHOLD:
+                continue
+            feeling_list.append(f"- Signal: {f_type} (intensity: {intensity:.2f})")
 
         # 6. 行动倾向 (Action Drives)
         # 提取 new_atoms 中关于 action 的反馈信息，或从其它字段提取行动倾向
@@ -260,6 +263,7 @@ class LLMBridge:
         packet.append(f"Exploration: {exploration:.3f}, Fatigue: {fatigue:.3f}, Stability: {stability:.3f}\n")
 
         packet.append("[COGNITIVE FEELINGS]")
+        packet.append("(System-level signals, NOT conscious emotions. Reflect them as 'system state' in your reply, not as 'I feel' statements.)")
         if feeling_list:
             packet.append("\n".join(feeling_list))
         else:

@@ -66,7 +66,8 @@ class CogCoreService:
         self._nt_sys = NeurotransmitterSystem()
         self._action_sys = ActionSystem()
         self._tuner = AdaptiveTuner()
-        self._tools = LongTermExperienceTools(self._hdb, self._pool)
+        diary_db_path = os.path.join(self._data_dir, "diary.db")
+        self._tools = LongTermExperienceTools(self._hdb, self._pool, db_path=diary_db_path)
 
         self._modules = {
             "pool": self._pool,

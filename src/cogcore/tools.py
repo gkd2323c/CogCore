@@ -9,6 +9,8 @@ M1.3 交付：
 
 from __future__ import annotations
 
+import sqlite3
+from pathlib import Path
 from typing import Any, Callable
 from uuid import uuid4
 
@@ -80,10 +82,57 @@ class LongTermExperienceTools:
         entries = tools.read_diary("X 工作")
     """
 
-    def __init__(self, hdb: HDB, pool: StatePool | None = None) -> None:
+    def __init__(
+        self,
+        hdb: HDB,
+        pool: StatePool | None = None,
+        db_path: str | None = None,
+    ) -> None:
         self._hdb = hdb
         self._pool = pool
         self._diary_store: list[dict] = []
+        self._db_path = db_path
+        if db_path:
+            self._init_diary_db()
+
+    def _init_diary_db(self) -> None:
+        """初始化日记 SQLite 表。"""
+        if not self._db_path:
+            return
+        Path(self._db_path).parent.mkdir(parents=True, exist_ok=True)
+        with sqlite3.connect(self._db_path) as conn:
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS diary (
+                    id TEXT PRIMARY KEY,
+                    title TEXT NOT NULL,
+                    content TEXT NOT NULL,
+                    importance REAL,
+                    tags TEXT,
+                    created_at REAL DEFAULT (strftime('%s', 'now'))
+                )
+                """
+            )
+            conn.commit()
+
+    def _load_diary(self) -> list[dict]:
+        """从 SQLite 加载所有日记条目。"""
+        if not self._db_path:
+            return list(self._diary_store)
+        try:
+            with sqlite3.connect(self._db_path) as conn:
+                rows = conn.execute(
+                    "SELECT id, title, content, importance, tags FROM diary ORDER BY created_at DESC"
+                ).fetchall()
+            return [
+                {
+                    "id": r[0], "title": r[1], "content": r[2],
+                    "importance": r[3], "tags": r[4].split(",") if r[4] else [],
+                }
+                for r in rows
+            ]
+        except Exception:
+            return list(self._diary_store)
 
     def write_diary(
         self,
@@ -102,6 +151,19 @@ class LongTermExperienceTools:
             "tags": tags or [],
         }
         self._diary_store.append(entry)
+
+        # SQLite 持久化
+        if self._db_path:
+            try:
+                with sqlite3.connect(self._db_path) as conn:
+                    conn.execute(
+                        "INSERT INTO diary (id, title, content, importance, tags) VALUES (?, ?, ?, ?, ?)",
+                        (entry["id"], entry["title"], entry["content"],
+                         entry["importance"], ",".join(entry["tags"])),
+                    )
+                    conn.commit()
+            except Exception:
+                pass
 
         memory = EpisodicMemory(
             id=entry_id,
@@ -133,11 +195,13 @@ class LongTermExperienceTools:
         Returns:
             日记条目列表 [{id, title, content, importance, tags}]
         """
+        # 从 SQLite 或内存加载
+        source = self._load_diary() if self._db_path else list(reversed(self._diary_store))
         results = []
 
         # 从 HDB 情景记忆中检索
         # 目前 HDB 没有全文搜索，用 memory store fallback + HDB report
-        for entry in reversed(self._diary_store):
+        for entry in source:
             if query:
                 if query.lower() in entry.get("title", "").lower() or query.lower() in entry.get("content", "").lower():
                     results.append(entry)

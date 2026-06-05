@@ -181,3 +181,42 @@ def test_schedule_multiple_tasks():
     t.schedule_task("t1", "a", 5)
     t.schedule_task("t2", "b", 10)
     assert len(t.list_tasks()) == 2
+
+
+# ============================================================
+# 日记 SQLite 持久化
+# ============================================================
+
+
+def test_diary_sqlite_persistence(tmp_path):
+    """日记写入 SQLite 后可重读。"""
+    import os
+    from cogcore.hdb import HDB
+    from cogcore.state_pool import StatePool
+
+    db = tmp_path / "diary.db"
+    t1 = LongTermExperienceTools(HDB(), StatePool(), db_path=str(db))
+    t1.write_diary("Alice 首次对话", "与 Alice 的首次对话")
+    t1.write_diary("技术笔记", "LangGraph 状态合并")
+
+    # 重新加载
+    t2 = LongTermExperienceTools(HDB(), StatePool(), db_path=str(db))
+    entries = t2.read_diary("")
+    assert len(entries) == 2
+    titles = {e["title"] for e in entries}
+    assert "Alice 首次对话" in titles
+
+
+def test_diary_sqlite_search_by_keyword(tmp_path):
+    """从 SQLite 重载后还能按关键词搜索。"""
+    from cogcore.hdb import HDB
+    from cogcore.state_pool import StatePool
+
+    db = tmp_path / "diary.db"
+    t1 = LongTermExperienceTools(HDB(), StatePool(), db_path=str(db))
+    t1.write_diary("Alice 首次对话", "今天认识了 Alice")
+    t1.write_diary("Bob 项目", "与 Bob 讨论新项目")
+
+    t2 = LongTermExperienceTools(HDB(), StatePool(), db_path=str(db))
+    alice_entries = t2.read_diary("Alice")
+    assert any("Alice" in e["title"] or "Alice" in e["content"] for e in alice_entries)

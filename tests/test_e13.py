@@ -34,7 +34,7 @@ def test_llm_bridge_build_context_packet():
     assert "[ENERGY STATE]" in packet
     assert "[NEUROTRANSMITTERS]" in packet
     assert "[COGNITIVE FEELINGS]" in packet
-    assert "- Feeling: correct (Intensity: 0.80)" in packet
+    assert "- Signal: correct (intensity: 0.80)" in packet
     assert "[ATTENTION FOCUS & ACTIVE MEMORIES]" in packet
     assert "[MEMORY ANCHORS & SOURCES]" in packet
     assert "[ACTION CANDIDATES & DRIVES]" in packet
