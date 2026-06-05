@@ -2,7 +2,7 @@
 
 **通用认知内核（Universal Cognitive Kernel）—— LLM Agent 的持续认知层**
 
-[![阶段](https://img.shields.io/badge/stage-M3-green)]() [![测试](https://img.shields.io/badge/tests-374%20passed-brightgreen)]() [![模块](https://img.shields.io/badge/modules-30-blue)]() [![论文](https://img.shields.io/badge/based%20on-AP%20(2026)-blue)]()
+[![阶段](https://img.shields.io/badge/stage-M3.6-green)]() [![测试](https://img.shields.io/badge/tests-390%20passed-brightgreen)]() [![模块](https://img.shields.io/badge/modules-32-blue)]() [![论文](https://img.shields.io/badge/based%20on-AP%20(2026)-blue)]()
 
 ---
 
@@ -19,14 +19,14 @@ CogCore 补 LLM 在长期连续性上的结构性缺失：长期状态维护、�
 | 设计文档 | ✅ 完成（9 章 + 5 个新章节 + 附录 A）|
 | 验证矩阵 | ✅ 完成（17 实验 × CogCore 模块映射）|
 | 论文选型 | ✅ 完成（LangGraph 首选，PydanticAI 次选）|
-| 代码实现 | ✅ M3.5 阶段完成 (FastAPI + LLM fallback + MCP + 错误处理 + 代码感知工具), 374/374 测试通过 |
+| 代码实现 | ✅ M3.6 阶段完成 (FastAPI + LLM fallback + MCP + 错误处理 + 代码感知工具 + 自迭代元循环), 390/390 测试通过 |
 | E01-E17 复现 | ✅ **17/17 全部通过**, CogCore 实验已覆盖全部论文实验 |
 | E18-E20 实验 | ✅ 3000 tick 稳定 + APT 消融 + CFS/NT 消融全部通过 |
 | L1 应用层 | ✅ FastAPI 接入 (5 端点, 真实 DeepSeek 跑通) |
 | L4 解释层 | ✅ LLMRegistry + circular fallback (14 测试 + 实跑) |
 | L5 工具层 | ✅ MCP 适配器 (15 测试) + 6 默认工具 + 3 long-term + 13 code/git/exec |
 | L10 错误处理 | ✅ 三层 (L1 retry + L2 fallback + L3 教师门控, 20 测试) |
-| L12 自迭代 | ⏳ M3.5 完成 L12.1 (自检) + L12.2 (自改), 缺 M3.6 元循环 |
+| L12 自迭代 | ✅ M3.5 完成 L12.1+L12.2, M3.6 完成 L12.3 元循环 (9 步 + 安全闸门 + CLI) |
 | 后台服务 | ✅ CogCoreService 持续 tick + 自动日记 + SQLite 持久化 |
 | LLM 集成 | ✅ OpenAI 兼容协议 + Ollama 本地 + end-to-end Agent |
 | 持久化 | ✅ SQLite（零 Docker）/ Memory 双路径 |
@@ -102,7 +102,7 @@ CogCore/
 │   ├── cogcore_framework_research.md  # LangGraph 选型调研
 │   └── 人工心智架构-论文分析.md         # AP 论文批判性分析
 ├── paper/                           # AP 论文原文
-├── src/cogcore/                     # 22 个 Python 模块
+├── src/cogcore/                     # 32 个 Python 模块
 │   ├── types.py                     # 核心类型（StimulusAtom 等）
 │   ├── state_schema.py              # CogCoreState + StateUpdater
 │   ├── config.py                    # TOML 配置加载（M1.1）
@@ -119,33 +119,58 @@ CogCore/
 │   ├── graph.py                     # LangGraph StateGraph（M0.5 + M1.2 SQLite）
 │   ├── modes.py                     # PA 运行模式（M1.4）
 │   ├── llm_bridge.py                # LLM 桥接 OpenAI SDK（M1.1）
-│   ├── tools.py                     # 工具系统（M1.3）
+│   ├── llm_registry.py              # 多 LLM 轮转 + circular fallback（M3.2）
+│   ├── mcp_adapter.py               # MCP 工具适配（M3.3）
+│   ├── retry.py                     # 节点级重试 + 退避（M3.4）
+│   ├── tool_executor.py             # 工具调用执行（M2.2）
+│   ├── tools.py                     # 工具注册表（M1.3）
+│   ├── tools_code.py                # 代码感知工具（M3.5 L12.1）
+│   ├── tools_git.py                 # git 工具（M3.5 L12.2）
+│   ├── tools_exec.py                # 执行工具（M3.5）
+│   ├── self_modify_safety.py        # 自修改安全闸门（M3.5）
+│   ├── self_iteration.py            # 9 步自迭代元循环（M3.6 L12.3）
+│   ├── service.py                   # 后台服务 + 自动 tick + 日记（M2.1）
+│   ├── agent.py                     # 端到端 Agent 5 步消息流（M2.2）
 │   ├── run.py                       # CLI 入口（M0.5）
 │   ├── main.py                      # M0.1 手动入口
 │   └── observability.py             # 可观测性
-├── tests/                           # 17 个测试文件 / 228 个测试
-│   ├── test_pipeline.py             # 5
-│   ├── test_state_pool.py           # 15
-│   ├── test_hdb.py                  # 16
-│   ├── test_state_schema.py         # 15
-│   ├── test_integration.py          # 9
-│   ├── test_action_system.py        # 23
-│   ├── test_cfs.py                  # 10 (M0.4)
-│   ├── test_nt.py                   # 13 (M0.4)
-│   ├── test_attention.py            # 9 (M0.4)
-│   ├── test_tuner.py                # 12 (M0.4)
-│   ├── test_graph.py                # 11 (M0.5)
-│   ├── test_config.py               # 12 (M1.1)
-│   ├── test_llm_bridge.py           # 16 (M1.1)
-│   ├── test_persistence.py          # 7 (M1.2)
-│   ├── test_tools.py                # 17 (M1.3)
-│   └── test_modes.py                # 12 (M1.4)
-├── scripts/                         # 5 个演示脚本
+├── tests/                           # 31 个测试文件 / 390 个测试
+│   ├── test_pipeline.py             # M0
+│   ├── test_state_pool.py           # M0.2
+│   ├── test_hdb.py                  # M0.2
+│   ├── test_state_schema.py         # M0
+│   ├── test_integration.py          # M0
+│   ├── test_action_system.py        # M0.3
+│   ├── test_cfs.py                  # M0.4
+│   ├── test_nt.py                   # M0.4
+│   ├── test_attention.py            # M0.4
+│   ├── test_tuner.py                # M0.4
+│   ├── test_graph.py                # M0.5
+│   ├── test_config.py               # M1.1
+│   ├── test_llm_bridge.py           # M1.1
+│   ├── test_persistence.py          # M1.2
+│   ├── test_tools.py                # M1.3
+│   ├── test_modes.py                # M1.4
+│   ├── test_service.py              # M2.1
+│   ├── test_agent.py                # M2.2
+│   ├── test_tool_executor.py        # M2.4
+│   ├── test_three_layer_errors.py   # M3.4
+│   ├── test_retry.py                # M3.4
+│   ├── test_llm_registry.py         # M3.2
+│   ├── test_mcp_adapter.py          # M3.3
+│   ├── test_api.py                  # M3.1
+│   ├── test_m35_code_tools.py       # M3.5
+│   ├── test_m35_safety_and_git.py   # M3.5
+│   ├── test_self_iteration.py       # M3.6
+│   ├── test_e13.py / test_e16.py / test_e17.py  # 实验
+│   └── test_m09.py                  # 实验
+├── scripts/                         # 6 个演示 + 工具脚本
 │   ├── demo_run.py                  # M0.1 手动流水线
 │   ├── demo_action.py               # M0.3 行动系统
 │   ├── demo_modulation.py           # M0.4 调制层
 │   ├── demo_langgraph.py            # M0.5 LangGraph
-│   └── demo_llm.py                  # M1.1 CogCore→LLM 闭环
+│   ├── demo_llm.py                  # M1.1 CogCore→LLM 闭环
+│   └── run_self_iteration.py        # M3.6 自迭代 CLI 入口
 ├── config.toml                      # 本地配置（.gitignore）
 ├── config.toml.example              # 配置模板
 ```
@@ -158,4 +183,4 @@ CogCore/
 
 ---
 
-*本 README 与 4 份门面文档同步于 2026-06-05 CogCore 第 1-3 轮文档补全后。*
+*本 README 与 4 份门面文档同步于 2026-06-06 CogCore M3.6 自迭代元循环完成后。*
