@@ -120,13 +120,13 @@ L12 自迭代层 (横切)
 │  L3  认知层    ─── CogCore 9 模块 + 25 实验        ✅ 17/25   │
 │  L4  解释层    ─── LLMRegistry + circular fallback ⚠️ 单 LLM │
 │  L5  工具层    ─── LangChain Tools + MCP           ⚠️ 6 工具 │
-│  L6  记忆层    ─── HDB + sqlite-vec / 嵌入       ⚠️ HDB only│
+│  L6  记忆层    ─── HDB + numpy 嵌入 (BLOB)        ⚠️ HDB only │
 │  L7  持久化    ─── SQLite + langgraph-checkpoint   ✅ SQLite  │
 │  L8  可观测性  ─── JSON trace + sqlite-stats       ❌ 未开始  │
 │  L9  部署层    ─── `python -m cogcore serve`       ❌ 未开始  │
-│  L10 错误处理  ─── RetryPolicy + fallback + 教师门控 ⚠️ 内部有│
-│  L11 测试      ─── evals/ + unit + integration     ⚠️ 262 unit│
-│  L12 自迭代    ─── 自检/自改/自部署/自学 + 安全约束  ⚠️ L12.1-L12.3 │
+│  L10 错误处理  ─── RetryPolicy + fallback + 教师门控 ✅ 完成  │
+│  L11 测试      ─── evals/ + unit + integration     ⚠️ 400 unit│
+│  L12 自迭代    ─── 自检/自改/自部署/自学 + 安全约束  ✅ L12.1-L12.3│
 └──────────────────────────────────────────────────────────────┘
                                                   ★ = 强项
                                                   ⚠ = 部分
@@ -142,7 +142,7 @@ L12 自迭代层 (横切)
 | 阶段     | 主题                    | 11 层覆盖目标                                        | 时间估计  | 实验      |
 | ------ | --------------------- | ----------------------------------------------- | ----- | ------- |
 | **M3** | 智能体能力 + **L12 自迭代起步** | L1 + L4(多LLM) + L5(MCP) + L10 + **L12.1-L12.2** | 1 周   | E21-E22 |
-| **M4** | 持久化与可观测 + **自迭代闭环**   | L6 + L8 + L11(evals) + **L12.3-L12.4**          | 1 周   | E23     |
+| **M4** | 持久化与可观测 + **自迭代闭环**   | L6 + **L7(优化)** + L8(trace+stats) + L11(evals) + **L12.4** | 1 周   | E23     |
 | **M5** | 部署与多场景 + **自迭代应用于业务** | L1(完善) + L9 + 5 业务场景 + **L12 生产验证**             | 1-2 周 | E24-E25 |
 
 ---
@@ -367,79 +367,114 @@ L12 自迭代层 (横切)
 
 ---
 
-### 阶段 M4 — 持久化与可观测（目标：让 Agent 真能观测）
+### 阶段 M4 — 持久化与可观测（目标：让 Agent 真能观测 + 真能自评）
 
-**L 层覆盖**：`L6`（语义层）+ `L8`（可观测性）+ `L11`（evals/）
+**L 层覆盖**：`L6`（语义层）+ `L7`（持久化优化）+ `L8`（可观测性）+ `L11`（evals/）
+
+**核心原则**：不引入 Docker / Postgres / Langfuse / Prom / Grafana。`pip install cogcore` → `python -m cogcore serve` 单进程全跑。
+
+**依赖顺序**：
+
+```
+M4.2 (SQLite 维护)  ──┐
+M4.3a (JSON trace)   ──┼──→ M4.4 (evals + A/B 度量) ──→ M4.5 (E23) ──→ M4.6 (M3.6 集成)
+M4.3b (sqlite-stats) ──┘
+M4.1 (嵌入) ──────────────────────────────────────────────→ M4.5 (E23)
+```
+
+| 子阶段 | L 层 | 阻塞主路径？ | 核心交付 |
+|--------|------|------------|----------|
+| **M4.2** SQLite 增强 | L7 | 是 (state.db 20MB 无上限) | vacuum / prune_checkpoints(N) / auto_backup / 容量预警 |
+| **M4.3a** JSON trace | L8 | 是 (M3.6 元循环需要看"上次改了什么") | `traces/YYYY-MM-DD.jsonl`, 每节点 `{ts,tick,node,duration_ms,status}`, 零依赖 viewer |
+| **M4.3b** sqlite-stats | L8 | 是 (度量基础) | counter / gauge / histogram 三种 primitive |
+| **M4.4** evals/ | L11 | 是 ("自改是否更好了"的判据) | `evals/<name>/eval.py` 协议 + A/B harness (baseline vs candidate) |
+| **M4.1** 嵌入语义层 | L6 | 否 (HDB-only 也能跑) | Ollama (qwen3-embedding:0.6b) / OpenAI / numpy + SQLite BLOB |
+| **M4.5** E23 | 实验 | 否 (依赖 M4.1) | 词级/字符级/向量混合感受器 |
+| **M4.6** M3.6 集成 | L12.4 | 是 (自迭代闭环) | 把 M4.3 trace + M4.4 evals 喂给 M3.6 元循环, 失败自动 revert |
 
 #### M4.1 — 嵌入语义层（`L6`）
 
-**目标**：HDB（结构）之外增加嵌入（语义）双轨记忆。**不引入 pgvector，用 sqlite-vec / numpy**。
+**目标**：HDB（结构）之外增加嵌入（语义）双轨记忆。**不引入 pgvector / sqlite-vec，用 numpy + SQLite BLOB**。
+
+**为什么不上 sqlite-vec**："永远不要自装 native module" 铁律（见 Pinned Memory），用 numpy 足够；N < 10K 时 cosine 距离比 sqlite-vec 还快。
 
 **交付**：
 
 - `src/cogcore/embeddings.py`：
-  - `EmbeddingProvider`：抽象接口
+  - `EmbeddingProvider`：抽象接口（`embed(text: str) -> list[float]`）
   - `OllamaEmbeddingProvider`：调 `qwen3-embedding:0.6b`（本地，无需 Docker）
   - `OpenAIEmbeddingProvider`：调 OpenAI text-embedding-3
+  - `MockEmbeddingProvider`：测试用，确定性 hash-based 向量
 - `src/cogcore/semantic_store.py`：
   - `SemanticStore`：默认用 numpy + SQLite（向量列存 BLOB）
-  - 可选 `sqlite-vec` 扩展（如果装了）
-  - 与 HDB 协作：HDB 命中走查存，miss 走相似度
-- `config.toml`：选 embedding provider
-
-**参考**：wassim249 `mem0` + pgvector 模式（仅作语义层设计参考，部署方案不同）
+  - `add(text, metadata)` / `search(query, top_k=5, threshold=0.7) -> list[(text, score, metadata)]`
+  - cosine 距离在 Python 端算
+- 与 HDB 协作：`DualStore` 包装 HDB + SemanticStore, HDB 命中走查存, miss 走相似度
+- `config.toml`：选 embedding provider (`[embeddings] provider = "ollama" | "openai" | "mock"`)
 
 **测试**：
 
-- `tests/test_embeddings.py`：本地 Ollama 嵌入
-- `tests/test_semantic_store.py`：存 + 查 + 相似度排序
+- `tests/test_embeddings.py`：3 个 provider 都能 embed (mock 自动跑, ollama/openai 需环境变量)
+- `tests/test_semantic_store.py`：存 + 查 + 相似度排序 + top_k 边界
 
-**退出条件**：HDB miss 时能 fallback 到语义查询
-
----
+**退出条件**：HDB miss 时能 fallback 到 SemanticStore, top-1 命中人造同义句
 
 #### M4.2 — SQLite 增强（`L7` 优化）
 
-**目标**：SQLite 保持不动，**为高频访问路径加索引 + 备份 + 容量预警**。
+**目标**：SQLite 保持不动，**为高频访问路径加索引 + 备份 + 容量预警**。当前 `state.db` 已 20MB 且无限增长。
 
 **交付**：
 
 - `src/cogcore/db_maintenance.py`：
-  - `vacuum()`：定期压缩
-  - `prune_old_checkpoints(N)`：只保留最近 N 个 LangGraph checkpoint（防止 state.db 无限增长）
-  - `auto_backup_to(dir)`：可选手动备份
-- `scripts/db_health.py`：状态报告 + 容量预警
+  - `vacuum(db_path)`：定期压缩 (VACUUM 命令)
+  - `prune_checkpoints(checkpointer, keep_last=100)`：只保留最近 N 个 LangGraph checkpoint
+  - `auto_backup_to(dir, every_n_ticks=1000)`：滚动备份
+  - `health_check(db_path) -> dict`：返回 `{size_mb, table_count, oldest_checkpoint_age_days, warning: bool}`
+- `scripts/db_health.py`：状态报告 + 容量预警（输出 Markdown）
 - `config.toml`：`[persistence] max_checkpoints=100, auto_vacuum_interval=1000`
 
 **测试**：
 
-- `tests/test_db_maintenance.py`：vacuum、prune、容量预警
+- `tests/test_db_maintenance.py`：vacuum 后 db 大小下降、prune 后只剩 100 个 checkpoint、容量预警触发
 
-**退出条件**：state.db 不会无限增长；OOM 前能发出警告
+**退出条件**：`state.db` 不会无限增长；OOM 前能发出警告
 
----
+#### M4.3a — JSON trace（`L8`）
 
-#### M4.3 — JSON trace + sqlite-stats（`L8`）
-
-**目标**：每节点/每 LLM 调用的 trace + 统计。**不引入 Langfuse / Prom / Grafana**。
+**目标**：每节点/每 LLM 调用的 trace。**不引入 Langfuse / Prom / Grafana**。
 
 **交付**：
 
-- `src/cogcore/observatory.py`：
-  - `JSONTracer`：每节点输出 `{ts, tick, node, duration_ms, status}` 到 `traces/YYYY-MM-DD.jsonl`
-  - `SQLiteStats`：写入 `cogcore.db` 的 `stats` 表（counter / gauge / histogram）
-  - `CogCoreAuditTrail`：每 tick 10 阶段快照 + SHA-256（论文 5.6.1）
-- `scripts/stats_report.py`：从 sqlite-stats 输出 Markdown 报告
-- `scripts/trace_viewer.py`：简易 HTML 渲染 JSONL trace（零依赖）
+- `src/cogcore/json_tracer.py`：
+  - `JSONTracer(path, node_name)`：context manager / decorator
+  - 写入 `traces/YYYY-MM-DD.jsonl`，每行 `{ts, tick, node, duration_ms, status, error?, sha256_input, sha256_output}`
+  - 支持 thread_id + tick 多维度聚合
+- `scripts/trace_viewer.py`：纯 Python 读 JSONL → 输出表格 HTML（零依赖, 不引 Jinja）
 
 **测试**：
 
-- `tests/test_observatory.py`：trace 写入、stats 累积
-- 集成测试：跑 50 tick → 查 stats 表 → 查 trace JSONL
+- `tests/test_json_tracer.py`：写入格式正确、SHA-256 校验、viewer 输出 HTML
+- 集成测试：跑 50 tick → 查 trace JSONL 验证每节点都有记录
+
+**退出条件**：`python scripts/trace_viewer.py traces/2026-06-06.jsonl` 一条命令出 HTML
+
+#### M4.3b — sqlite-stats（`L8`）
+
+**目标**：counter / gauge / histogram 三种度量 primitive。**不引 Prometheus**。
+
+**交付**：
+
+- `src/cogcore/sqlite_stats.py`：
+  - `StatsDB(path)`：3 张表 `counter, gauge, histogram`
+  - `incr(name, value=1)` / `set(name, value)` / `observe(name, value)` (P50/P95/P99 在 SQLite 端用 window function 算)
+  - `report() -> dict` + `report_markdown()` 输出报告
+- `scripts/stats_report.py`：从 sqlite-stats 输出 Markdown 报告
+
+**测试**：
+
+- `tests/test_sqlite_stats.py`：incr/set/observe 正确累加、histogram P50/P95/P99 计算正确
 
 **退出条件**：`python -m cogcore.stats` 一条命令出报告
-
----
 
 #### M4.4 — evals/ 评测模块（`L11` 升级）
 
@@ -447,24 +482,61 @@ L12 自迭代层 (横切)
 
 **交付**：
 
-- `evals/` 目录：
-  - `evals/E21_reward_curve/eval.py`：不同奖励曲线 → NT 演化路径评估
-  - `evals/E22_delayed_reentry/eval.py`：延迟回投准确率评估
-  - `evals/agent_quality/eval.py`：对话质量 LLM-as-judge（用本地 Ollama 当 judge）
-- `pyproject.toml`：`pytest --evals` 入口
-- 报告输出：`evals/reports/E21-2026-06-05.json`
+- `evals/` 目录协议：
+  - `evals/<name>/eval.py`：接受一个 cogcore 状态, 返回 metrics dict
+  - `evals/<name>/test_eval.py`：pytest 可跑
+  - `evals/reports/<name>-YYYY-MM-DD.json`：报告存档
+  - 必备 3 个 eval:
+    - `evals/E21_reward_curve/eval.py`：不同奖励曲线 → NT 演化路径评估
+    - `evals/E22_self_iter/eval.py`：自迭代前/后跑同一轨迹, 对比 metrics
+    - `evals/agent_quality/eval.py`：对话质量 LLM-as-judge（用本地 Ollama 当 judge）
+- `evals/ab_harness.py`：baseline vs candidate, paired diff 输出
+- `pyproject.toml`：`pytest --evals` 入口（`[tool.pyproject] markers = ["evals: opt-in"]`）
+- 报告输出：`evals/reports/<name>-2026-06-06.json` + 自动 diff 与上次
 
 **测试**：跑 evals/ 套件，输出 JSON 报告
 
-**退出条件**：evals/ 套件能 1 键跑 + 输出可对比报告
-
----
+**退出条件**：`pytest --evals` 一键跑全套 evals/, 报告含 diff vs 上次
 
 #### M4.5 — 实验 E23
 
-- **E23** 词级/字符级/向量混合：3 种粒度的感受器并存
+- **E23** 词级/字符级/向量混合：3 种粒度的感受器并存, 召回率 > HDB-only baseline
 
 **退出条件**：E23 通过四项准入
+
+#### M4.6 — M3.6 元循环接入 evals（`L12.4` 闭环）
+
+**目标**：把 M4.3 trace + M4.4 evals 喂给 M3.6 元循环, 让"自改是否更好"成为可测判据。
+
+**交付**：
+
+- `src/cogcore/self_iteration.py` 升级：
+  - `evaluate_after_change(loop, before_metrics, after_metrics) -> "accept" | "revert"`
+  - 当 eval score 不升反降时, 自动 `git revert` (之前只基于 test 失败 rollback, 现在基于 "evals 评分下降")
+  - 记录每次 self-iter 的 `(before, after, decision, reason)` 到 `self_iteration.jsonl`
+- `scripts/run_self_iteration.py` 加 `--with-evals` flag 走完整闭环
+
+**测试**：
+
+- `tests/test_self_iteration_ab.py`：构造 before/after metrics, 验证 accept/revert 决策
+- 集成测试：故意引入 perf regression → 期望自动 revert
+
+**退出条件**：自迭代闭环跑通, "改-测-evals-决策" 4 步全部自动化
+
+---
+
+**M4 退出准则**：
+
+| 指标 | 目标 |
+|------|------|
+| 测试 | 400 → 460+ (60 个新增, 分布在 5 个子阶段) |
+| 阻塞子阶段 | M4.2 + M4.3a + M4.3b + M4.4 + M4.6 必做 |
+| 关键路径 | M3.6 元循环接入 evals 后, A/B 决策可工作 |
+| 实验 | E23 通过 (依赖 M4.1) |
+| 不引入 | Docker / Postgres / pgvector / sqlite-vec / Langfuse / Prom / Grafana |
+| 自迭代就绪度表 | M4.3 ✅, M4.4 ✅, M4.5 ✅ 三行都打勾 |
+
+**执行顺序**：M4.2 → M4.3a → M4.3b → M4.4 → M4.1 → M4.5 (含 E23) → M4.6
 
 ---
 
@@ -544,7 +616,8 @@ L12 自迭代层 (横切)
 | **M3.5** | 工具齐备: read/write/test/git 都可用 ✅ (6+5+2 工具 + 闸门, 50 测试) |
 | **M3.6** | 元循环跑通: dry-run 能生成 diff ✅ (9 步 + 5 重闸门 + CLI, 16 测试) |
 | **M3.7** | 自迭代价值验证 ✅ (E21 奖励反事实 + E22 A/B 对照, 10 测试) |
-| **M4.3** | **真正能改 + 跑测试 + commit + reload**（干跑 → 干跑-测-改循环 → 闭环） |
+| **M4.3a** | trace 能记录"改了什么 / 改的时长 / 是否成功" (JSONL 追加)        |
+| **M4.3b** | stats 能度量"调用次数 / 延迟分布 / 错误率" (counter/gauge/histogram) |
 | **M4.4** | evals 套件能评估"这次自改是否比上次好"（A/B 度量）                      |
 | **M5.3** | 业务场景 5 (长期陪伴) 中 Agent 实际自迭代过至少 1 次                   |
 | **M5.4** | E24/E25 至少一个验证"自迭代产生价值"（如：Agent 自己补了某个测试）            |
@@ -561,14 +634,14 @@ M3 ───┐
      M3.4 (错误处理) 横向贯穿
 
 M4.1 (嵌入) ──┐
-M4.2 (SQLite 增强) ──→ M4.3 (JSON trace) ──→ M4.4 (evals)
-M4.5 (E23) 跟随
+M4.2 (SQLite 增强) ──→ M4.3a (JSON trace) ──→ M4.4 (evals) ──→ M4.6 (元循环集成)
+   M4.3b (sqlite-stats) ─┘                  ├→ M4.1 (嵌入) ──→ M4.5 (E23)
 
 M5.1 (单进程部署) ──┐
 M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 ```
 
-**关键路径**：M3.1 FastAPI → M3.2 多 LLM → M4.1 嵌入 → M4.3 JSON trace → M5.1 `python -m cogcore serve`
+**关键路径**：M3.1 FastAPI → M3.2 多 LLM → M4.2 SQLite 增强 → M4.3a JSON trace → M4.3b sqlite-stats → M4.4 evals → M4.6 元循环集成 → M5.1 `python -m cogcore serve`
 
 **不依赖路径**（如果环境受限可以跳过）：
 
@@ -584,10 +657,11 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 | ------------------------- | ------------------------------------- |
 | FastAPI chatbot endpoint  | M3.1                                  |
 | JWT + slowapi             | M5.2                                  |
-| Alembic migration         | M4.2                                  |
+| Alembic migration         | **不采用**——SQLite 足够, 手动 schema 迁移 |
 | Langfuse + Prom + Grafana | **不采用**——自写 JSON trace + sqlite-stats |
-| Prometheus 配置             | M4.3                                  |
+| Prometheus 配置             | **不采用**——StatsDB histogram in SQLite |
 | Docker / Compose          | **不采用**——`python -m cogcore serve`    |
+| sqlite-vec / pgvector      | **不采用**——numpy 嵌入 + SQLite BLOB (N<10K 时更快) |
 | evals/ 套件                 | M4.4                                  |
 
 阶段 D 全部分散到 M3-M5 各任务里。
@@ -599,7 +673,7 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 ### 5.1 L6 语义层风险
 
 - **依赖**：本机有 Ollama（已确认运行）或愿意调用 OpenAI Embeddings
-- **未决**：用 numpy 存储向量还是 sqlite-vec 扩展
+- **已决**：用 numpy 存储向量 (sqlite-vec 是 native module, 违反"不装 native"铁律)
 - **退路**：HDB-only 也能跑，语义层为可选增强
 
 ### 5.2 M5.3 多 Agent 协作
@@ -620,7 +694,7 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 | 阶段     | 硬指标                                                                                                                         |
 | ------ | --------------------------------------------------------------------------------------------------------------------------- |
 | **M3** | 5 个 API 端点 ✅ + 3+ LLM provider 轮转 ✅ + 至少 1 个 MCP server 集成 ✅ + 错误处理三层全测 ✅ + 代码感知工具齐备 ✅ + 自迭代元循环干跑成功 ✅ + E21/E22 通过 ✅ + 400 tests |
-| **M4** | HDB+嵌入双轨工作 + SQLite 增强（容量可控） + JSON trace + sqlite-stats + evals/ 1 键跑 + **自迭代闭环（改+测+commit+reload）** + E23 通过 + 380+ tests |
+| **M4** | M4.2 ✅ + M4.3a ✅ + M4.3b ✅ + M4.4 ✅ + M4.6 ✅ 必做；M4.1 + M4.5 可选；460+ tests；E23 视 M4.1 决定；自迭代就绪度表 M4.3/4.4/4.5 三行打勾 |
 | **M5** | `python -m cogcore serve` 启动 + JWT 鉴权 + 5 业务场景至少 4 个能跑 + **业务场景中至少 1 个用过自迭代** + E24-E25 通过 + 420+ tests                     |
 
 **所有阶段都零 Docker / 零外部服务**（除可选的远程 LLM 端点）。
@@ -639,4 +713,4 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 
 ---
 
-*最后更新：2026-06-06 (M3.7 E21+E22 完成, 400 tests, M3 全部交付)*
+*最后更新：2026-06-06 (M3 全部完成, M4 计划定稿, 400 tests)*
