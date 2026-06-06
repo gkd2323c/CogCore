@@ -34,7 +34,7 @@ M4.1 (嵌入) ──────────────────────
 | 子阶段 | L 层 | 阻塞主路径？ | 核心交付 | 状态 |
 |--------|------|------------|----------|------|
 | **M4.2** SQLite 增强 | L7 | 是 (state.db 20MB 无上限) | vacuum / prune_checkpoints(N) / auto_backup / 容量预警 | ✅ 完成 (19 测试) |
-| **M4.3a** JSON trace | L8 | 是 (M3.6 元循环需要看"上次改了什么") | `traces/YYYY-MM-DD.jsonl`, 每节点 `{ts,tick,node,duration_ms,status}`, 零依赖 viewer | ⏳ |
+| **M4.3a** JSON trace | L8 | 是 (M3.6 元循环需要看"上次改了什么") | `traces/YYYY-MM-DD.jsonl`, 每节点 `{ts,tick,node,duration_ms,status}`, 零依赖 viewer | ✅ 完成 (22 测试) |
 | **M4.3b** sqlite-stats | L8 | 是 (度量基础) | counter / gauge / histogram 三种 primitive | ⏳ |
 | **M4.4** evals/ | L11 | 是 ("自改是否更好了"的判据) | `evals/<name>/eval.py` 协议 + A/B harness | ⏳ |
 | **M4.1** 嵌入语义层 | L6 | 否 (HDB-only 也能跑) | Ollama (qwen3-embedding:0.6b) / OpenAI / numpy + SQLite BLOB | ⏳ |
@@ -113,24 +113,36 @@ backup + prune --keep 3 + vacuum:
 
 ---
 
-## M4.3a — JSON trace (`L8`)
+## M4.3a — JSON trace (`L8`) ✅ **已完成** (2026-06-06, 22 测试)
 
 **目标**：每节点/每 LLM 调用的 trace。**不引入 Langfuse / Prom / Grafana**。
 
-**交付**：
+**交付**（全部完成）：
+- ✅ `src/cogcore/json_tracer.py` (570 行, stdlib only)
+  - `TraceRecord`: {ts, node, thread_id, tick, duration_ms, status, error,
+                    sha256_input, sha256_output, input_size, output_size, extra}
+  - `TraceWriter`: 线程安全 JSONL 写入, 每天一个文件 `traces/YYYY-MM-DD.jsonl`
+  - `JSONTracer`: context manager + decorator + `trace_node` helper
+  - `read_traces(path, node=, thread_id=, status=)`: 过滤读
+  - `aggregate_by_node / aggregate_by_thread`: 统计
+  - `render_html / write_html`: 零依赖 HTML viewer
+- ✅ `scripts/trace_viewer.py` (CLI, 写 traces/YYYY-MM-DD.html)
+  - `--date YYYY-MM-DD`: 指定日期
+  - `--node / --thread / --status`: 过滤
+  - `--markdown`: 输出 markdown 报告
+  - `--open`: 浏览器自动打开
 
-- `src/cogcore/json_tracer.py`：
-  - `JSONTracer(path, node_name)`：context manager / decorator
-  - 写入 `traces/YYYY-MM-DD.jsonl`，每行 `{ts, tick, node, duration_ms, status, error?, sha256_input, sha256_output}`
-  - 支持 thread_id + tick 多维度聚合
-- `scripts/trace_viewer.py`：纯 Python 读 JSONL → 输出表格 HTML（零依赖, 不引 Jinja）
+**测试**: 22 个 (test_json_tracer.py) 全过
+- TraceRecord (4): 基础 / input+output / error / extra
+- TraceWriter (3): 创建 / 追加 / 多线程安全 (3 thread 30 行)
+- JSONTracer cm (4): 正常 / 异常 / 时长 / 状态
+- JSONTracer decorator (2): 带 thread_id/tick / trace_node helper
+- 聚合 (2): by_node / by_thread
+- read_traces 过滤 (3): 无 / by node / by status
+- HTML viewer (3): render / empty / write
+- 集成 (1): 50 tick * 10 stage = 500 records 全部聚合
 
-**测试**：
-
-- `tests/test_json_tracer.py`：写入格式正确、SHA-256 校验、viewer 输出 HTML
-- 集成测试：跑 50 tick → 查 trace JSONL 验证每节点都有记录
-
-**退出条件**：`python scripts/trace_viewer.py traces/2026-06-06.jsonl` 一条命令出 HTML
+**退出条件**: `python scripts/trace_viewer.py` 一条命令出 HTML ✅
 
 ---
 
@@ -211,15 +223,15 @@ backup + prune --keep 3 + vacuum:
 
 | 指标 | 目标 | 实际 |
 |------|------|------|
-| 测试 | 460+ (60 个新增) | 419 (M4.2 已 +19, 余下 41 待 M4.3a-M4.6) |
-| 阻塞子阶段 | M4.2 + M4.3a + M4.3b + M4.4 + M4.6 必做 | M4.2 ✅, 其余 ⏳ |
+| 测试 | 460+ (60 个新增) | 441 (M4.2 +19, M4.3a +22, 余下 19 待 M4.3b-M4.6) |
+| 阻塞子阶段 | M4.2 + M4.3a + M4.3b + M4.4 + M4.6 必做 | M4.2 ✅, M4.3a ✅, 其余 ⏳ |
 | 关键路径 | M3.6 元循环接入 evals 后, A/B 决策可工作 | 待 M4.6 |
 | 实验 | E23 通过 (依赖 M4.1) | 待 M4.1+M4.5 |
 | 不引入 | Docker / Postgres / pgvector / sqlite-vec / Langfuse / Prom / Grafana | 0 依赖 ✅ |
-| 自迭代就绪度表 | M4.3a / M4.3b / M4.4 三行都打勾 | 待 |
+| 自迭代就绪度表 | M4.3a / M4.3b / M4.4 三行都打勾 | M4.3a ✅, 其余 ⏳ |
 
-**执行顺序**：M4.2 ✅ → M4.3a → M4.3b → M4.4 → M4.1 → M4.5 (含 E23) → M4.6
+**执行顺序**：M4.2 ✅ → M4.3a ✅ → M4.3b → M4.4 → M4.1 → M4.5 (含 E23) → M4.6
 
 ---
 
-*最后更新：2026-06-06 (M4.2 完成, 1/7 子阶段)*
+*最后更新：2026-06-06 (M4.2 + M4.3a 完成, 2/7 子阶段, 441 tests)*
