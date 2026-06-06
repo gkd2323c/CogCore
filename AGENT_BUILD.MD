@@ -36,14 +36,14 @@ CogCore 已经是认知层；本指南聚焦"剩下的 5 层怎么选、怎么�
 |------|------------|-----------|-------------|--------------|---------------|------|
 | **图引擎** | 纯 Python `pipeline.run_cycle` | LangGraph | LangGraph | LangGraph | LangGraph | **需要 LangGraph 集成** |
 | **状态合并** | 无显式 Reducer | 完整 Reducer | 隐式 | 隐式 | 隐式 | **需要补 Reducer** |
-| **持久化** | 内存 stub | Postgres + Alembic | MemorySaver | MemorySaver | MemorySaver | **需要 PostgresSaver + Store** |
-| **长期记忆** | 仅 StatePool | mem0 + pgvector | 无 | 各种 | State Persistence | **需要 mem0 或 HDB-as-Memory** |
-| **可观测性** | 仅 `Observatory` stub | Langfuse + Prom + Grafana | LangSmith | 输出文件 | 无 | **需要 Langfuse / LangSmith 集成** |
+| **持久化** | 内存 stub | Postgres + Alembic | MemorySaver | MemorySaver | MemorySaver | **需要 SQLite + langgraph-checkpoint（M4.2 增强）** |
+| **长期记忆** | 仅 StatePool | mem0 + pgvector | 无 | 各种 | State Persistence | **需要 sqlite-vec/numpy 嵌入层（M4.1）** |
+| **可观测性** | 仅 `Observatory` stub | Langfuse + Prom + Grafana | LangSmith | 输出文件 | 无 | **需要自写 JSON trace + sqlite-stats（M4.3）** |
 | **多 LLM** | 无 | LLMRegistry | 多 provider | 单一（Cerebras） | 单一（Gemini） | **需要 LLMRegistry 模式** |
 | **错误处理** | 无 | RetryPolicy + circular fallback | 无 | 无 | 无 | **需要节点级重试 + 模型回退** |
 | **工具集成** | ToolRegistry stub | `@tool` 装饰器 + 动态注册 | MCP tools | 各种 | 基础 | **需要 LangChain Tool 包装** |
 | **HITL** | 无 | 无 | 提示可加 interrupt | project-03 | 无 | **可加 interrupt_before** |
-| **部署** | 无 | Docker + FastAPI | LangGraph Platform | 无 | 无 | **需要 FastAPI + Docker** |
+| **部署** | 无 | Docker + FastAPI | LangGraph Platform | 无 | 无 | **需要 FastAPI + `python -m cogcore serve`（M5.1）** |
 | **测试** | 5 个烟雾测试 | evals/ + unit + integration | unit + integration | 无 | practice.ipynb | **需要 evals/ 模块 + integration** |
 | **业务模板** | 0 个 | 0 个（通用） | 1 个 | **20 个** | 8 个 | **需要从 hereandnowai 提炼通用模式** |
 
@@ -60,10 +60,10 @@ CogCore 已经是认知层；本指南聚焦"剩下的 5 层怎么选、怎么�
 │  L3 认知层 ─── CogCore（StatePool + HDB + 9 模块）★         │
 │  L4 解释层 ─── LLMRegistry + LLMService + circular fallback   │
 │  L5 工具层 ─── LangChain Tools + MCP + tool_allowlist        │
-│  L6 记忆层 ─── HDB（结构）+ pgvector（语义）+ 长期日记/任务    │
-│  L7 持久化 ── PostgresSaver + Store + Alembic migration      │
-│  L8 可观测性 ─ Langfuse / LangSmith + Prom + Grafana         │
-│  L9 部署层 ── Docker + Docker Compose + JWT + slowapi         │
+│  L6 记忆层 ─── HDB（结构）+ sqlite-vec/numpy（语义）+ 长期日记  │
+│  L7 持久化 ── SQLite + langgraph-checkpoint（无 Postgres）    │
+│  L8 可观测性 ─ JSON trace + sqlite-stats（无 Langfuse/Prom） │
+│  L9 部署层 ── `python -m cogcore serve` + JWT + slowapi     │
 │  L10 错误处理 ─ RetryPolicy + circular fallback + structured │
 │  L11 测试 ── evals/ + unit + integration + smoke              │
 └──────────────────────────────────────────────────────────────┘
@@ -102,12 +102,12 @@ CogCore 已经是认知层；本指南聚焦"剩下的 5 层怎么选、怎么�
 | **L3 认知层** | **CogCore** | 自研，AP 闭环 |
 | **L4 解释层** | LangChain ChatModel + LLMRegistry | 多个项目验证；circular fallback 模式 |
 | **L5 工具层** | LangChain `@tool` + MCP | wassim249 + react-agent 双验证 |
-| **L6 记忆层** | HDB（结构）+ pgvector（语义）+ mem0（事实） | wassim249 模式；HDB 提供可解释性 |
-| **L7 持久化** | PostgresSaver + PostgresStore + Alembic | LangGraph 原生 + wassim249 实践 |
-| **L8 可观测性** | Langfuse（自托管可换 LangSmith）+ Prom + Grafana | wassim249 已验证全栈 |
-| **L9 部署层** | Docker + Docker Compose | wassim249 标准做法 |
-| **L10 错误处理** | tenacity 重试 + LLMRegistry circular fallback | wassim249 实践 |
-| **L11 测试** | pytest + LangSmith Evals + custom evaluator | 4 个项目综合 |
+| **L6 记忆层** | HDB（结构）+ sqlite-vec/numpy（语义） | HDB 提供可解释性；嵌入层为可选增强（M4.1） |
+| **L7 持久化** | SQLite + langgraph-checkpoint | 零 Postgres；`build_cogcore_graph_persistent` 已落地 |
+| **L8 可观测性** | JSON trace + sqlite-stats（自写） | 零 Langfuse/Prom/Grafana；`observatory.py` + `stats_report.py` |
+| **L9 部署层** | `python -m cogcore serve`（单进程） | 零 Docker；可走 systemd/NSSM/Task Scheduler |
+| **L10 错误处理** | tenacity 重试 + LLMRegistry circular fallback | wassim249 模式；M3.4 已实现三层 |
+| **L11 测试** | pytest + 自写 evals/ | 零 LangSmith；本地 Ollama 当 judge |
 
 ## 6. 实施路线（4 阶段）
 
@@ -157,7 +157,9 @@ graph.add_node("pool_maintenance", stage_2_state_pool_maintenance)
 graph.add_node("hdb_lookup", stage_3_hdb_lookup)
 # ... 10 个节点
 graph.add_conditional_edges("adapt_tune", should_continue, {"next": "perceive", "end": END})
-cogcore = graph.compile(checkpointer=PostgresSaver(...), store=PostgresStore(...))
+# 实际交付: 开发用 MemorySaver，生产用 SqliteSaver（M1.2 落地，`build_cogcore_graph_persistent`）
+# 不引入 PostgresSaver / PostgresStore——见 [CogCore-总计划.md](./docs/CogCore-总计划.md) §0.5 设计原则
+cogcore = graph.compile(checkpointer=SqliteSaver("~/.cogcore/state.db"))
 ```
 
 **退出标准**：能用 `cogcore.invoke({"raw_input": "..."})` 跑通 10 阶段，状态可在 LangGraph Studio 可视化。
@@ -183,27 +185,34 @@ cogcore = graph.compile(checkpointer=PostgresSaver(...), store=PostgresStore(...
 
 **状态**：M1.2-M1.4 已全部完成。SQLite 持久化（`build_cogcore_graph_persistent`）零 Docker 依赖；ToolRegistry + LongTermExperienceTools（write_diary/read_diary/schedule_task）全部可用；PA 运行模式（full_silent/ap_agency/reinforced_agency）已实现。
 
-**起点**：[wassim249](https://github.com/wassim249/fastapi-langgraph-agent-production-ready-template) 的 mem0 + pgvector 模式 + [hereandnowai project-16](https://github.com/hereandnowai/master-langgraph-workflows-in-python-20-real-world-agent-projects-by-hereandnow-ai) 的 Knowledge Base 模式
+**起点**：[wassim249](https://github.com/wassim249/fastapi-langgraph-agent-production-ready-template) 的 mem0 + pgvector 模式（**仅作语义层设计参考，部署方案走 sqlite-vec + numpy**）+ [hereandnowai project-16](https://github.com/hereandnowai/master-langgraph-workflows-in-python-20-real-world-agent-projects-by-hereandnow-ai) 的 Knowledge Base 模式
 
 **关键模块**：
 - `ToolRegistry` 扩展为 LangChain `@tool` 包装
-- 新增 `mem0_adapter.py`（事实抽取与召回）
+- 新增 `semantic_store.py`（sqlite-vec / numpy 向量检索，M4.1 落地）
 - 长期经验工具（write_diary / read_diary / schedule_task）已在主文档 §6.2.1 设计
 
-### 阶段 D：部署与可观测性（M1.5 → M2）
+### 阶段 D：部署与可观测性（已重构 → 总体计划 M3-M5）
 
 **目标**：从"能跑"到"能生产"。
 
-**起点**：[wassim249](https://github.com/wassim249/fastapi-langgraph-agent-production-ready-template) 的全套基础设施
+> ⚠️ 本节原计划于 2026-06-05 22:03 写成，依赖 Docker/Postgres/Langfuse 等全栈生产基础设施。2026-06-06 02:34 重构后已拆解到 [docs/CogCore-总计划.md](./docs/CogCore-总计划.md) 的 M3-M5 三阶段，**不引入 Docker / Postgres / Langfuse / Prometheus / Grafana**。
 
-**关键交付**：
-- `app/api/v1/chatbot.py`（FastAPI 端点）
-- `app/core/middleware.py`（JWT + slowapi）
-- `alembic/` 迁移
-- `grafana/dashboards/` 模板
-- `prometheus/` 配置
-- `Dockerfile` + `docker-compose.yml`
-- `evals/` 评测套件
+**起点**：[wassim249](https://github.com/wassim249/fastapi-langgraph-agent-production-ready-template) 的全套基础设施（**仅作设计参考**，部署方案改走单进程）
+
+**新关键交付**（参见 [CogCore-总计划.md §4](./docs/CogCore-总计划.md) 对照表）：
+
+| 原 D 阶段目标 | 落到 M3-M5 | 状态 |
+|---|---|---|
+| FastAPI chatbot endpoint | M3.1 `app/api/v1/chat.py` + `app/main.py` | ✅ 已完成（5 端点 + 13 测试）|
+| JWT + slowapi | M5.2 `app/auth/jwt.py` + `app/middleware/rate_limit.py` | ⏳ 未开始 |
+| Alembic migration | M4.2 SQLite 增强（无需 Alembic） | ⏳ 未开始 |
+| Langfuse + Prom + Grafana | **不采用**——M4.3 自写 JSON trace + sqlite-stats | ⏳ 未开始 |
+| Prometheus 配置 | M4.3 | ⏳ 未开始 |
+| Docker / Compose | **不采用**——M5.1 `python -m cogcore serve` | ⏳ 未开始 |
+| evals/ 套件 | M4.4（不依赖 LangSmith，本地 Ollama 当 judge） | ⏳ 未开始 |
+
+**退出标准**：见 [CogCore-总计划.md §6](./docs/CogCore-总计划.md) — M3 退出条件为 5 端点 + 3+ LLM provider 轮转 + ≥1 MCP server + 错误处理三层全测 + 代码感知工具 + 自迭代元循环干跑成功。
 
 ## 7. 关键架构决策（从 4 个项目吸收的）
 
@@ -224,17 +233,17 @@ cogcore = graph.compile(checkpointer=PostgresSaver(...), store=PostgresStore(...
 ### 7.2 长期记忆的双轨
 
 - **结构记忆**：HDB（可解释、查存一体）
-- **事实记忆**：mem0 或 pgvector（语义相似）
+- **语义记忆**：sqlite-vec 扩展 或 numpy + SQLite（向量列存 BLOB）——`SemanticStore` 抽象在 M4.1
 
-**决策**：CogCore HDB 是 L1，mem0 是 L2，两者通过 `ActionSystem.process_feedback` 协作。
+**决策**：CogCore HDB 是 L1（查存命中走精确查存），语义嵌入是 L2（HDB miss 时走相似度 fallback），两者通过 `SemanticStore` 协作，HDB 优先。**不引入 mem0 / pgvector**。
 
 ### 7.3 可观测性分层
 
-- **追踪（trace）**：Langfuse 或 LangSmith（每节点/每 LLM 调用）
-- **指标（metrics）**：Prometheus + Grafana（吞吐量、延迟、错误率）
-- **审计（audit）**：CogCore Observatory（每 tick 的 10 阶段快照 + SHA-256）
+- **追踪（trace）**：`JSONTracer` → `traces/YYYY-MM-DD.jsonl`（每节点/每 LLM 调用，自写）
+- **指标（metrics）**：`SQLiteStats` → `cogcore.db` 的 `stats` 表（counter/gauge/histogram）
+- **审计（audit）**：`CogCoreAuditTrail`（每 tick 10 阶段快照 + SHA-256，对齐论文 5.6.1）
 
-**决策**：所有报告都带 SHA-256 哈希锚点（论文 5.6.1），可跨系统回溯。
+**决策**：所有报告都带 SHA-256 哈希锚点，可跨系统回溯。**不引入 Langfuse / LangSmith / Prometheus / Grafana**——M4.3 自写三件套 + `stats_report.py` / `trace_viewer.py` 两个零依赖查看器。
 
 ### 7.4 错误处理三层
 
@@ -323,7 +332,7 @@ def stage_node(state: CogCoreState) -> dict:
 | 2 | 工具调用 | project-02 | LangChain @tool + 行动节点 |
 | 3 | 人工干预 | project-03 | interrupt_before + 教师门控 |
 | 4 | 多 Agent 协作 | project-05 | 多个 CogCore 实例 + Store 共享 |
-| 5 | 长期陪伴 | project-11 + project-12 | mem0 + HDB + 定时任务 |
+| 5 | 长期陪伴 | project-11 + project-12 | HDB + sqlite-vec + 定时任务 |
 
 每个场景的复现都对应 `CogCore-验证矩阵.md` 第 4 节中的未来实验（E18-E25）。
 

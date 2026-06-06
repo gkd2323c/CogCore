@@ -30,12 +30,10 @@ def main() -> None:
     args = parser.parse_args()
 
     from cogcore.self_iteration import SelfIterateLoop
-    from cogcore.tools import (
-        ToolRegistry,
-        register_code_tools,
-        register_exec_tools,
-        register_git_tools,
-    )
+    from cogcore.tools import ToolRegistry
+    from cogcore.tools_code import register_code_tools
+    from cogcore.tools_git import register_git_tools
+    from cogcore.tools_exec import register_exec_tools
 
     # 构造 registry (注入 M3.5 工具)
     registry = ToolRegistry()

@@ -12,7 +12,7 @@ M1 的核心命题：**CogCore 已经能自己跑认知闭环了，但它怎么�
 
 阶段目标是把 CogCore 接入：
 1. **LLM**（本地 Ollama）——让 LLM 能读 CogCore 状态、能决定下一步做什么
-2. **持久化存储**（PostgreSQL）——让认知状态跨会话存活
+2. **持久化存储**（SQLite + langgraph-checkpoint）——让认知状态跨会话存活
 3. **工具系统**（ToolRegistry）——让 CogCore 能调用外部工具
 4. **运行模式**（PA 双层）——让三种主动性能级可切换
 
@@ -35,7 +35,7 @@ M1 的核心命题：**CogCore 已经能自己跑认知闭环了，但它怎么�
 
 | 原始里程碑 | 原始内容 | M0 已交付 | M1 实际工作 |
 |-----------|---------|----------|-----------|
-| M1.1 | StateGraph 完整搭建 | ✅ 10 节点 + MemorySaver + StateUpdater | ⏳ PostgresSaver/Store 持久化 |
+| M1.1 | StateGraph 完整搭建 | ✅ 10 节点 + MemorySaver + StateUpdater | ⏳ SQLite + langgraph-checkpoint 持久化（已实现 `build_cogcore_graph_persistent`，增强项移 M4.2） |
 | M1.2 | LLMBridge 完整实现 | ✅ `build_context_packet` 骨架 + `queue_teacher_feedback` | ⏳ `parse_llm_output` + Ollama 集成 + `teacher_gate` |
 | M1.3 | tool_allowlist + skill_run | ❌ | ⏳ ToolRegistry + 安全机制 |
 | M1.4 | write_diary / read_diary / schedule_task | ❌ | ⏳ 长期经验工具 |
@@ -49,7 +49,7 @@ M1 的核心命题：**CogCore 已经能自己跑认知闭环了，但它怎么�
 
 ```
 M1.1 — LLM 桥接 + Ollama 接入    高价值，使 CogCore 可对话
-M1.2 — Postgres 持久化            生产基础设施
+M1.2 — SQLite 持久化（langgraph-checkpoint）  轻量持久化
 M1.3 — 工具系统                   能力扩展
 M1.4 — PA 双层运行模式            工程完整性
 ```
@@ -57,7 +57,7 @@ M1.4 — PA 双层运行模式            工程完整性
 ### 依赖关系
 
 ```
-M1.2 (Postgres)  ──→  M1.4 (PA 模式需要 stable 持久化)
+M1.2 (SQLite 持久化)  ──→  M1.4 (PA 模式需要 stable 持久化)
       │
       ├── M1.1 (LLM Bridge) ──→ 退出条件 #1 (build_context_packet)
       │         │
@@ -165,52 +165,53 @@ class LLMBridge:
 
 ---
 
-## 5. M1.2 — Postgres 持久化
+## 5. M1.2 — SQLite 持久化（langgraph-checkpoint）
+
+> **原计划 (2026-06-05 22:03)**：PostgresSaver + Store + docker-compose.yml + langgraph-checkpoint-postgres
+> **实际交付 (2026-06-05 23:00)**：`build_cogcore_graph_persistent` —— SQLite 持久化，零 Docker 依赖
+> **后续增强**：M4.2 SQLite 增强（vacuum / prune / 容量预警）
 
 ### 目标
 
-把 LangGraph 的 `MemorySaver` 替换为 `PostgresSaver`，加入 `Store` 实现跨线程状态共享。
+把 LangGraph 的 `MemorySaver` 升级为 SQLite-backed checkpointer（`langgraph-checkpoint`），让跨进程 / 跨重启的 tick 状态不丢失。**不引入 Postgres / docker-compose**——SQLite 覆盖 99% 个人开发者场景。
 
 ### 交付物
 
-| 文件 | 改动 | 测试数 |
-|------|------|--------|
-| `docker-compose.yml` | 项目根目录新增 | — |
-| `src/cogcore/graph.py` | 加入 PostgresSaver/Store 路径 | ~5 |
-| `src/cogcore/store.py` | 新的持久化存储模块 | ~8 |
-| `tests/test_persistence.py` | 持久化集成测试 | ~8 |
-| `pyproject.toml` | 加 `langgraph-checkpoint-postgres` 依赖 | — |
+| 文件 | 改动 | 测试数 | 状态 |
+|------|------|--------|------|
+| `src/cogcore/graph.py` | 加入 `build_cogcore_graph_persistent` 编译路径 | ~5 | ✅ 已完成 |
+| `pyproject.toml` | 加 `langgraph-checkpoint` 依赖（不带 `-postgres`） | — | ✅ 已完成 |
+| `tests/test_persistence.py` | SQLite 持久化集成测试 | ~8 | ✅ 已完成 |
+| `src/cogcore/db_maintenance.py` | vacuum / prune_old_checkpoints / 容量预警 | — | ⏳ M4.2 |
+| `scripts/db_health.py` | 状态报告 + 容量预警 | — | ⏳ M4.2 |
 
 ### 设计要点
 
 ```python
-# graph.py — 新增生产模式编译路径
-def build_cogcore_graph_production(
-    modules: dict,
-    postgres_uri: str = "postgresql://...",
-) -> CompiledStateGraph:
-    """使用 PostgresSaver + Store 的生产构图。"""
-    checkpointer = PostgresSaver.from_conn_string(postgres_uri)
-    store = PostgresStore.from_conn_string(postgres_uri)
-    # ... 相同节点定义 ...
-    return graph.compile(checkpointer=checkpointer, store=store)
+# graph.py — 新增持久化编译路径
+from langgraph.checkpoint.sqlite import SqliteSaver
+import sqlite3
 
-# store.py — 跨线程共享状态
-class CogCoreStore:
-    """基于 LangGraph Store 的命名空间。
-    
-    - ("tick", "global") → 全局 tick 计数器
-    - ("hdb", thread_id) → 每个线程的 HDB 快照
-    - ("config", thread_id) → 每个线程的配置
-    """
+def build_cogcore_graph_persistent(
+    modules: dict,
+    db_path: str = "~/.cogcore/state.db",
+) -> CompiledStateGraph:
+    """使用 SqliteSaver 的持久化构图。"""
+    conn = sqlite3.connect(db_path, check_same_thread=False)
+    checkpointer = SqliteSaver(conn)
+    # ... 相同 10 节点定义 ...
+    return graph.compile(checkpointer=checkpointer)
+
+# 跨线程共享状态（后续 M4.2 增强会加入 LangGraph Store）
+# 目前状态以 checkpoint 形式存于 SQLite，thread_id 隔离
 ```
 
 ### 测试要点
 
-- invoke 一次后检查 Postgres 中有记录
-- 重启进程后在同一 thread_id 下可继续
-- `store` 的读写: 写入一个值，读取能取回
-- Docker compose 的 `docker compose up -d` 一键启动
+- invoke 一次后检查 SQLite 中有 checkpoint 记录
+- 重启进程后在同一 thread_id 下可继续（状态恢复）
+- 不同 thread_id 状态隔离
+- 持久化路径写入异常时优雅降级回 MemorySaver
 
 ---
 
@@ -311,7 +312,7 @@ class AgentMode(str, Enum):
 | 里程碑 | 预估测试数 | 核心文件 | 估算 |
 |--------|----------|---------|------|
 | M1.1 LLM 桥接 | ~18 新增 | `llm_bridge.py`, `run.py` | 最大 |
-| M1.2 Postgres | ~13 新增 | `graph.py`, `store.py`, `docker-compose.yml` | 中 |
+| M1.2 SQLite 持久化 | ~13 新增 | `graph.py`（`build_cogcore_graph_persistent`） | 中 |
 | M1.3 工具系统 | ~18 新增 | `tools.py`, `tools_diary.py` | 中 |
 | M1.4 运行模式 | ~11 新增 | `modes.py` | 小 |
 | **总计** | **~60 新增** | **总测试 ~220** | |
@@ -323,9 +324,9 @@ class AgentMode(str, Enum):
 | 风险 | 可能性 | 影响 | 缓解 |
 |------|--------|------|------|
 | Ollama 本地模型质量不足以驱动 Agent | 中 | M1.1 价值降低 | 先用量化版 qwen3:8b 验证链路，可换 API 模型 |
-| Postgres 依赖增加部署复杂度 | 低 | M1.2 需用户自行部署 | 保留 MemorySaver 作为轻量回退路径 |
+| SQLite WAL 模式跨进程并发 | 低 | 持久化写入冲突 | `check_same_thread=False` + 单写多读；M4.2 加 `WAL` pragma |
+| Windows 下 SQLite 路径权限/编码异常 | 低 | M1.2 部署受阻 | 使用 `pathlib.Path` + UTF-8 编码；默认 `~/.cogcore/state.db` 避开系统目录 |
 | LangGraph 版本更新导致 API 不兼容 | 低 | 高 | `pyproject.toml` 锁定版本，升级前跑全量测试 |
-| Windows 下 Docker 不可用 | 中 | M1.2 阻塞 | 提供 SQLite 作为 Windows 回退持久化方案 |
 | 工具系统 scope 蔓延 | 中 | 延误 | M1.3 只做 3 个核心工具，其余放 M2 |
 
 ---
