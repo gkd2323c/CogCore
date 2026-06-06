@@ -46,6 +46,9 @@ htmlcov/
 *test_*.db
 test_cogcore*
 
+# Trace 日志 (运行时产物, 详见 src/cogcore/json_tracer.py)
+traces/
+
 # 服务运行时数据
 cogcore_data/
 
