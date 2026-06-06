@@ -22,9 +22,9 @@ def create_app() -> FastAPI:
         title="CogCore API",
         description=(
             "CogCore 通用认知内核 HTTP/WebSocket 接口。\n\n"
-            "M3.1 阶段：5 个端点（chat / ws / status / diary / health）。"
+            "M5.1 阶段：serve CLI + 5 个端点（chat / ws / status / diary / health）。"
         ),
-        version="0.3.0",
+        version="0.5.0",
     )
     app.include_router(chat.router)
     app.include_router(diary.router)
