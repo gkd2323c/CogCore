@@ -1,0 +1,14 @@
+{
+  "experiment": "E21",
+  "files": {
+    "tables/summary.json": {
+      "sha256": "f351f9802f6f2af96dc5b931b5892f8b09c590d1fbc8813570b8998c32cc9f82"
+    },
+    "design.md": {
+      "sha256": "ddff7d47ec77f51d6cf69a7f51104a47959fde95ff790734133ecc1aa18af585"
+    },
+    "report.md": {
+      "sha256": "9bd525da54068c23318513e21e1165b63f61216efd867d8ada560abecae14862"
+    }
+  }
+}

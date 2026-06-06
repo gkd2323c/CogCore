@@ -1,0 +1,446 @@
+{
+  "cases": [
+    {
+      "schedule": "linear_asc",
+      "n_ticks": 100,
+      "avg_reward": 0.495,
+      "max_reward": 0.99,
+      "min_reward": 0.0,
+      "final": {
+        "focus": 0.0,
+        "arousal": 1.0,
+        "caution": 0.0,
+        "exploration": 1.0,
+        "fatigue": 0.0,
+        "stability": 0.0
+      },
+      "snapshots": [
+        {
+          "tick": 0,
+          "reward": 0.0,
+          "focus": 0.0,
+          "arousal": 0.0,
+          "caution": 0.0,
+          "exploration": 0.0,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 20,
+          "reward": 0.2,
+          "focus": 0.0,
+          "arousal": 0.291,
+          "caution": 0.0,
+          "exploration": 0.194,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 40,
+          "reward": 0.4,
+          "focus": 0.0,
+          "arousal": 0.687,
+          "caution": 0.0,
+          "exploration": 0.458,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 60,
+          "reward": 0.6,
+          "focus": 0.0,
+          "arousal": 1.0,
+          "caution": 0.0,
+          "exploration": 0.724,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 80,
+          "reward": 0.8,
+          "focus": 0.0,
+          "arousal": 1.0,
+          "caution": 0.0,
+          "exploration": 0.991,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 99,
+          "reward": 0.99,
+          "focus": 0.0,
+          "arousal": 1.0,
+          "caution": 0.0,
+          "exploration": 1.0,
+          "fatigue": 0.0,
+          "stability": 0.0
+        }
+      ]
+    },
+    {
+      "schedule": "plateau_spike",
+      "n_ticks": 100,
+      "avg_reward": 0.631,
+      "max_reward": 0.964,
+      "min_reward": 0.3,
+      "final": {
+        "focus": 0.0,
+        "arousal": 1.0,
+        "caution": 0.0,
+        "exploration": 1.0,
+        "fatigue": 0.0,
+        "stability": 0.0
+      },
+      "snapshots": [
+        {
+          "tick": 0,
+          "reward": 0.3,
+          "focus": 0.0,
+          "arousal": 0.09,
+          "caution": 0.0,
+          "exploration": 0.06,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 20,
+          "reward": 0.3,
+          "focus": 0.0,
+          "arousal": 0.58,
+          "caution": 0.0,
+          "exploration": 0.387,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 40,
+          "reward": 0.544,
+          "focus": 0.0,
+          "arousal": 0.877,
+          "caution": 0.0,
+          "exploration": 0.585,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 60,
+          "reward": 0.806,
+          "focus": 0.0,
+          "arousal": 1.0,
+          "caution": 0.0,
+          "exploration": 0.992,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 80,
+          "reward": 0.918,
+          "focus": 0.0,
+          "arousal": 1.0,
+          "caution": 0.0,
+          "exploration": 1.0,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 99,
+          "reward": 0.964,
+          "focus": 0.0,
+          "arousal": 1.0,
+          "caution": 0.0,
+          "exploration": 1.0,
+          "fatigue": 0.0,
+          "stability": 0.0
+        }
+      ]
+    },
+    {
+      "schedule": "inverse_u",
+      "n_ticks": 100,
+      "avg_reward": 0.733,
+      "max_reward": 1.0,
+      "min_reward": 0.2,
+      "final": {
+        "focus": 0.0,
+        "arousal": 0.722,
+        "caution": 0.0,
+        "exploration": 0.513,
+        "fatigue": 0.0,
+        "stability": 0.0
+      },
+      "snapshots": [
+        {
+          "tick": 0,
+          "reward": 0.2,
+          "focus": 0.0,
+          "arousal": 0.06,
+          "caution": 0.0,
+          "exploration": 0.04,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 20,
+          "reward": 0.712,
+          "focus": 0.0,
+          "arousal": 1.0,
+          "caution": 0.0,
+          "exploration": 0.776,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 40,
+          "reward": 0.968,
+          "focus": 0.0,
+          "arousal": 1.0,
+          "caution": 0.0,
+          "exploration": 1.0,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 60,
+          "reward": 0.968,
+          "focus": 0.0,
+          "arousal": 1.0,
+          "caution": 0.0,
+          "exploration": 1.0,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 80,
+          "reward": 0.712,
+          "focus": 0.0,
+          "arousal": 1.0,
+          "caution": 0.0,
+          "exploration": 0.989,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 99,
+          "reward": 0.232,
+          "focus": 0.0,
+          "arousal": 0.722,
+          "caution": 0.0,
+          "exploration": 0.513,
+          "fatigue": 0.0,
+          "stability": 0.0
+        }
+      ]
+    },
+    {
+      "schedule": "punishment_first",
+      "n_ticks": 100,
+      "avg_reward": -0.415,
+      "max_reward": 0.355,
+      "min_reward": -0.5,
+      "final": {
+        "focus": 0.0,
+        "arousal": 0.342,
+        "caution": 0.14,
+        "exploration": 0.228,
+        "fatigue": 0.079,
+        "stability": 0.0
+      },
+      "snapshots": [
+        {
+          "tick": 0,
+          "reward": -0.5,
+          "focus": 0.0,
+          "arousal": 0.0,
+          "caution": 0.2,
+          "exploration": 0.0,
+          "fatigue": 0.1,
+          "stability": 0.0
+        },
+        {
+          "tick": 20,
+          "reward": -0.5,
+          "focus": 0.0,
+          "arousal": 0.0,
+          "caution": 1.0,
+          "exploration": 0.0,
+          "fatigue": 0.645,
+          "stability": 0.0
+        },
+        {
+          "tick": 40,
+          "reward": -0.5,
+          "focus": 0.0,
+          "arousal": 0.0,
+          "caution": 1.0,
+          "exploration": 0.0,
+          "fatigue": 0.666,
+          "stability": 0.0
+        },
+        {
+          "tick": 60,
+          "reward": -0.5,
+          "focus": 0.0,
+          "arousal": 0.0,
+          "caution": 1.0,
+          "exploration": 0.0,
+          "fatigue": 0.667,
+          "stability": 0.0
+        },
+        {
+          "tick": 80,
+          "reward": -0.5,
+          "focus": 0.0,
+          "arousal": 0.0,
+          "caution": 1.0,
+          "exploration": 0.0,
+          "fatigue": 0.667,
+          "stability": 0.0
+        },
+        {
+          "tick": 99,
+          "reward": 0.355,
+          "focus": 0.0,
+          "arousal": 0.342,
+          "caution": 0.14,
+          "exploration": 0.228,
+          "fatigue": 0.079,
+          "stability": 0.0
+        }
+      ]
+    },
+    {
+      "schedule": "random",
+      "n_ticks": 100,
+      "avg_reward": -0.02,
+      "max_reward": 0.498,
+      "min_reward": -0.494,
+      "final": {
+        "focus": 0.0,
+        "arousal": 0.402,
+        "caution": 0.247,
+        "exploration": 0.268,
+        "fatigue": 0.124,
+        "stability": 0.0
+      },
+      "snapshots": [
+        {
+          "tick": 0,
+          "reward": 0.139,
+          "focus": 0.0,
+          "arousal": 0.042,
+          "caution": 0.0,
+          "exploration": 0.028,
+          "fatigue": 0.0,
+          "stability": 0.0
+        },
+        {
+          "tick": 20,
+          "reward": 0.306,
+          "focus": 0.0,
+          "arousal": 0.222,
+          "caution": 0.415,
+          "exploration": 0.148,
+          "fatigue": 0.207,
+          "stability": 0.0
+        },
+        {
+          "tick": 40,
+          "reward": 0.205,
+          "focus": 0.0,
+          "arousal": 0.364,
+          "caution": 0.088,
+          "exploration": 0.243,
+          "fatigue": 0.044,
+          "stability": 0.0
+        },
+        {
+          "tick": 60,
+          "reward": 0.49,
+          "focus": 0.0,
+          "arousal": 0.282,
+          "caution": 0.35,
+          "exploration": 0.188,
+          "fatigue": 0.175,
+          "stability": 0.0
+        },
+        {
+          "tick": 80,
+          "reward": 0.061,
+          "focus": 0.0,
+          "arousal": 0.195,
+          "caution": 0.303,
+          "exploration": 0.13,
+          "fatigue": 0.151,
+          "stability": 0.0
+        },
+        {
+          "tick": 99,
+          "reward": 0.361,
+          "focus": 0.0,
+          "arousal": 0.402,
+          "caution": 0.247,
+          "exploration": 0.268,
+          "fatigue": 0.124,
+          "stability": 0.0
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "schedules_tested": [
+      "linear_asc",
+      "plateau_spike",
+      "inverse_u",
+      "punishment_first",
+      "random"
+    ],
+    "arousal_range": 0.658,
+    "caution_range": 0.247,
+    "punishment_fatigue": 0.079,
+    "linear_fatigue": 0.0,
+    "fatigue_ordering_correct": true,
+    "paths_diverge": true,
+    "final_states": {
+      "linear_asc": {
+        "focus": 0.0,
+        "arousal": 1.0,
+        "caution": 0.0,
+        "exploration": 1.0,
+        "fatigue": 0.0,
+        "stability": 0.0
+      },
+      "plateau_spike": {
+        "focus": 0.0,
+        "arousal": 1.0,
+        "caution": 0.0,
+        "exploration": 1.0,
+        "fatigue": 0.0,
+        "stability": 0.0
+      },
+      "inverse_u": {
+        "focus": 0.0,
+        "arousal": 0.722,
+        "caution": 0.0,
+        "exploration": 0.513,
+        "fatigue": 0.0,
+        "stability": 0.0
+      },
+      "punishment_first": {
+        "focus": 0.0,
+        "arousal": 0.342,
+        "caution": 0.14,
+        "exploration": 0.228,
+        "fatigue": 0.079,
+        "stability": 0.0
+      },
+      "random": {
+        "focus": 0.0,
+        "arousal": 0.402,
+        "caution": 0.247,
+        "exploration": 0.268,
+        "fatigue": 0.124,
+        "stability": 0.0
+      }
+    }
+  }
+}

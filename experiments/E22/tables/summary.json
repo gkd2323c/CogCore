@@ -1,0 +1,67 @@
+{
+  "cases": [
+    {
+      "scenario": "logic_error",
+      "branch_a_meta_loop": {
+        "detected": true,
+        "fixed": false,
+        "rolled_back": true,
+        "result": [
+          "failed",
+          "rolled_back"
+        ]
+      },
+      "branch_b_no_op": {
+        "detected": true,
+        "fixed": false
+      },
+      "improvement": "M3.6 attempted fix even though it could not pass synthetic test"
+    },
+    {
+      "scenario": "type_error",
+      "branch_a_meta_loop": {
+        "detected": true,
+        "fixed": false,
+        "rolled_back": true,
+        "result": [
+          "failed",
+          "rolled_back"
+        ]
+      },
+      "branch_b_no_op": {
+        "detected": true,
+        "fixed": false
+      },
+      "improvement": "M3.6 attempted fix even though it could not pass synthetic test"
+    },
+    {
+      "scenario": "import_error",
+      "branch_a_meta_loop": {
+        "detected": true,
+        "fixed": false,
+        "rolled_back": true,
+        "result": [
+          "failed",
+          "rolled_back"
+        ]
+      },
+      "branch_b_no_op": {
+        "detected": true,
+        "fixed": false
+      },
+      "improvement": "M3.6 attempted fix even though it could not pass synthetic test"
+    }
+  ],
+  "metrics": {
+    "scenarios": [
+      "logic_error",
+      "type_error",
+      "import_error"
+    ],
+    "branch_a_detected": 3,
+    "branch_b_detected": 3,
+    "consistency": true,
+    "total_scenarios": 3,
+    "branch_a_rolled_back_count": 3
+  }
+}

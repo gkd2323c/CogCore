@@ -1,0 +1,14 @@
+{
+  "experiment": "E22",
+  "files": {
+    "tables/summary.json": {
+      "sha256": "977e4cd5683238d443ecd8e9382d6050ed4b559f74a1d989e59e297dba3c13da"
+    },
+    "design.md": {
+      "sha256": "68c3d7d53f7f0cf101bcbb1cbf8ba46c1882db5c47ee9533a0da18fa83db4fac"
+    },
+    "report.md": {
+      "sha256": "4046e339847387105149d9312238178cb6edf93312f2511adaef223f93963b27"
+    }
+  }
+}
