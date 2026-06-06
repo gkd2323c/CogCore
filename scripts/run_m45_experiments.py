@@ -64,17 +64,17 @@ def run_e23() -> dict:
     prep(exp)
     dataset = [
         {
-            "query": "rain umbrella",
+            "query": "rain protection",
             "positive": "weather rain umbrella",
             "negative": "coffee beans grinder",
         },
         {
-            "query": "memory recall",
+            "query": "remembering things",
             "positive": "long term memory recall",
             "negative": "network socket timeout",
         },
         {
-            "query": "agent self iteration",
+            "query": "autonomous improvement",
             "positive": "agent self iteration rollback tests",
             "negative": "static document rendering",
         },

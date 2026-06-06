@@ -25,6 +25,7 @@ def main() -> None:
     parser.add_argument("--once", action="store_true", help="跑一次就退出")
     parser.add_argument("--interval", type=int, default=300, help="循环模式间隔秒数")
     parser.add_argument("--loop", action="store_true", help="持续循环")
+    parser.add_argument("--with-evals", action="store_true", help="跑 evals A/B 评估 (M4.6)")
     parser.add_argument("--project-root", default=".", help="项目根目录")
     parser.add_argument("--data-dir", default="cogcore_data", help="数据目录")
     args = parser.parse_args()
@@ -66,7 +67,7 @@ def main() -> None:
     )
 
     if args.once or args.dry_run:
-        result = loop.run_once(dry_run=args.dry_run)
+        result = loop.run_once(dry_run=args.dry_run, with_evals=args.with_evals)
         print("\n=== Result ===")
         for k, v in result.items():
             if k in ("plan", "change") and isinstance(v, dict):
@@ -83,7 +84,7 @@ def main() -> None:
         try:
             while True:
                 logger.info("Running self-iteration cycle...")
-                result = loop.run_once(dry_run=False)
+                result = loop.run_once(dry_run=False, with_evals=args.with_evals)
                 logger.info(f"Cycle result: {list(result.keys())}")
                 time.sleep(args.interval)
         except KeyboardInterrupt:
@@ -92,7 +93,7 @@ def main() -> None:
 
     # 默认: 跑一次 dry-run
     logger.info("No mode specified, running --dry-run --once")
-    result = loop.run_once(dry_run=True)
+    result = loop.run_once(dry_run=True, with_evals=args.with_evals)
     print("\n=== Dry-Run Result ===")
     for k, v in result.items():
         if k in ("plan", "change") and isinstance(v, dict):

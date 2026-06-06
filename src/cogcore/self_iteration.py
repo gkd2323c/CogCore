@@ -230,6 +230,63 @@ class SelfIterateLoop:
             self._log({"step": "reload", "error": str(e)})
             return False
 
+    def evaluate_after_change(
+        self,
+        before_metrics: dict[str, Any],
+        after_metrics: dict[str, Any],
+        *,
+        score_key: str = "score",
+        min_improvement: float = 0.0,
+    ) -> str:
+        """评估自改前后指标，返回 accept 或 revert 决策。
+
+        Args:
+            before_metrics: 改前 eval 指标
+            after_metrics: 改后 eval 指标
+            score_key: 用于比较的指标键
+            min_improvement: 最小改善阈值（防止噪声导致的微幅波动）
+
+        Returns:
+            "accept" | "revert"
+        """
+        before = before_metrics.get(score_key, 0.0)
+        after = after_metrics.get(score_key, 0.0)
+        delta = after - before
+
+        decision = "revert" if delta < -min_improvement else "accept"
+        reason = f"{score_key}: {before} -> {after} (delta={delta:.4f})"
+
+        self._log({
+            "step": "evaluate_after_change",
+            "decision": decision,
+            "reason": reason,
+            "before": before_metrics,
+            "after": after_metrics,
+        })
+        return decision
+
+    def run_evals(self) -> dict[str, Any]:
+        """跑 evals 套件，返回聚合指标。"""
+        metrics: dict[str, Any] = {}
+        try:
+            from evals.E21_reward_curve.eval import evaluate as e21_eval
+            from evals.E22_self_iter.eval import evaluate as e22_eval
+            from evals.agent_quality.eval import evaluate as aq_eval
+
+            metrics["E21"] = e21_eval({"n_ticks": 50})
+            metrics["E22"] = e22_eval({"scenarios": ["logic_error"]})
+            metrics["agent_quality"] = aq_eval()
+            metrics["score"] = round(
+                (metrics["E21"].get("score", 0.0) +
+                 metrics["E22"].get("score", 0.0) +
+                 metrics["agent_quality"].get("score", 0.0)) / 3,
+                4,
+            )
+        except Exception as e:
+            metrics["error"] = str(e)
+            metrics["score"] = 0.0
+        return metrics
+
     def health_check(self) -> bool:
         """步骤 8 补充: 跑 N tick 看 error_log。"""
         # 真实实现: 调 service.tick() N 次, 检查 error_log
@@ -259,7 +316,7 @@ class SelfIterateLoop:
     # 主入口
     # ============================================================
 
-    def run_once(self, dry_run: bool = False) -> dict:
+    def run_once(self, dry_run: bool = False, with_evals: bool = False) -> dict:
         """完整跑一次元循环。
 
         Returns:
@@ -314,6 +371,13 @@ class SelfIterateLoop:
                 self.log("skip", {"reason": "no concrete change proposed"})
                 return {"skipped": "no concrete change proposed"}
 
+            # 6a. before evals (optional)
+            before_metrics: dict[str, Any] | None = None
+            if with_evals:
+                self.log("evals_before_start", {})
+                before_metrics = self.run_evals()
+                self.log("evals_before_done", {"score": before_metrics.get("score")})
+
             applied = self.apply_change(change)
             if not applied:
                 return {"failed": "apply_change blocked by safety check"}
@@ -324,6 +388,18 @@ class SelfIterateLoop:
                 self.log("test_failed", {"file": change.target_file})
                 return {"failed": "tests failed", "rolled_back": True}
             self.log("test_passed", {})
+
+            # 6b. after evals + decision (optional)
+            if with_evals and before_metrics is not None:
+                self.log("evals_after_start", {})
+                after_metrics = self.run_evals()
+                self.log("evals_after_done", {"score": after_metrics.get("score")})
+                decision = self.evaluate_after_change(before_metrics, after_metrics)
+                if decision == "revert":
+                    self.rollback(change.target_file)
+                    self.log("evals_revert", {"reason": "score regression"})
+                    return {"failed": "evals score regression", "rolled_back": True}
+                self.log("evals_accept", {})
 
             # 7. commit
             self.log("commit_start", {})

@@ -1,0 +1,42 @@
+{
+  "cases": [
+    {
+      "query": "rain protection",
+      "char_pos": 0.6667,
+      "char_neg": 0.7778,
+      "word_pos": 0.5,
+      "word_neg": 0.0,
+      "vector_top_label": "positive",
+      "hdb_hit": false,
+      "mixed_hit": true
+    },
+    {
+      "query": "remembering things",
+      "char_pos": 0.6,
+      "char_neg": 0.7,
+      "word_pos": 0.0,
+      "word_neg": 0.0,
+      "vector_top_label": "positive",
+      "hdb_hit": false,
+      "mixed_hit": true
+    },
+    {
+      "query": "autonomous improvement",
+      "char_pos": 0.6667,
+      "char_neg": 0.8333,
+      "word_pos": 0.0,
+      "word_neg": 0.0,
+      "vector_top_label": "negative",
+      "hdb_hit": false,
+      "mixed_hit": false
+    }
+  ],
+  "metrics": {
+    "total_cases": 3,
+    "hdb_only_hits": 0,
+    "mixed_hits": 2,
+    "hdb_only_recall": 0.0,
+    "mixed_recall": 0.6667,
+    "improved_over_hdb": true
+  }
+}
