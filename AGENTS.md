@@ -1,13 +1,13 @@
 # CogCore — AGENTS.md
 
-Cognitive kernel ("long-term cognitive runtime") for LLM agents. Engineering rewrite of the AP paper (2026). **M3 complete** — 32 modules, 32 test files, 400 tests.
+Cognitive kernel ("long-term cognitive runtime") for LLM agents. Engineering rewrite of the AP paper (2026). **M4.2 complete** — 33 modules, 33 test files, 419 tests.
 
 ## Quick start
 
 ```bash
 cp config.toml.example config.toml   # then edit (gitignored, holds api keys)
 pip install -e ".[dev]"              # install package + dev deps
-pytest                               # 400 tests
+pytest                               # 419 tests
 python scripts/verify_all.py         # full-chain smoke test
 ```
 
@@ -25,15 +25,16 @@ python scripts/verify_all.py         # full-chain smoke test
 | Full verification | `python scripts/verify_all.py` |
 | Run all experiments | `python scripts/run_all_experiments.py` |
 | Run M3.7 (E21/E22) | `python scripts/run_m37_experiments.py` |
+| Run M4.2 db_health | `python scripts/db_health.py` (默认 20MB state.db 健康报告) |
 | Run self-iteration (dry-run) | `python scripts/run_self_iteration.py --dry-run` |
 
 No linter, formatter, typechecker, or CI configured. All tests are sync (no `pytest.mark.asyncio` despite having the dep).
 
 ## Package layout
 
-- **`src/cogcore/`** — 32 Python modules (`types.py`, `pipeline.py`, `hdb.py`, `graph.py`, `llm_bridge.py`, `service.py`, `agent.py`, `tools*.py`, `self_iteration.py`, `main.py`, `run.py`, …)
+- **`src/cogcore/`** — 33 Python modules (`types.py`, `pipeline.py`, `hdb.py`, `graph.py`, `llm_bridge.py`, `service.py`, `agent.py`, `tools*.py`, `self_iteration.py`, `db_maintenance.py`, `main.py`, `run.py`, …)
 - **`app/`** — FastAPI app (endpoints: chat, diary, status, ws). Depends on `src/cogcore/`.
-- **`tests/`** — 32 test files. `test_api.py` uses `cogcore_data_api_test/` as temp data dir (auto cleaned).
+- **`tests/`** — 33 test files. `test_api.py` uses `cogcore_data_api_test/` as temp data dir (auto cleaned).
 - **`scripts/`** — 15+ demo/verification scripts. `verify_all.py` is the main one.
 - **`experiments/E01/`…`E22/`** — one dir per experiment. See `docs/CogCore-验证矩阵.md`.
 - **`config.toml`** — local config (gitignored). Template: `config.toml.example`.

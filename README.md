@@ -2,7 +2,7 @@
 
 **通用认知内核（Universal Cognitive Kernel）—— LLM Agent 的持续认知层**
 
-[![阶段](https://img.shields.io/badge/stage-M3.6-green)]() [![测试](https://img.shields.io/badge/tests-390%20passed-brightgreen)]() [![模块](https://img.shields.io/badge/modules-32-blue)]() [![论文](https://img.shields.io/badge/based%20on-AP%20(2026)-blue)]()
+[![阶段](https://img.shields.io/badge/stage-M4.2-green)]() [![测试](https://img.shields.io/badge/tests-419%20passed-brightgreen)]() [![模块](https://img.shields.io/badge/modules-33-blue)]() [![论文](https://img.shields.io/badge/based%20on-AP%20(2026)-blue)]()
 
 ---
 
@@ -19,7 +19,7 @@ CogCore 补 LLM 在长期连续性上的结构性缺失：长期状态维护、�
 | 设计文档 | ✅ 完成（9 章 + 5 个新章节 + 附录 A）|
 | 验证矩阵 | ✅ 完成（17 实验 × CogCore 模块映射）|
 | 论文选型 | ✅ 完成（LangGraph 首选，PydanticAI 次选）|
-| 代码实现 | ✅ M3 阶段完成 (FastAPI + LLM fallback + MCP + 错误处理 + 代码感知 + 自迭代元循环 + E21/E22), 400/400 测试通过 |
+| 代码实现 | ✅ M4.2 阶段完成 (FastAPI + LLM fallback + MCP + 错误处理 + 代码感知 + 自迭代元循环 + E21/E22 + SQLite 维护), 419/419 测试通过 |
 | E01-E17 复现 | ✅ **17/17 全部通过**, CogCore 实验已覆盖全部论文实验 |
 | E18-E20 实验 | ✅ 3000 tick 稳定 + APT 消融 + CFS/NT 消融全部通过 |
 | E21-E22 实验 | ✅ 奖惩反事实课程 (5 NT 路径发散) + 自迭代 A/B 对照 (3/3 detect+rollback) |
@@ -130,6 +130,7 @@ CogCore/
 │   ├── tools_exec.py                # 执行工具（M3.5）
 │   ├── self_modify_safety.py        # 自修改安全闸门（M3.5）
 │   ├── self_iteration.py            # 9 步自迭代元循环（M3.6 L12.3）
+│   ├── db_maintenance.py            # vacuum / prune / backup / health (M4.2)
 │   ├── service.py                   # 后台服务 + 自动 tick + 日记（M2.1）
 │   ├── agent.py                     # 端到端 Agent 5 步消息流（M2.2）
 │   ├── run.py                       # CLI 入口（M0.5）
@@ -163,6 +164,7 @@ CogCore/
 │   ├── test_m35_code_tools.py       # M3.5
 │   ├── test_m35_safety_and_git.py   # M3.5
 │   ├── test_self_iteration.py       # M3.6
+│   ├── test_db_maintenance.py       # M4.2
 │   ├── test_e21_e22.py              # M3.7 实验单元测试
 │   ├── test_e13.py / test_e16.py / test_e17.py  # 实验
 │   └── test_m09.py                  # 实验
@@ -174,6 +176,7 @@ CogCore/
 │   ├── demo_llm.py                  # M1.1 CogCore→LLM 闭环
 │   └── run_self_iteration.py        # M3.6 自迭代 CLI 入口
 │   └── run_m37_experiments.py       # M3.7 E21/E22 实验运行器
+│   └── db_health.py                 # M4.2 SQLite 健康检查 CLI
 ├── config.toml                      # 本地配置（.gitignore）
 ├── config.toml.example              # 配置模板
 ```

@@ -419,25 +419,46 @@ M4.1 (嵌入) ──────────────────────
 
 **退出条件**：HDB miss 时能 fallback 到 SemanticStore, top-1 命中人造同义句
 
-#### M4.2 — SQLite 增强（`L7` 优化）
+#### M4.2 — SQLite 增强（`L7` 优化）✅ **已完成** (2026-06-06, 19 测试)
 
 **目标**：SQLite 保持不动，**为高频访问路径加索引 + 备份 + 容量预警**。当前 `state.db` 已 20MB 且无限增长。
 
-**交付**：
+**交付**（全部完成）：
+- ✅ `src/cogcore/db_maintenance.py` (415 行, stdlib only)
+  - `vacuum(db_path)`: 压缩 SQLite (VACUUM 命令 + WAL checkpoint)
+  - `prune_checkpoints(db_path, keep_last=100)`: 保留每 thread 最近 N 个 checkpoint
+    用 rowid + ROW_NUMBER 窗口，严格区分 `thread_id` vs `thread_ts` 列
+    max_delete 限制单次删除条数, 防止事务过大
+  - `backup_to(db_path, backup_dir)`: sqlite3.Connection.backup() 拿一致性快照
+  - `health_check(db_path) -> HealthReport`: 容量 + 表数 + 预警
+    `HealthStatus`: OK / WARNING / CRITICAL
+  - `full_maintenance()`: backup -> prune -> vacuum -> health 一键
+- ✅ `scripts/db_health.py` (CLI, 退出码 0/1/2 对应 OK/WARN/CRITICAL)
+  - `--prune --keep N`: 只 prune
+  - `--vacuum`: 只 vacuum
+  - `--backup dir/`: 备份
+  - `--json`: JSON 输出
+- ✅ `HealthStatus`, `VacuumResult`, `PruneResult`, `BackupResult`, `HealthReport` dataclass
+- ✅ `config.toml` 暂不集成 (CLI 已经走 127.0.0.1 单 db, 调与不调都 OK)
 
-- `src/cogcore/db_maintenance.py`：
-  - `vacuum(db_path)`：定期压缩 (VACUUM 命令)
-  - `prune_checkpoints(checkpointer, keep_last=100)`：只保留最近 N 个 LangGraph checkpoint
-  - `auto_backup_to(dir, every_n_ticks=1000)`：滚动备份
-  - `health_check(db_path) -> dict`：返回 `{size_mb, table_count, oldest_checkpoint_age_days, warning: bool}`
-- `scripts/db_health.py`：状态报告 + 容量预警（输出 Markdown）
-- `config.toml`：`[persistence] max_checkpoints=100, auto_vacuum_interval=1000`
+**测试**: 19 个 (test_db_maintenance.py)
+- vacuum (3): 缺文件、size 减少、字段完整
+- prune (5): 缺文件、保留 N、noop、错误参数、限 batch、空表
+- backup (3): 文件存在、创建嵌套目录、文件名时间戳
+- health (5): missing、basic、warn、critical、dict JSON
+- full_maintenance (2): pipeline、no-backup
 
-**测试**：
+**实测** (cogcore_data/state.db 真实数据, 122 thread, 2808 checkpoint):
+```
+原始:  20.01 MB / 2808 checkpoint
+backup + prune --keep 3 + vacuum:
+  backup 13.5MB, 删 1000 checkpoint, vacuum 释放 7.5MB
+  终态: 5.83 MB / 808 checkpoint ✅ 71% 减少
+```
 
-- `tests/test_db_maintenance.py`：vacuum 后 db 大小下降、prune 后只剩 100 个 checkpoint、容量预警触发
-
-**退出条件**：`state.db` 不会无限增长；OOM 前能发出警告
+**退出条件**：
+- ✅ `state.db` 不会无限增长 (有 prune + vacuum)
+- ✅ OOM 前能发出警告 (HealthStatus.WARNING/CRITICAL, CLI exit code)
 
 #### M4.3a — JSON trace（`L8`）
 
@@ -529,8 +550,8 @@ M4.1 (嵌入) ──────────────────────
 
 | 指标 | 目标 |
 |------|------|
-| 测试 | 400 → 460+ (60 个新增, 分布在 5 个子阶段) |
-| 阻塞子阶段 | M4.2 + M4.3a + M4.3b + M4.4 + M4.6 必做 |
+| 测试 | 400 → 460+ (60 个新增, 分布在 5 个子阶段, M4.2 已 +19) |
+| 阻塞子阶段 | M4.2 ✅ + M4.3a + M4.3b + M4.4 + M4.6 必做 |
 | 关键路径 | M3.6 元循环接入 evals 后, A/B 决策可工作 |
 | 实验 | E23 通过 (依赖 M4.1) |
 | 不引入 | Docker / Postgres / pgvector / sqlite-vec / Langfuse / Prom / Grafana |
@@ -713,4 +734,4 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 
 ---
 
-*最后更新：2026-06-06 (M3 全部完成, M4 计划定稿, 400 tests)*
+*最后更新：2026-06-06 (M3 全部完成, M4.2 SQLite 增强完成, 419 tests)*
