@@ -115,18 +115,18 @@ L12 自迭代层 (横切)
 ┌──────────────────────────────────────────────────────────────┐
 │                       完整智能体能力栈                          │
 │                                                              │
-│  L1  应用层    ─── FastAPI / WebSocket / Studio     ❌ 未开始  │
+│  L1  应用层    ─── FastAPI / WebSocket / Studio     ⚠️ 部分  │
 │  L2  图引擎    ─── LangGraph StateGraph            ✅ 完成    │
 │  L3  认知层    ─── CogCore 9 模块 + 25 实验        ✅ 17/25   │
-│  L4  解释层    ─── LLMRegistry + circular fallback ⚠️ 单 LLM │
-│  L5  工具层    ─── LangChain Tools + MCP           ⚠️ 6 工具 │
-│  L6  记忆层    ─── HDB + numpy 嵌入 (BLOB)        ⚠️ HDB only │
-│  L7  持久化    ─── SQLite + langgraph-checkpoint   ✅ SQLite  │
+│  L4  解释层    ─── LLMRegistry + circular fallback ✅ 完成    │
+│  L5  工具层    ─── LangChain Tools + MCP           ✅ 完成    │
+│  L6  记忆层    ─── HDB + numpy 嵌入 (BLOB)        ✅ 完成    │
+│  L7  持久化    ─── SQLite + langgraph-checkpoint   ✅ 完成    │
 │  L8  可观测性  ─── JSON trace + sqlite-stats       ✅ 完成    │
 │  L9  部署层    ─── `python -m cogcore serve`       ❌ 未开始  │
 │  L10 错误处理  ─── RetryPolicy + fallback + 教师门控 ✅ 完成  │
-│  L11 测试      ─── evals/ + unit + integration     ⚠️ 400 unit│
-│  L12 自迭代    ─── 自检/自改/自部署/自学 + 安全约束  ✅ L12.1-L12.3│
+│  L11 测试      ─── evals/ + unit + integration     ✅ 473 tests│
+│  L12 自迭代    ─── 自检/自改/自部署/自学 + 安全约束  ✅ L12.1-L12.4│
 └──────────────────────────────────────────────────────────────┘
                                                   ★ = 强项
                                                   ⚠ = 部分
@@ -196,10 +196,10 @@ M4.1 (嵌入) ──────────────────────
 - M4.2 SQLite 增强           ✅ vacuum / prune / backup / health, 19 测试 (state.db 20MB -> 5.83MB)
 - M4.3a JSON trace           ✅ 22 测试, 零依赖 viewer
 - M4.3b sqlite-stats         ✅ 10 测试, counter/gauge/histogram
-- M4.4 evals/ 协议            ⏳
-- M4.1 嵌入语义层             ⏳
-- M4.5 实验 E23              ⏳
-- M4.6 M3.6 集成闭环         ⏳
+- M4.4 evals/ 协议            ✅ 5 测试 (E21/E22/agent_quality)
+- M4.1 嵌入语义层             ✅ 11 测试 (embeddings + semantic_store + DualStore)
+- M4.5 实验 E23              ✅ mixed_recall 0.667 > hdb_only 0.0
+- M4.6 M3.6 集成闭环         ✅ evaluate_after_change + run_evals + with_evals, 6 测试
 
 > 各子阶段详细交付 / 测试 / 退出准则 参见 [CogCore-M4-规划.md](./CogCore-M4-规划.md)。
 
@@ -359,7 +359,7 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 | 阶段     | 硬指标                                                                                                                         |
 | ------ | --------------------------------------------------------------------------------------------------------------------------- |
 | **M3** | 5 个 API 端点 ✅ + 3+ LLM provider 轮转 ✅ + 至少 1 个 MCP server 集成 ✅ + 错误处理三层全测 ✅ + 代码感知工具齐备 ✅ + 自迭代元循环干跑成功 ✅ + E21/E22 通过 ✅ + 400 tests |
-| **M4** | M4.2 ✅ + M4.3a ✅ + M4.3b ✅ + M4.4 + M4.6 必做；M4.1 + M4.5 可选；460+ tests (451 collected, 当前环境 445 passed / 6 skipped); 自迭代就绪度表 M4.3a/M4.3b 已打勾 |
+| **M4** | M4.2 ✅ + M4.3a ✅ + M4.3b ✅ + M4.4 ✅ + M4.6 ✅ 必做；M4.1 ✅ + M4.5 ✅ 可选；473 passed / 5 skipped / 0 failed; 自迭代就绪度表 M4.3a/M4.3b/M4.4 全部打勾 |
 | **M5** | `python -m cogcore serve` 启动 + JWT 鉴权 + 5 业务场景至少 4 个能跑 + **业务场景中至少 1 个用过自迭代** + E24-E25 通过 + 420+ tests                     |
 
 **所有阶段都零 Docker / 零外部服务**（除可选的远程 LLM 端点）。
@@ -378,4 +378,4 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 
 ---
 
-*最后更新：2026-06-06 (M4.2 + M4.3a + M4.3b 完成, 3/7 子阶段, 451 collected, 445 passed / 6 skipped 当前环境)*
+*最后更新：2026-06-06 (M4 全部 7/7 子阶段完成, 473 passed / 5 skipped / 0 failed, L12.1-L12.4 全部就绪)*
