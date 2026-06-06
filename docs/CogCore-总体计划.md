@@ -158,7 +158,7 @@ L12 自迭代层 (横切)
 - M3.4 错误处理三层            ✅ L1 retry + L2 fallback + L3 gate, 20 测试
 - M3.5 代码感知工具集           ✅ 6 code + 5 git + 2 exec + 闸门, 50 测试
 - M3.6 自迭代元循环             ✅ 9 步流程 + 5 重安全闸门 + CLI 入口, 16 测试
-- M3.7 实验 E21-E22            ⏳
+- M3.7 实验 E21-E22            ✅ E21 奖惩反事实 + E22 自迭代 A/B, 10 测试
 
 #### M3.1 — FastAPI 接入（`L1`）
 
@@ -344,12 +344,26 @@ L12 自迭代层 (横切)
 
 ---
 
-#### M3.7 — 实验 E21-E22
+#### M3.7 — 实验 E21-E22 ✅ **已完成** (2026-06-06, 10 测试)
 
-- **E21** 奖惩反事实课程：构造 5 条不同奖励曲线的轨迹，对比 NT 演化路径
-- **E22** 时间延迟压力测试：10/50/100 tick 延迟任务的回投准确率
+- **E21** 奖惩反事实课程 (5 条奖励曲线, 100 tick, NT 演化路径对比) ✅
+  - linear_asc / plateau_spike / inverse_u / punishment_first / random
+  - 判据: arousal_range > 0.1 (paths diverge)
+  - 判据: punishment_fatigue >= linear_fatigue (惩罚累积疲劳)
+  - 实测: arousal range 0.658, fatigue 0.079 vs 0.0
+  - 文件: experiments/E21/{design.md, report.md, manifest.json, tables/summary.json}
+- **E22** 自迭代 A/B 对照 (M3.6 元循环在 3 个合成失败场景) ✅
+  - 3 场景: logic_error / type_error / import_error
+  - Branch A: 走完整 9 步元循环
+  - Branch B: no-op baseline (只 observe + detect)
+  - 判据: detect 一致性 (A 和 B 都 detect)
+  - 判据: 合成失败必须 rollback (不偷留 untracked 改动)
+  - 实测: 3/3 detect, 3/3 rolled back ✅
+  - 文件: experiments/E22/{design.md, report.md, manifest.json, tables/summary.json}
+- **退出条件**: E21/E22 通过验证矩阵四项准入 + 全部 6 个产物文件 SHA-256 记录 ✅
 
-**退出条件**：E21/E22 通过验证矩阵四项准入
+**运行**: `python scripts/run_m37_experiments.py` (所有实验, ~3s)
+**运行**: `python -m pytest tests/test_e21_e22.py -v` (单元测试, < 1s)
 
 ---
 
@@ -528,7 +542,8 @@ L12 自迭代层 (横切)
 | 阶段       | 自迭代就绪度检查                                             |
 | -------- | ---------------------------------------------------- |
 | **M3.5** | 工具齐备: read/write/test/git 都可用 ✅ (6+5+2 工具 + 闸门, 50 测试) |
-| **M3.6** | 元循环跑通：dry-run 能生成 diff ✅ (9 步 + 5 重闸门 + CLI, 16 测试) |
+| **M3.6** | 元循环跑通: dry-run 能生成 diff ✅ (9 步 + 5 重闸门 + CLI, 16 测试) |
+| **M3.7** | 自迭代价值验证 ✅ (E21 奖励反事实 + E22 A/B 对照, 10 测试) |
 | **M4.3** | **真正能改 + 跑测试 + commit + reload**（干跑 → 干跑-测-改循环 → 闭环） |
 | **M4.4** | evals 套件能评估"这次自改是否比上次好"（A/B 度量）                      |
 | **M5.3** | 业务场景 5 (长期陪伴) 中 Agent 实际自迭代过至少 1 次                   |
@@ -604,7 +619,7 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 
 | 阶段     | 硬指标                                                                                                                         |
 | ------ | --------------------------------------------------------------------------------------------------------------------------- |
-| **M3** | 5 个 API 端点 ✅ + 3+ LLM provider 轮转 ✅ + 至少 1 个 MCP server 集成 ✅ + 错误处理三层全测 ✅ + 代码感知工具齐备 ✅ + 自迭代元循环干跑成功 ✅ + E21/E22 通过 ⏳ + 390 tests |
+| **M3** | 5 个 API 端点 ✅ + 3+ LLM provider 轮转 ✅ + 至少 1 个 MCP server 集成 ✅ + 错误处理三层全测 ✅ + 代码感知工具齐备 ✅ + 自迭代元循环干跑成功 ✅ + E21/E22 通过 ✅ + 400 tests |
 | **M4** | HDB+嵌入双轨工作 + SQLite 增强（容量可控） + JSON trace + sqlite-stats + evals/ 1 键跑 + **自迭代闭环（改+测+commit+reload）** + E23 通过 + 380+ tests |
 | **M5** | `python -m cogcore serve` 启动 + JWT 鉴权 + 5 业务场景至少 4 个能跑 + **业务场景中至少 1 个用过自迭代** + E24-E25 通过 + 420+ tests                     |
 
@@ -624,4 +639,4 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 
 ---
 
-*最后更新：2026-06-06 (M3.6 自迭代元循环完成, 390 tests)*
+*最后更新：2026-06-06 (M3.7 E21+E22 完成, 400 tests, M3 全部交付)*

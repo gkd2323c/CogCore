@@ -19,14 +19,15 @@ CogCore 补 LLM 在长期连续性上的结构性缺失：长期状态维护、�
 | 设计文档 | ✅ 完成（9 章 + 5 个新章节 + 附录 A）|
 | 验证矩阵 | ✅ 完成（17 实验 × CogCore 模块映射）|
 | 论文选型 | ✅ 完成（LangGraph 首选，PydanticAI 次选）|
-| 代码实现 | ✅ M3.6 阶段完成 (FastAPI + LLM fallback + MCP + 错误处理 + 代码感知工具 + 自迭代元循环), 390/390 测试通过 |
+| 代码实现 | ✅ M3 阶段完成 (FastAPI + LLM fallback + MCP + 错误处理 + 代码感知 + 自迭代元循环 + E21/E22), 400/400 测试通过 |
 | E01-E17 复现 | ✅ **17/17 全部通过**, CogCore 实验已覆盖全部论文实验 |
 | E18-E20 实验 | ✅ 3000 tick 稳定 + APT 消融 + CFS/NT 消融全部通过 |
+| E21-E22 实验 | ✅ 奖惩反事实课程 (5 NT 路径发散) + 自迭代 A/B 对照 (3/3 detect+rollback) |
 | L1 应用层 | ✅ FastAPI 接入 (5 端点, 真实 DeepSeek 跑通) |
 | L4 解释层 | ✅ LLMRegistry + circular fallback (14 测试 + 实跑) |
 | L5 工具层 | ✅ MCP 适配器 (15 测试) + 6 默认工具 + 3 long-term + 13 code/git/exec |
 | L10 错误处理 | ✅ 三层 (L1 retry + L2 fallback + L3 教师门控, 20 测试) |
-| L12 自迭代 | ✅ M3.5 完成 L12.1+L12.2, M3.6 完成 L12.3 元循环 (9 步 + 安全闸门 + CLI) |
+| L12 自迭代 | ✅ M3.5 完成 L12.1+L12.2, M3.6 完成 L12.3 元循环, M3.7 E21/E22 价值验证 (10 测试) |
 | 后台服务 | ✅ CogCoreService 持续 tick + 自动日记 + SQLite 持久化 |
 | LLM 集成 | ✅ OpenAI 兼容协议 + Ollama 本地 + end-to-end Agent |
 | 持久化 | ✅ SQLite（零 Docker）/ Memory 双路径 |
@@ -162,6 +163,7 @@ CogCore/
 │   ├── test_m35_code_tools.py       # M3.5
 │   ├── test_m35_safety_and_git.py   # M3.5
 │   ├── test_self_iteration.py       # M3.6
+│   ├── test_e21_e22.py              # M3.7 实验单元测试
 │   ├── test_e13.py / test_e16.py / test_e17.py  # 实验
 │   └── test_m09.py                  # 实验
 ├── scripts/                         # 6 个演示 + 工具脚本
@@ -171,6 +173,7 @@ CogCore/
 │   ├── demo_langgraph.py            # M0.5 LangGraph
 │   ├── demo_llm.py                  # M1.1 CogCore→LLM 闭环
 │   └── run_self_iteration.py        # M3.6 自迭代 CLI 入口
+│   └── run_m37_experiments.py       # M3.7 E21/E22 实验运行器
 ├── config.toml                      # 本地配置（.gitignore）
 ├── config.toml.example              # 配置模板
 ```
