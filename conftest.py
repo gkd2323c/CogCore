@@ -1,6 +1,11 @@
 """Pytest configuration for CogCore."""
 from __future__ import annotations
 
+import pytest
+from fastapi.testclient import TestClient
+
+from app.main import app
+
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -25,3 +30,9 @@ def pytest_collection_modifyitems(config, items):
     for item in items:
         if "evals" in item.keywords:
             item.add_marker(skip_evals)
+
+
+@pytest.fixture
+def client():
+    """FastAPI TestClient fixture（全局可用）。"""
+    return TestClient(app)

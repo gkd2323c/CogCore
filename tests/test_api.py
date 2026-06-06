@@ -55,11 +55,6 @@ def reset_and_mock():
         shutil.rmtree(TEST_DATA_DIR, ignore_errors=True)
 
 
-@pytest.fixture
-def client():
-    return TestClient(app)
-
-
 # ============================================================
 # 健康检查 & 状态
 # ============================================================
