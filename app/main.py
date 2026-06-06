@@ -15,7 +15,7 @@ from fastapi import FastAPI
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from app.api.v1 import chat, diary, status, ws
+from app.api.v1 import chat, diary, hitl, multi_agent, scheduler, status, ws
 from app.middleware.logging import StructuredLoggingMiddleware
 from app.middleware.rate_limit import RateLimitMiddleware, limiter
 
@@ -42,6 +42,9 @@ def create_app() -> FastAPI:
 
     app.include_router(chat.router)
     app.include_router(diary.router)
+    app.include_router(hitl.router)
+    app.include_router(multi_agent.router)
+    app.include_router(scheduler.router)
     app.include_router(status.router)
     app.include_router(ws.router)
     return app
