@@ -19,18 +19,18 @@ CogCore 补 LLM 在长期连续性上的结构性缺失：长期状态维护、�
 | 设计文档 | ✅ 完成（9 章 + 5 个新章节 + 附录 A）|
 | 验证矩阵 | ✅ 完成（17 实验 × CogCore 模块映射）|
 | 论文选型 | ✅ 完成（LangGraph 首选，PydanticAI 次选）|
-| 代码实现 | ✅ M4 全部完成 (7/7 子阶段: SQLite 维护 + JSON trace + sqlite-stats + evals + 嵌入语义层 + E23 + 元循环 evals 集成), 当前环境 473 passed / 5 skipped |
+| 代码实现 | ✅ M5 全部完成 (4/4 子阶段: serve CLI + JWT/slowapi + 5 业务场景 + E24-E25), 当前环境 528 passed / 5 skipped |
 | E01-E17 复现 | ✅ **17/17 全部通过**, CogCore 实验已覆盖全部论文实验 |
 | E18-E20 实验 | ✅ 3000 tick 稳定 + APT 消融 + CFS/NT 消融全部通过 |
 | E21-E22 实验 | ✅ 奖惩反事实课程 (5 NT 路径发散) + 自迭代 A/B 对照 (3/3 detect+rollback) |
-| L1 应用层 | ✅ FastAPI 接入 (5 端点, 真实 DeepSeek 跑通) |
+| L1 应用层 | ✅ FastAPI 8 端点 + HITL + 多 Agent + 定时任务 |
 | L4 解释层 | ✅ LLMRegistry + circular fallback (14 测试 + 实跑) |
 | L5 工具层 | ✅ MCP 适配器 (15 测试) + 6 默认工具 + 3 long-term + 13 code/git/exec |
 | L10 错误处理 | ✅ 三层 (L1 retry + L2 fallback + L3 教师门控, 20 测试) |
 | L6 记忆层 | ✅ HDB + SemanticStore (numpy 嵌入 + SQLite BLOB) + DualStore 回退 |
 | L7 持久化 | ✅ SQLite 维护 (vacuum/prune/backup/health, 20MB→5.83MB) |
 | L8 可观测性 | ✅ JSON trace (22 测试) + sqlite-stats (10 测试) |
-| L11 评测 | ✅ evals/ 协议 (E21/E22/agent_quality) + A/B harness + 473 tests |
+| L11 评测 | ✅ evals/ + 528 tests + E24-E25 |
 | L12 自迭代 | ✅ L12.1-L12.4 全部就绪 (代码自检/自改/自部署/元循环 evals 闭环) |
 | 后台服务 | ✅ CogCoreService 持续 tick + 自动日记 + SQLite 持久化 |
 | LLM 集成 | ✅ OpenAI 兼容协议 + Ollama 本地 + end-to-end Agent |
@@ -200,4 +200,4 @@ CogCore/
 
 ---
 
-*本 README 与 4 份门面文档同步于 2026-06-06 CogCore M4 全部 7/7 子阶段完成后 (473 passed / 5 skipped)。*
+*本 README 与 4 份门面文档同步于 2026-06-06 CogCore M5 全部完成后 (528 passed / 5 skipped)。*

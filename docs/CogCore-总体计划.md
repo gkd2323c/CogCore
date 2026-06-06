@@ -115,7 +115,7 @@ L12 自迭代层 (横切)
 ┌──────────────────────────────────────────────────────────────┐
 │                       完整智能体能力栈                          │
 │                                                              │
-│  L1  应用层    ─── FastAPI / WebSocket / Studio     ⚠️ 部分  │
+│  L1  应用层    ─── FastAPI 8 端点 + HITL + 多 Agent + 定时任务     ✅ 完成  │
 │  L2  图引擎    ─── LangGraph StateGraph            ✅ 完成    │
 │  L3  认知层    ─── CogCore 9 模块 + 25 实验        ✅ 17/25   │
 │  L4  解释层    ─── LLMRegistry + circular fallback ✅ 完成    │
@@ -123,9 +123,9 @@ L12 自迭代层 (横切)
 │  L6  记忆层    ─── HDB + numpy 嵌入 (BLOB)        ✅ 完成    │
 │  L7  持久化    ─── SQLite + langgraph-checkpoint   ✅ 完成    │
 │  L8  可观测性  ─── JSON trace + sqlite-stats       ✅ 完成    │
-│  L9  部署层    ─── `python -m cogcore serve`       ❌ 未开始  │
+│  L9  部署层    ─── `python -m cogcore serve` + JWT + slowapi       ✅ 完成    │
 │  L10 错误处理  ─── RetryPolicy + fallback + 教师门控 ✅ 完成  │
-│  L11 测试      ─── evals/ + unit + integration     ✅ 473 tests│
+│  L11 测试      ─── evals/ + unit + integration     ✅ 528 tests│
 │  L12 自迭代    ─── 自检/自改/自部署/自学 + 安全约束  ✅ L12.1-L12.4│
 └──────────────────────────────────────────────────────────────┘
                                                   ★ = 强项
@@ -362,7 +362,7 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 | ------ | --------------------------------------------------------------------------------------------------------------------------- |
 | **M3** | 5 个 API 端点 ✅ + 3+ LLM provider 轮转 ✅ + 至少 1 个 MCP server 集成 ✅ + 错误处理三层全测 ✅ + 代码感知工具齐备 ✅ + 自迭代元循环干跑成功 ✅ + E21/E22 通过 ✅ + 400 tests |
 | **M4** | M4.2 ✅ + M4.3a ✅ + M4.3b ✅ + M4.4 ✅ + M4.6 ✅ 必做；M4.1 ✅ + M4.5 ✅ 可选；473 passed / 5 skipped / 0 failed; 自迭代就绪度表 M4.3a/M4.3b/M4.4 全部打勾 |
-| **M5** | `python -m cogcore serve` 启动 + JWT 鉴权 + 5 业务场景至少 4 个能跑 + **业务场景中至少 1 个用过自迭代** + E24-E25 通过 + 420+ tests                     |
+| **M5** | `python -m cogcore serve` 启动 + JWT 鉴权 + 5 业务场景至少 4 个能跑 + **业务场景中至少 1 个用过自迭代** + E24-E25 通过 + 528+ tests                     |
 
 **所有阶段都零 Docker / 零外部服务**（除可选的远程 LLM 端点）。
 
@@ -380,4 +380,4 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 
 ---
 
-*最后更新：2026-06-06 (M4 全部 7/7 子阶段完成, 473 passed / 5 skipped / 0 failed, L12.1-L12.4 全部就绪)*
+*最后更新：2026-06-06 (M5 全部 4/4 子阶段完成, 528 passed / 5 skipped / 0 failed, 11 层能力栈全部就绪)*

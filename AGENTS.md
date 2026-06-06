@@ -1,13 +1,13 @@
 # CogCore — AGENTS.md
 
-Cognitive kernel ("long-term cognitive runtime") for LLM agents. Engineering rewrite of the AP paper (2026). **M4 complete** — 37 modules, 36 test files, 478 tests (473 passed / 5 skipped in current env).
+Cognitive kernel ("long-term cognitive runtime") for LLM agents. Engineering rewrite of the AP paper (2026). **M5 complete** — 40 modules, 40 test files, 533 tests (528 passed / 5 skipped in current env).
 
 ## Quick start
 
 ```bash
 cp config.toml.example config.toml   # then edit (gitignored, holds api keys)
 pip install -e ".[dev]"              # install package + dev deps
-pytest                               # 478 tests (473 passed / 5 skipped in current env)
+pytest                               # 533 tests (528 passed / 5 skipped in current env)
 python scripts/verify_all.py         # full-chain smoke test
 ```
 
@@ -35,9 +35,9 @@ No linter, formatter, typechecker, or CI configured. All tests are sync (no `pyt
 
 ## Package layout
 
-- **`src/cogcore/`** — 37 Python modules (`types.py`, `pipeline.py`, `hdb.py`, `graph.py`, `llm_bridge.py`, `service.py`, `agent.py`, `tools*.py`, `self_iteration.py`, `db_maintenance.py`, `json_tracer.py`, `sqlite_stats.py`, `main.py`, `run.py`, …)
+- **`src/cogcore/`** — 40 Python modules (`types.py`, `pipeline.py`, `hdb.py`, `graph.py`, `llm_bridge.py`, `service.py`, `agent.py`, `tools*.py`, `self_iteration.py`, `db_maintenance.py`, `json_tracer.py`, `sqlite_stats.py`, `main.py`, `run.py`, …)
 - **`app/`** — FastAPI app (endpoints: chat, diary, status, ws). Depends on `src/cogcore/`.
-- **`tests/`** — 36 test files. `test_api.py` uses `cogcore_data_api_test/` as temp data dir (auto cleaned).
+- **`tests/`** — 40 test files. `test_api.py` uses `cogcore_data_api_test/` as temp data dir (auto cleaned).
 - **`scripts/`** — 15+ demo/verification scripts. `verify_all.py` is the main one.
 - **`experiments/E01/`…`E22/`** — one dir per experiment. See `docs/CogCore-验证矩阵.md`.
 - **`config.toml`** — local config (gitignored). Template: `config.toml.example`.
