@@ -56,7 +56,9 @@ def run_tests(
         return {"error": "forbidden pytest filter: -k skip"}
 
     # 构造命令
-    cmd = ["python", "-m", "pytest", path, "-q", "--tb=line", "--no-header"]
+    import sys
+    python_exe = sys.executable
+    cmd = [python_exe, "-m", "pytest", path, "-q", "--tb=line", "--no-header"]
     if marker:
         cmd.extend(["-m", marker])
 

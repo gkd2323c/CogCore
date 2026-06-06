@@ -35,7 +35,7 @@ M4.1 (嵌入) ──────────────────────
 |--------|------|------------|----------|------|
 | **M4.2** SQLite 增强 | L7 | 是 (state.db 20MB 无上限) | vacuum / prune_checkpoints(N) / auto_backup / 容量预警 | ✅ 完成 (19 测试) |
 | **M4.3a** JSON trace | L8 | 是 (M3.6 元循环需要看"上次改了什么") | `traces/YYYY-MM-DD.jsonl`, 每节点 `{ts,tick,node,duration_ms,status}`, 零依赖 viewer | ✅ 完成 (22 测试) |
-| **M4.3b** sqlite-stats | L8 | 是 (度量基础) | counter / gauge / histogram 三种 primitive | ⏳ |
+| **M4.3b** sqlite-stats | L8 | 是 (度量基础) | counter / gauge / histogram 三种 primitive | ✅ 完成 (10 测试) |
 | **M4.4** evals/ | L11 | 是 ("自改是否更好了"的判据) | `evals/<name>/eval.py` 协议 + A/B harness | ⏳ |
 | **M4.1** 嵌入语义层 | L6 | 否 (HDB-only 也能跑) | Ollama (qwen3-embedding:0.6b) / OpenAI / numpy + SQLite BLOB | ⏳ |
 | **M4.5** E23 | 实验 | 否 (依赖 M4.1) | 词级/字符级/向量混合感受器 | ⏳ |
@@ -146,23 +146,32 @@ backup + prune --keep 3 + vacuum:
 
 ---
 
-## M4.3b — sqlite-stats (`L8`)
+## M4.3b — sqlite-stats (`L8`) ✅ **已完成** (2026-06-06, 10 测试)
 
 **目标**：counter / gauge / histogram 三种度量 primitive。**不引 Prometheus**。
 
-**交付**：
+**交付**（全部完成）：
 
-- `src/cogcore/sqlite_stats.py`：
+- ✅ `src/cogcore/sqlite_stats.py`：
   - `StatsDB(path)`：3 张表 `counter, gauge, histogram`
   - `incr(name, value=1)` / `set(name, value)` / `observe(name, value)` (P50/P95/P99 在 SQLite 端用 window function 算)
   - `report() -> dict` + `report_markdown()` 输出报告
-- `scripts/stats_report.py`：从 sqlite-stats 输出 Markdown 报告
+  - `python -m cogcore.sqlite_stats`：Markdown/JSON 报告 + 写入辅助
+- ✅ `src/cogcore/stats.py`：兼容退出命令 `python -m cogcore.stats`
+- ✅ `scripts/stats_report.py`：从 sqlite-stats 输出 Markdown/JSON 报告
 
 **测试**：
 
-- `tests/test_sqlite_stats.py`：incr/set/observe 正确累加、histogram P50/P95/P99 计算正确
+- ✅ `tests/test_sqlite_stats.py`：10 个测试
+  - schema 创建 3 张表
+  - counter 累加 + 拒绝负增量
+  - gauge 最新值覆盖 + 样本计数
+  - histogram P50/P95/P99 计算
+  - 多 histogram 独立统计
+  - report JSON-safe + Markdown 三段输出
+  - context manager 自动关闭
 
-**退出条件**：`python -m cogcore.stats` 一条命令出报告
+**退出条件**：`python -m cogcore.stats` 一条命令出报告 ✅
 
 ---
 
@@ -223,15 +232,15 @@ backup + prune --keep 3 + vacuum:
 
 | 指标 | 目标 | 实际 |
 |------|------|------|
-| 测试 | 460+ (60 个新增) | 441 (M4.2 +19, M4.3a +22, 余下 19 待 M4.3b-M4.6) |
-| 阻塞子阶段 | M4.2 + M4.3a + M4.3b + M4.4 + M4.6 必做 | M4.2 ✅, M4.3a ✅, 其余 ⏳ |
+| 测试 | 460+ (60 个新增) | 451 collected；当前环境 445 passed / 6 skipped (M4.2 +19, M4.3a +22, M4.3b +10) |
+| 阻塞子阶段 | M4.2 + M4.3a + M4.3b + M4.4 + M4.6 必做 | M4.2 ✅, M4.3a ✅, M4.3b ✅, 其余 ⏳ |
 | 关键路径 | M3.6 元循环接入 evals 后, A/B 决策可工作 | 待 M4.6 |
 | 实验 | E23 通过 (依赖 M4.1) | 待 M4.1+M4.5 |
 | 不引入 | Docker / Postgres / pgvector / sqlite-vec / Langfuse / Prom / Grafana | 0 依赖 ✅ |
-| 自迭代就绪度表 | M4.3a / M4.3b / M4.4 三行都打勾 | M4.3a ✅, 其余 ⏳ |
+| 自迭代就绪度表 | M4.3a / M4.3b / M4.4 三行都打勾 | M4.3a ✅, M4.3b ✅, M4.4 ⏳ |
 
-**执行顺序**：M4.2 ✅ → M4.3a ✅ → M4.3b → M4.4 → M4.1 → M4.5 (含 E23) → M4.6
+**执行顺序**：M4.2 ✅ → M4.3a ✅ → M4.3b ✅ → M4.4 → M4.1 → M4.5 (含 E23) → M4.6
 
 ---
 
-*最后更新：2026-06-06 (M4.2 + M4.3a 完成, 2/7 子阶段, 441 tests)*
+*最后更新：2026-06-06 (M4.2 + M4.3a + M4.3b 完成, 3/7 子阶段, 451 collected, 445 passed / 6 skipped 当前环境)*

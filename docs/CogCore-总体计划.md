@@ -122,7 +122,7 @@ L12 自迭代层 (横切)
 │  L5  工具层    ─── LangChain Tools + MCP           ⚠️ 6 工具 │
 │  L6  记忆层    ─── HDB + numpy 嵌入 (BLOB)        ⚠️ HDB only │
 │  L7  持久化    ─── SQLite + langgraph-checkpoint   ✅ SQLite  │
-│  L8  可观测性  ─── JSON trace + sqlite-stats       ❌ 未开始  │
+│  L8  可观测性  ─── JSON trace + sqlite-stats       ✅ 完成    │
 │  L9  部署层    ─── `python -m cogcore serve`       ❌ 未开始  │
 │  L10 错误处理  ─── RetryPolicy + fallback + 教师门控 ✅ 完成  │
 │  L11 测试      ─── evals/ + unit + integration     ⚠️ 400 unit│
@@ -195,7 +195,7 @@ M4.1 (嵌入) ──────────────────────
 **M4 进度** (2026-06-06 实际状态):
 - M4.2 SQLite 增强           ✅ vacuum / prune / backup / health, 19 测试 (state.db 20MB -> 5.83MB)
 - M4.3a JSON trace           ✅ 22 测试, 零依赖 viewer
-- M4.3b sqlite-stats         ⏳
+- M4.3b sqlite-stats         ✅ 10 测试, counter/gauge/histogram
 - M4.4 evals/ 协议            ⏳
 - M4.1 嵌入语义层             ⏳
 - M4.5 实验 E23              ⏳
@@ -282,7 +282,7 @@ M4.1 (嵌入) ──────────────────────
 | **M3.6** | 元循环跑通: dry-run 能生成 diff ✅ (9 步 + 5 重闸门 + CLI, 16 测试) |
 | **M3.7** | 自迭代价值验证 ✅ (E21 奖励反事实 + E22 A/B 对照, 10 测试) |
 | **M4.3a** | trace 能记录"改了什么 / 改的时长 / 是否成功" (JSONL 追加) ✅        |
-| **M4.3b** | stats 能度量"调用次数 / 延迟分布 / 错误率" (counter/gauge/histogram) |
+| **M4.3b** | stats 能度量"调用次数 / 延迟分布 / 错误率" (counter/gauge/histogram) ✅ |
 | **M4.4** | evals 套件能评估"这次自改是否比上次好"（A/B 度量）                      |
 | **M5.3** | 业务场景 5 (长期陪伴) 中 Agent 实际自迭代过至少 1 次                   |
 | **M5.4** | E24/E25 至少一个验证"自迭代产生价值"（如：Agent 自己补了某个测试）            |
@@ -359,7 +359,7 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 | 阶段     | 硬指标                                                                                                                         |
 | ------ | --------------------------------------------------------------------------------------------------------------------------- |
 | **M3** | 5 个 API 端点 ✅ + 3+ LLM provider 轮转 ✅ + 至少 1 个 MCP server 集成 ✅ + 错误处理三层全测 ✅ + 代码感知工具齐备 ✅ + 自迭代元循环干跑成功 ✅ + E21/E22 通过 ✅ + 400 tests |
-| **M4** | M4.2 ✅ + M4.3a ✅ + M4.3b + M4.4 + M4.6 必做；M4.1 + M4.5 可选；460+ tests (441 当前); 自迭代就绪度表 M4.3a 已打勾 |
+| **M4** | M4.2 ✅ + M4.3a ✅ + M4.3b ✅ + M4.4 + M4.6 必做；M4.1 + M4.5 可选；460+ tests (451 collected, 当前环境 445 passed / 6 skipped); 自迭代就绪度表 M4.3a/M4.3b 已打勾 |
 | **M5** | `python -m cogcore serve` 启动 + JWT 鉴权 + 5 业务场景至少 4 个能跑 + **业务场景中至少 1 个用过自迭代** + E24-E25 通过 + 420+ tests                     |
 
 **所有阶段都零 Docker / 零外部服务**（除可选的远程 LLM 端点）。
@@ -378,4 +378,4 @@ M5.2 (JWT) ──────→ M5.3 (5 业务场景) ──→ M5.4 (E24-E25)
 
 ---
 
-*最后更新：2026-06-06 (M4.2 + M4.3a 完成, 2/7 子阶段, 441 tests)*
+*最后更新：2026-06-06 (M4.2 + M4.3a + M4.3b 完成, 3/7 子阶段, 451 collected, 445 passed / 6 skipped 当前环境)*

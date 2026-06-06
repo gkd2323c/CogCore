@@ -24,7 +24,7 @@ from cogcore.adaptive_tuner import AdaptiveTuner
 from cogcore.attention import Attention
 from cogcore.cfs import CognitiveFeelingSystem
 from cogcore.config import load_config
-from cogcore.graph import build_cogcore_graph_persistent, invoke_cogcore
+from cogcore.graph import _HAS_SQLITE, build_cogcore_graph, build_cogcore_graph_persistent, invoke_cogcore
 from cogcore.hdb import HDB
 from cogcore.nt import NeurotransmitterSystem
 from cogcore.state_pool import StatePool
@@ -79,15 +79,49 @@ class CogCoreService:
             "tuner": self._tuner,
         }
 
-        # 构造持久化图
+        # 构造持久化图。缺少 langgraph-checkpoint-sqlite 时降级到内存图，
+        # 让 API/Agent 在最小开发环境仍可运行；正式安装通过 pyproject 声明该依赖。
         sqlite_path = os.path.join(self._data_dir, "state.db")
-        self._graph = build_cogcore_graph_persistent(
-            self._modules, sqlite_path=sqlite_path
-        )
+        self._sqlite_path = sqlite_path
+        if _HAS_SQLITE:
+            self._graph = build_cogcore_graph_persistent(
+                self._modules, sqlite_path=sqlite_path
+            )
+            self._persistence_backend = "sqlite"
+        else:
+            logger.warning(
+                "langgraph-checkpoint-sqlite not installed; "
+                "CogCoreService is using in-memory graph fallback"
+            )
+            self._graph = build_cogcore_graph(self._modules)
+            self._persistence_backend = "memory_fallback"
+            self._ensure_fallback_state_db()
 
     def _ensure_data_dir(self) -> None:
         self._data_dir = self.config.service.data_dir
         os.makedirs(self._data_dir, exist_ok=True)
+
+    def _ensure_fallback_state_db(self) -> None:
+        """Create a minimal state DB marker when SQLite checkpointer is unavailable."""
+        import sqlite3
+
+        conn = sqlite3.connect(self._sqlite_path)
+        try:
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS service_metadata (
+                    key TEXT PRIMARY KEY,
+                    value TEXT NOT NULL
+                )
+                """
+            )
+            conn.execute(
+                "INSERT OR REPLACE INTO service_metadata(key, value) VALUES (?, ?)",
+                ("persistence_backend", self._persistence_backend),
+            )
+            conn.commit()
+        finally:
+            conn.close()
 
     # ============================================================
     # 生命周期
@@ -252,5 +286,9 @@ class CogCoreService:
             },
             "diary_tools": {
                 "diary_count": len(self._tools._diary_store),
+            },
+            "persistence": {
+                "backend": self._persistence_backend,
+                "state_db": self._sqlite_path,
             },
         }

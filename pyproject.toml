@@ -15,6 +15,7 @@ authors = [
 dependencies = [
     "pydantic>=2.5",
     "langgraph>=1.2",
+    "langgraph-checkpoint-sqlite>=2.0",
     "openai>=1.0",
 ]
 
@@ -34,5 +35,8 @@ package-dir = { "" = "src" }
 where = ["src"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "evals"]
 python_files = ["test_*.py"]
+markers = [
+    "evals: opt-in evaluation tests",
+]
