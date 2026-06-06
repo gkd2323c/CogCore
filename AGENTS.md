@@ -48,8 +48,10 @@ No linter, formatter, typechecker, or CI configured. All tests are sync (no `pyt
 | "Architecture?" | `docs/CogCore-通用认知内核架构设计.md` |
 | "Experiments E01-E17?" | `docs/CogCore-验证矩阵.md` §1 |
 | "E0X → module mapping?" | `docs/CogCore-验证矩阵.md` §3 |
-| "Next steps?" | `docs/CogCore-通用认知内核架构设计.md` §10 |
 | "Build a full agent?" | `AGENT_BUILD.MD` |
+| "Overall plan (M3-M5)?" | `docs/CogCore-总体计划.md` |
+| "M3 sub-stages (FastAPI/LLM/MCP/...)?" | `docs/CogCore-M3-规划.md` |
+| "M4 sub-stages (SQLite/trace/evals/...)?" | `docs/CogCore-M4-规划.md` |
 
 ## Hard constraints
 
