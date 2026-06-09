@@ -331,4 +331,4 @@ class AgentMode(str, Enum):
 
 ---
 
-*CogCore M1 规划 v0.1 | 2026-06-05 | 基于 M0 阶段全部完成的状态重新校准*
+*CogCore M1 规划 v0.1 | 2026-06-09 | 基于 M0 阶段全部完成的状态重新校准（零 Docker 不变量已对齐）*

@@ -378,4 +378,4 @@ def stage_node(state: CogCoreState) -> dict:
 
 ---
 
-*最后更新：2026-06-05（M0.5 LangGraph 集成完成，138 测试全过）*
+*最后更新：2026-06-09（M3-M5 全部完成，528 tests，11 层能力栈就绪）*
